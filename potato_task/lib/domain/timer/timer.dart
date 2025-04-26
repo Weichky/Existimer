@@ -1,11 +1,13 @@
 import 'package:potato_task/core/constants/timer_status.dart';
+import 'package:potato_task/core/constants/timer_type.dart';
 import 'package:potato_task/core/utils/helper.dart';
 import 'package:potato_task/core/config.dart';
 
 abstract class TimerBase {
+  TimerType timerType;
   TimerStatus status;
   final String uuid;
-  TimerBase() :
+  TimerBase(this.timerType) :
   status = TimerStatus.inactive,
   uuid = UuidHelper.getUuid();
 
@@ -19,9 +21,10 @@ abstract class TimerBase {
 class ForwardTimer extends TimerBase {
   Duration totalTime;
   DateTime? startTime;
+
   ForwardTimer() :
     totalTime = Duration(),
-    super();
+    super(TimerType.forward);
 
   @override
   Duration show() {
@@ -84,8 +87,9 @@ class ForwardTimer extends TimerBase {
 class CountdownTimer extends TimerBase {
   Duration remainTime;
   DateTime? endTime;
+
   CountdownTimer(this.remainTime) :
-    super();
+    super(TimerType.countdown);
 
   @override
   Duration show() {

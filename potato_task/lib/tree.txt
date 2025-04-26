@@ -5,8 +5,11 @@
 ├── core
 │   ├── config.dart
 │   ├── constants
-│   │   └── timer_status.dart
+│   │   ├── timer_status.dart
+│   │   ├── timer_type.dart
+│   │   └── timer_unit_status.dart
 │   ├── services
+│   │   └── timer_service.dart
 │   └── utils
 │       ├── helper.dart
 │       └── uuid_helper.dart
@@ -15,6 +18,7 @@
 │   │   ├── task.dart
 │   │   └── timer.dart
 │   ├── repositories
+│   │   └── timer_repository.dart
 │   ├── sources
 │   └── sync
 ├── domain
@@ -22,6 +26,8 @@
 │   ├── settings
 │   ├── task
 │   └── timer
+│       ├── timer.dart
+│       └── timer_unit.dart
 ├── main.dart
 ├── presentation
 │   ├── pages
@@ -29,4 +35,4 @@
 │   └── widgets
 └── tree.txt
 
-22 directories, 8 files
+22 directories, 14 files
