@@ -1,0 +1,32 @@
+.
+├── application
+│   ├── controllers
+│   └── providers
+├── core
+│   ├── config.dart
+│   ├── constants
+│   │   └── timer_status.dart
+│   ├── services
+│   └── utils
+│       ├── helper.dart
+│       └── uuid_helper.dart
+├── data
+│   ├── models
+│   │   ├── task.dart
+│   │   └── timer.dart
+│   ├── repositories
+│   ├── sources
+│   └── sync
+├── domain
+│   ├── note
+│   ├── settings
+│   ├── task
+│   └── timer
+├── main.dart
+├── presentation
+│   ├── pages
+│   ├── themes
+│   └── widgets
+└── tree.txt
+
+22 directories, 8 files
