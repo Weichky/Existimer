@@ -89,7 +89,7 @@ class TimerUnit {
   void _checkTimeout() {
       if (_currentTimer.timerType.isCountdown) {
         CountdownTimer countdown = _currentTimer as CountdownTimer;
-        if (countdown.remainTime < Duration()) {
+        if (countdown.remainTime <= Duration()) {
           _status = TimerUnitStatus.timeout;
         }
       }

@@ -1,17 +1,23 @@
 import 'package:potato_task/core/constants/timer_status.dart';
 import 'package:potato_task/core/constants/timer_type.dart';
+
 import 'package:potato_task/core/utils/helper.dart';
-import 'package:potato_task/core/config.dart';
+
+import 'package:potato_task/core/services/timer_manager.dart';
 
 abstract class TimerBase {
   TimerType timerType;
   TimerStatus status;
+
   final String uuid;
+
+  TimeManager timeManager;
   TimerBase(this.timerType) :
   status = TimerStatus.inactive,
+  timeManager = TimeManager(),
   uuid = UuidHelper.getUuid();
 
-  void show();
+  Duration duration();
   void update();
   void start();
   void pause();
@@ -27,9 +33,9 @@ class ForwardTimer extends TimerBase {
     super(TimerType.forward);
 
   @override
-  Duration show() {
+  Duration duration() {
     if (status.isActive && startTime != null) {
-      return DateTime.now().difference(startTime!);
+      return timeManager.currentTime.difference(startTime!);
     }
     return totalTime;
   }
@@ -37,7 +43,7 @@ class ForwardTimer extends TimerBase {
 
   @override
   void update() {
-    startTime = DateTime.now();
+    startTime = timeManager.currentTime;
   }
   //更新开始时间
 
@@ -57,7 +63,7 @@ class ForwardTimer extends TimerBase {
     if (status.isActive) {
       // 冗余保障
         if (startTime != null) {
-          totalTime += DateTime.now().difference(startTime!);
+          totalTime += timeManager.currentTime.difference(startTime!);
         } else {
           throw StateError("Timer must be started once before paused.");
         }
@@ -92,9 +98,9 @@ class CountdownTimer extends TimerBase {
     super(TimerType.countdown);
 
   @override
-  Duration show() {
+  Duration duration() {
     if (status.isActive && endTime != null) {
-      return endTime!.difference(DateTime.now());
+      return endTime!.difference(timeManager.currentTime);
     }
     return remainTime;
   }
@@ -102,7 +108,7 @@ class CountdownTimer extends TimerBase {
 
   @override
   void update() {
-    endTime = DateTime.now().add(remainTime);
+    endTime = timeManager.currentTime.add(remainTime);
   }
   //更新结束时间
 
@@ -122,7 +128,8 @@ class CountdownTimer extends TimerBase {
     if (status.isActive) {
       if (endTime != null) {
         //实际上有可能小于0,留给控制模块，便于处理超时问题
-        remainTime = endTime!.difference(DateTime.now());
+        remainTime = endTime!.difference(timeManager.currentTime);
+        status = TimerStatus.paused;
       } else {
         throw StateError("Timer must be started once before paused.");
       }
@@ -137,18 +144,16 @@ class CountdownTimer extends TimerBase {
       return;
     }
 
-    pause();
-
+    if (status.isActive) {
+      pause();
+    }
+  
     status = TimerStatus.inactive;
   }
 
-  void reset([Duration? duration]) {
-    if (duration != null) {
+
+  void reset(Duration duration) {
       remainTime = duration;
       endTime = null;
-    } else {
-      remainTime = DEFAULT_REMAIN_TIME;
-      endTime = null;
-    }
   }
 }
