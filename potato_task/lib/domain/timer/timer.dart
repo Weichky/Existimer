@@ -3,7 +3,7 @@ import 'package:potato_task/core/constants/timer_type.dart';
 
 import 'package:potato_task/core/utils/helper.dart';
 
-import 'package:potato_task/core/services/timer_manager.dart';
+import 'package:potato_task/core/services/time_manager.dart';
 
 abstract class TimerBase {
   TimerType timerType;

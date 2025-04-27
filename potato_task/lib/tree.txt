@@ -9,7 +9,7 @@
 │   │   ├── timer_type.dart
 │   │   └── timer_unit_status.dart
 │   ├── services
-│   │   └── timer_service.dart
+│   │   └── timer_manager.dart
 │   └── utils
 │       ├── helper.dart
 │       └── uuid_helper.dart

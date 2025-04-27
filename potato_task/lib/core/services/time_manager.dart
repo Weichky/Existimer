@@ -1,4 +1,4 @@
-//timer_manager.dart
+//timer_manage.dart
 class TimeManager {
   static final TimeManager _instance = TimeManager._internal();
 

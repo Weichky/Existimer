@@ -46,7 +46,7 @@ class TimerUnit {
         _currentTimer.start();
         _status = TimerUnitStatus.active;
     } else {
-      // 异常处理
+      throw StateError("Timer Unit must be inactive before started.");
     }
   }
 
@@ -59,7 +59,7 @@ class TimerUnit {
       _status = TimerUnitStatus.paused;
 
     } else {
-      //异常处理
+      throw StateError("Timer Unit must be actived before paused.");
     }
   }
 
@@ -68,7 +68,7 @@ class TimerUnit {
       _currentTimer.start();
       _status = TimerUnitStatus.active;
     } else {
-      //异常处理
+      throw StateError("Timer Unit must be resumed from paused.");
     }
   }
 
