@@ -3,7 +3,7 @@ import 'package:potato_task/core/constants/timer_type.dart';
 
 import 'package:potato_task/core/utils/helper.dart';
 
-import 'package:potato_task/core/services/time_manager.dart';
+import 'package:potato_task/core/services/clock.dart';
 
 abstract class TimerBase {
   TimerType timerType;
@@ -11,10 +11,10 @@ abstract class TimerBase {
 
   final String uuid;
 
-  TimeManager timeManager;
+  Clock clock;
   TimerBase(this.timerType) :
   status = TimerStatus.inactive,
-  timeManager = TimeManager(),
+  clock = Clock(),
   uuid = UuidHelper.getUuid();
 
   Duration duration();
@@ -35,7 +35,7 @@ class ForwardTimer extends TimerBase {
   @override
   Duration duration() {
     if (status.isActive && startTime != null) {
-      return timeManager.currentTime.difference(startTime!);
+      return clock.currentTime.difference(startTime!);
     }
     return totalTime;
   }
@@ -43,7 +43,7 @@ class ForwardTimer extends TimerBase {
 
   @override
   void update() {
-    startTime = timeManager.currentTime;
+    startTime = clock.currentTime;
   }
   //更新开始时间
 
@@ -63,7 +63,7 @@ class ForwardTimer extends TimerBase {
     if (status.isActive) {
       // 冗余保障
         if (startTime != null) {
-          totalTime += timeManager.currentTime.difference(startTime!);
+          totalTime += clock.currentTime.difference(startTime!);
         } else {
           throw StateError("Timer must be started once before paused.");
         }
@@ -100,7 +100,7 @@ class CountdownTimer extends TimerBase {
   @override
   Duration duration() {
     if (status.isActive && endTime != null) {
-      return endTime!.difference(timeManager.currentTime);
+      return endTime!.difference(clock.currentTime);
     }
     return remainTime;
   }
@@ -108,7 +108,7 @@ class CountdownTimer extends TimerBase {
 
   @override
   void update() {
-    endTime = timeManager.currentTime.add(remainTime);
+    endTime = clock.currentTime.add(remainTime);
   }
   //更新结束时间
 
@@ -128,7 +128,7 @@ class CountdownTimer extends TimerBase {
     if (status.isActive) {
       if (endTime != null) {
         //实际上有可能小于0,留给控制模块，便于处理超时问题
-        remainTime = endTime!.difference(timeManager.currentTime);
+        remainTime = endTime!.difference(clock.currentTime);
         status = TimerStatus.paused;
       } else {
         throw StateError("Timer must be started once before paused.");

@@ -1,13 +1,13 @@
-//timer_manage.dart
-class TimeManager {
-  static final TimeManager _instance = TimeManager._internal();
+//clock.dart
+class Clock {
+  static final Clock _instance = Clock._internal();
 
   int _timeDrift = 0;
   int _timezoneOffset = 0;
 
-  TimeManager._internal();
+  Clock._internal();
 
-  factory TimeManager() => _instance;
+  factory Clock() => _instance;
 
   DateTime get currentTime {
     DateTime now = DateTime.now().add(Duration(milliseconds: _timeDrift));
