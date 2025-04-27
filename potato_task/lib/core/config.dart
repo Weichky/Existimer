@@ -1,1 +1,0 @@
-const Duration DEFAULT_REMAIN_TIME = Duration(minutes: 35);

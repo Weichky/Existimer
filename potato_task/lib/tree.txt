@@ -1,23 +1,29 @@
 .
 ├── application
 │   ├── controllers
+│   │   ├── settings_controller.dart
+│   │   └── timer_controller.dart
 │   └── providers
+│       ├── settings_provider.dart
+│       └── timer_provider.dart
 ├── core
-│   ├── config.dart
 │   ├── constants
 │   │   ├── timer_status.dart
 │   │   ├── timer_type.dart
 │   │   └── timer_unit_status.dart
 │   ├── services
-│   │   └── timer_manager.dart
+│   │   ├── clock.dart
+│   │   └── settings_service.dart
 │   └── utils
 │       ├── helper.dart
 │       └── uuid_helper.dart
 ├── data
 │   ├── models
-│   │   ├── task.dart
-│   │   └── timer.dart
+│   │   ├── settings_model.dart
+│   │   ├── task_model.dart
+│   │   └── timer_model.dart
 │   ├── repositories
+│   │   ├── settings_repository.dart
 │   │   └── timer_repository.dart
 │   ├── sources
 │   └── sync
@@ -35,4 +41,4 @@
 │   └── widgets
 └── tree.txt
 
-22 directories, 14 files
+22 directories, 20 files
