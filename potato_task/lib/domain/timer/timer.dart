@@ -1,21 +1,16 @@
 import 'package:potato_task/core/constants/timer_status.dart';
 import 'package:potato_task/core/constants/timer_type.dart';
 
-import 'package:potato_task/core/utils/helper.dart';
-
 import 'package:potato_task/core/services/clock.dart';
 
 abstract class TimerBase {
   TimerType timerType;
   TimerStatus status;
 
-  final String uuid;
-
   Clock clock;
   TimerBase(this.timerType) :
   status = TimerStatus.inactive,
-  clock = Clock(),
-  uuid = UuidHelper.getUuid();
+  clock = Clock();
 
   Duration duration();
   void update();

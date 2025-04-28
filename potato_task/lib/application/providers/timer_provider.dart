@@ -27,5 +27,11 @@ class TimerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
+  void toggle() {
+    if (_timerUnit.timerType.isForward) {
+      _timerUnit.toCountdown(/*此处暂且搁置*/Duration());
+    } else {
+      _timerUnit.toForward();
+    }
+  }
 }

@@ -1,17 +1,20 @@
 //timer_unit.dart
 import 'package:potato_task/core/constants/timer_type.dart';
 import 'package:potato_task/core/constants/timer_unit_status.dart';
+
+import 'package:potato_task/core/utils/helper.dart';
+
 import 'package:potato_task/domain/timer/timer.dart';
 
 class TimerUnit {
   TimerUnitStatus _status;
   late TimerBase _currentTimer;
-
-  //接入数据库
-  // final TimerRepository timerRepository;
+  String _uuid;
 
   TimerUnit._internal(this._currentTimer)
-  : _status = TimerUnitStatus.inactive;
+  : 
+  _status = TimerUnitStatus.inactive,
+  _uuid = UuidHelper.getUuid();
 
   factory TimerUnit.forward() {
     return TimerUnit._internal(ForwardTimer());
@@ -22,9 +25,14 @@ class TimerUnit {
   }
 
   //定义get方法
-  String get timerUuid => _currentTimer.uuid;
+  String get uuid => _uuid;
   TimerUnitStatus get status => _status;
   TimerType get timerType => _currentTimer.timerType;
+  Duration get duration => _currentTimer.duration();
+
+  //定义set方法
+  //setUuid方法仅用于恢复和调试
+  set setUuid(String string) => _uuid = string;
 
   //定义重置方法
   void toForward() {
