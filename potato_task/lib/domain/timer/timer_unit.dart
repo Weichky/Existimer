@@ -6,6 +6,8 @@ import 'package:potato_task/core/utils/helper.dart';
 
 import 'package:potato_task/domain/timer/timer.dart';
 
+//要重新设计TimerUnit
+//保证错误处理、状态管理、暂停、重置的逻辑实现在TimerUnit而非Timer里
 class TimerUnit {
   TimerUnitStatus _status;
   late TimerBase _currentTimer;

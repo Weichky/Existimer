@@ -3,6 +3,8 @@ import 'package:potato_task/core/constants/timer_type.dart';
 
 import 'package:potato_task/core/services/clock.dart';
 
+//要重新设计Timer
+//保证Timer专注于计时，
 abstract class TimerBase {
   TimerType timerType;
   TimerStatus status;
@@ -12,7 +14,10 @@ abstract class TimerBase {
   status = TimerStatus.inactive,
   clock = Clock();
 
+  //对于forward返回totalTime,对于countdown返回remainTime
   Duration duration();
+  //用于数据库保存状态，对于forward返回startTime，对于countdown返回endTime
+  DateTime showTime();
   void update();
   void start();
   void pause();
@@ -35,6 +40,9 @@ class ForwardTimer extends TimerBase {
     return totalTime;
   }
 
+  @override
+  DateTime showTime() => startTime ??
+    (throw StateError("ForwardTimer must be started at once before calling showTime()."));
 
   @override
   void update() {
@@ -100,6 +108,9 @@ class CountdownTimer extends TimerBase {
     return remainTime;
   }
 
+  @override
+  DateTime showTime() => endTime ??
+    (throw StateError("CountdownTimer must be started at once before calling showTime()."));
 
   @override
   void update() {

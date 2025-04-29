@@ -8,6 +8,7 @@
 │       └── timer_provider.dart
 ├── core
 │   ├── constants
+│   │   ├── default_settings.dart
 │   │   ├── timer_status.dart
 │   │   ├── timer_type.dart
 │   │   └── timer_unit_status.dart
@@ -21,7 +22,7 @@
 │   ├── models
 │   │   ├── settings_model.dart
 │   │   ├── task_model.dart
-│   │   └── timer_model.dart
+│   │   └── timer_unit_model.dart
 │   ├── repositories
 │   │   ├── settings_repository.dart
 │   │   └── timer_repository.dart
@@ -31,6 +32,7 @@
 │   ├── note
 │   ├── settings
 │   ├── task
+│   │   └── task.dart
 │   └── timer
 │       ├── timer.dart
 │       └── timer_unit.dart
@@ -41,4 +43,4 @@
 │   └── widgets
 └── tree.txt
 
-22 directories, 20 files
+22 directories, 22 files
