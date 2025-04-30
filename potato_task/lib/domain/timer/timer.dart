@@ -4,7 +4,7 @@ import 'package:potato_task/core/constants/timer_type.dart';
 import 'package:potato_task/core/services/clock.dart';
 
 //要重新设计Timer
-//保证Timer专注于计时，
+//添加snapshot,来保证数据持久化
 abstract class TimerBase {
   TimerType timerType;
   TimerStatus status;

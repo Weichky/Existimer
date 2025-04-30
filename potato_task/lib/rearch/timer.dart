@@ -6,36 +6,36 @@ abstract class TimerBase {
   Clock clock;
   TimerBase(this._isActive) : clock = Clock();
 
-  //对于forward返回totalTime,对于countdown返回remainTime
+  //对于Countup返回totalTime,对于countdown返回remainTime
   Duration duration();
-  //用于数据库保存状态，对于forward返回startTime，对于countdown返回endTime
+  //用于数据库保存状态，对于Countup返回startTime，对于countdown返回endTime
   DateTime showTime();
   void update();
   void start();
   void stop();
 
-  bool get isForward;
+  bool get isCountup;
   bool get isCountdown;
   bool get isActive => _isActive;
 }
 
-class ForwardTimer extends TimerBase {
+class CountupTimer extends TimerBase {
   Duration totalTime;
   DateTime? startTime;
 
-  ForwardTimer() :
+  CountupTimer() :
   totalTime = Duration(),
   super(false);
 
   @override
   Duration duration() {
-    assert(startTime != null,"ForwardTimer must be started at once before calling Duration().");
+    assert(startTime != null,"CountupTimer must be started at once before calling Duration().");
     return clock.currentTime.difference(startTime!);
   }//上层需保证非空调用
 
   @override
   DateTime showTime() {
-    assert(startTime != null,"ForwardTimer must be started at once before calling showTime().");
+    assert(startTime != null,"CountupTimer must be started at once before calling showTime().");
     return startTime!;
   }//上层需保证非空调用
 
@@ -72,7 +72,7 @@ class ForwardTimer extends TimerBase {
   }
 
   @override
-  bool get isForward => true;
+  bool get isCountup => true;
   @override
   bool get isCountdown => false;
 }
@@ -134,7 +134,7 @@ class CountdownTimer extends TimerBase {
   }
 
   @override
-  bool get isForward => true;
+  bool get isCountup => false;
   @override
-  bool get isCountdown => false;
+  bool get isCountdown => true;
 }
