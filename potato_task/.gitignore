@@ -54,4 +54,4 @@ app.*.map.json
 
 #统计文件
 /lib/tree.md
-/.VSCodeCounter
+/.VSCodeCounter/
