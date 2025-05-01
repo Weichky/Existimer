@@ -1,49 +1,57 @@
-//timer_unit.dart
-import 'package:potato_task/core/constants/timer_type.dart';
 import 'package:potato_task/core/constants/timer_unit_status.dart';
+import 'package:potato_task/core/constants/timer_unit_type.dart';
 
 import 'package:potato_task/core/utils/helper.dart';
+import 'package:potato_task/core/services/clock.dart';
 
 import 'package:potato_task/domain/timer/timer.dart';
 
-//要重新设计TimerUnit
-//保证错误处理、状态管理、暂停、重置的逻辑实现在TimerUnit而非Timer里
-//错误控制逻辑（start/stop/pause 检查）重复分散
-//_checkTimeout 属于 CountdownTimer 的职责
+import 'package:potato_task/snapshots/timer_unit_snapshot.dart';
+
 class TimerUnit {
+  //TimerUnit状态
+  final String _uuid;
   TimerUnitStatus _status;
+  late TimerUnitType _timerUnitType;
   late TimerBase _currentTimer;
-  String _uuid;
 
-  TimerUnit._internal(this._currentTimer)
-  : 
-  _status = TimerUnitStatus.inactive,
-  _uuid = UuidHelper.getUuid();
+  //TimerUnit计时数据
+  Duration _duration;
+  DateTime? _referenceTime;
+  Duration? _lastRemainTime;
+  Clock clock;
 
-  factory TimerUnit.forward() {
-    return TimerUnit._internal(ForwardTimer());
+  TimerUnit._internal(this._timerUnitType, this._duration)
+    : _uuid = UuidHelper.getUuid(),
+      _status = TimerUnitStatus.inactive,
+      _currentTimer =
+          _timerUnitType.isCountup ? CountupTimer() : CountdownTimer(_duration),
+      _referenceTime = null,
+      _lastRemainTime = _timerUnitType.isCountdown ? _duration : null,
+      clock = Clock();
+
+  factory TimerUnit.countup() {
+    return TimerUnit._internal(TimerUnitType.countup, Duration());
   }
 
   factory TimerUnit.countdown(Duration time) {
-    return TimerUnit._internal(CountdownTimer(time));
+    return TimerUnit._internal(TimerUnitType.countdown, time);
   }
 
   //定义get方法
   String get uuid => _uuid;
   TimerUnitStatus get status => _status;
-  TimerType get timerType => _currentTimer.timerType;
-  Duration get duration => _currentTimer.duration();
+  TimerUnitType get type => _timerUnitType;
 
-  //定义set方法
-  //setUuid方法仅用于恢复和调试
-  set setUuid(String string) => _uuid = string;
-
-  //定义重置方法
-  void toForward() {
+  void toCountup() {
     if (!_status.isInactive) {
       _status = TimerUnitStatus.inactive;
     }
-    _currentTimer = ForwardTimer();
+    _currentTimer = CountupTimer();
+    _timerUnitType = TimerUnitType.countup;
+
+    _duration = Duration();
+    _referenceTime = null;
   }
 
   void toCountdown(Duration time) {
@@ -51,59 +59,100 @@ class TimerUnit {
       _status = TimerUnitStatus.inactive;
     }
     _currentTimer = CountdownTimer(time);
+    _timerUnitType = TimerUnitType.countdown;
+
+    _duration = time;
+    _referenceTime = null;
+    _lastRemainTime = time;
   }
 
   void start() {
     if (_status.isInactive) {
-        _currentTimer.start();
-        _status = TimerUnitStatus.active;
+      _currentTimer.start(clock.currentTime);
+      _status = TimerUnitStatus.active;
+
+      _update();
     } else {
-      throw StateError("Timer Unit must be inactive before started.");
+      throw StateError("TimerUnit must be inactive before you call start().");
     }
   }
 
   void pause() {
-    //暂停前检查是否timeout
     _checkTimeout();
 
     if (_status.isActive) {
-      _currentTimer.pause();
+      _currentTimer.stop(clock.currentTime);
+      _update();
+      _reset(_duration);
       _status = TimerUnitStatus.paused;
-
+    } else if (_status.isTimeout) {
+      stop();
     } else {
-      throw StateError("Timer Unit must be actived before paused.");
+      throw StateError("You must start TimerUnit before calling pause().");
     }
   }
 
   void resume() {
     if (_status.isPaused) {
-      _currentTimer.start();
+      _currentTimer.start(clock.currentTime);
+      _update();
+
       _status = TimerUnitStatus.active;
     } else {
-      throw StateError("Timer Unit must be resumed from paused.");
+      throw StateError("You must pause TimerUnit before calling resume().");
     }
   }
 
   void stop() {
-    //停止前检查是否timeout
-    _checkTimeout();
-
     if (_status.isInactive) {
       return;
+    } else {
+      _currentTimer.stop(clock.currentTime);
+      _update();
+      _status = TimerUnitStatus.inactive;
     }
-
-    _currentTimer.stop();
-    _status = TimerUnitStatus.inactive;
-
   }
 
-  //检查倒计时是否超时
+  void _update() {
+    if (_timerUnitType.isCountup) {
+      _duration += _currentTimer.duration(clock.currentTime);
+      _referenceTime = _currentTimer.referenceTime();
+    } else {
+      _duration = _currentTimer.duration(clock.currentTime);
+      _referenceTime = _currentTimer.referenceTime();
+    }
+  }
+
   void _checkTimeout() {
-      if (_currentTimer.timerType.isCountdown) {
-        CountdownTimer countdown = _currentTimer as CountdownTimer;
-        if (countdown.remainTime <= Duration()) {
-          _status = TimerUnitStatus.timeout;
-        }
+    if (_currentTimer.isCountdown) {
+      if ((_currentTimer as CountdownTimer).duration(clock.currentTime) <=
+          Duration()) {
+        _status = TimerUnitStatus.timeout;
       }
+    }
   }
+
+  //注意不要填入负值
+  void _reset([Duration? remainTime]) {
+    assert(
+      remainTime == null || remainTime > Duration(),
+      "Should not reset from negtive remainTime.",
+    );
+    if (_currentTimer is CountupTimer) {
+      (_currentTimer as CountupTimer).reset();
+    } else if (_currentTimer is CountdownTimer && remainTime != null) {
+      (_currentTimer as CountdownTimer).reset(remainTime);
+    } else {
+      throw ArgumentError("Cannot reset without remainTime.");
+    }
+  }
+
+  TimerUnitSnapshot toSnapshot() => TimerUnitSnapshot(
+    uuid: _uuid,
+    status: _status,
+    type: _timerUnitType,
+    duration: _duration,
+    referenceTime: _referenceTime,
+    lastRemainTime: _lastRemainTime,
+  );
 }

@@ -7,6 +7,7 @@ class TimerUnitSnapshot {
   final TimerUnitType type;
   final Duration duration;
   final DateTime? referenceTime;
+  final Duration? lastRemainTime;
 
   TimerUnitSnapshot({
     required this.uuid,
@@ -14,5 +15,6 @@ class TimerUnitSnapshot {
     required this.type,
     required this.duration,
     this.referenceTime,
+    this.lastRemainTime,
   });
 }

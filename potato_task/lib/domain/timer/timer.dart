@@ -1,163 +1,110 @@
-import 'package:potato_task/core/constants/timer_status.dart';
-import 'package:potato_task/core/constants/timer_type.dart';
-
-import 'package:potato_task/core/services/clock.dart';
-
 abstract class TimerBase {
-  TimerType timerType;
-  TimerStatus status;
+  //对于Countup返回totalTime,对于countdown返回remainTime
+  Duration duration(DateTime now);
+  //用于数据库保存状态，对于Countup返回startTime，对于countdown返回endTime
+  DateTime referenceTime();
 
-  Clock clock;
-  TimerBase(this.timerType) : status = TimerStatus.inactive, clock = Clock();
+  bool get isCountup;
+  bool get isCountdown;
 
-  //对于forward返回totalTime,对于countdown返回remainTime
-  Duration duration();
-  //用于数据库保存状态，对于forward返回startTime，对于countdown返回endTime
-  DateTime showTime();
-  void update();
-  void start();
-  void pause();
-  void stop();
+  void start(DateTime now);
+  void stop(DateTime now);
 }
 
-class ForwardTimer extends TimerBase {
+class CountupTimer extends TimerBase {
   Duration totalTime;
   DateTime? startTime;
 
-  ForwardTimer() : totalTime = Duration(), super(TimerType.forward);
+  CountupTimer() : totalTime = Duration();
 
   @override
-  Duration duration() {
-    if (status.isActive && startTime != null) {
-      return clock.currentTime.difference(startTime!);
-    }
-    return totalTime;
+  Duration duration(DateTime now) {
+    assert(
+      startTime != null,
+      "You must start CountupTimer before calling Duration().",
+    );
+    return now.difference(startTime!);
+  } //上层需保证非空调用
+
+  @override
+  DateTime referenceTime() {
+    assert(
+      startTime != null,
+      "You must start CountupTimer before calling referenceTime().",
+    );
+    return startTime!;
+  } //上层需保证非空调用
+
+  @override
+  void start(DateTime now) {
+    startTime = now;
   }
 
   @override
-  DateTime showTime() =>
-      startTime ??
-      (throw StateError(
-        "ForwardTimer must be started at once before calling showTime().",
-      ));
-
-  @override
-  void update() {
-    startTime = clock.currentTime;
-  }
-  //更新开始时间
-
-  @override
-  void start() {
-    if (status.isActive) {
-      return;
-    }
-
-    update();
-
-    status = TimerStatus.active;
-  }
-
-  @override
-  void pause() {
-    if (status.isActive) {
-      // 冗余保障
-      if (startTime != null) {
-        totalTime += clock.currentTime.difference(startTime!);
-      } else {
-        throw StateError("Timer must be started once before paused.");
-      }
-      status = TimerStatus.paused;
-    }
-
-    return;
-  }
-
-  @override
-  void stop() {
-    if (status.isInactive) {
-      return;
-    }
-
-    pause();
-
-    status = TimerStatus.inactive;
-  }
+  void stop(DateTime now) {
+    assert(
+      startTime != null,
+      "You must start CountupTimer before calling stop().",
+    );
+    totalTime += now.difference(startTime!);
+  } //上层需保证非空调用
 
   void reset() {
     totalTime = Duration();
     startTime = null;
   }
+
+  @override
+  bool get isCountup => true;
+  @override
+  bool get isCountdown => false;
 }
 
 class CountdownTimer extends TimerBase {
   Duration remainTime;
   DateTime? endTime;
 
-  CountdownTimer(this.remainTime) : super(TimerType.countdown);
+  CountdownTimer(this.remainTime);
 
   @override
-  Duration duration() {
-    if (status.isActive && endTime != null) {
-      return endTime!.difference(clock.currentTime);
-    }
-    return remainTime;
+  Duration duration(DateTime now) {
+    assert(
+      endTime != null,
+      "You must start CountdownTimer before calling Duration().",
+    );
+    return endTime!.difference(now);
+  } //上层需保证非空调用
+
+  @override
+  DateTime referenceTime() {
+    assert(
+      endTime != null,
+      "You must start CountdownTimer before calling showTime().",
+    );
+    return endTime!;
+  } //上层需保证非空调用
+
+  @override
+  void start(DateTime now) {
+    endTime = now.add(remainTime);
   }
 
   @override
-  DateTime showTime() =>
-      endTime ??
-      (throw StateError(
-        "CountdownTimer must be started at once before calling showTime().",
-      ));
+  void stop(DateTime now) {
+    assert(
+      endTime != null,
+      "You must start CountdownTimer before calling stop().",
+    );
+    remainTime = endTime!.difference(now);
+  } //上层需保证非空调用
 
-  @override
-  void update() {
-    endTime = clock.currentTime.add(remainTime);
-  }
-  //更新结束时间
-
-  @override
-  void start() {
-    if (status.isActive) {
-      return;
-    }
-
-    update();
-
-    status = TimerStatus.active;
-  }
-
-  @override
-  void pause() {
-    if (status.isActive) {
-      if (endTime != null) {
-        //实际上有可能小于0,留给控制模块，便于处理超时问题
-        remainTime = endTime!.difference(clock.currentTime);
-        status = TimerStatus.paused;
-      } else {
-        throw StateError("Timer must be started once before paused.");
-      }
-    }
-
-    return;
-  }
-
-  @override
-  void stop() {
-    if (status.isInactive) {
-      return;
-    }
-
-    if (status.isActive) {
-      pause();
-    }
-
-    status = TimerStatus.inactive;
-  }
-
-  void reset(Duration duration) {
-    remainTime = duration;
+  void reset(Duration time) {
+    remainTime = time;
     endTime = null;
   }
+
+  @override
+  bool get isCountup => false;
+  @override
+  bool get isCountdown => true;
 }
