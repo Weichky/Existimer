@@ -6,6 +6,7 @@ import 'package:potato_task/core/services/clock.dart';
 import 'package:potato_task/rearch/timer.dart';
 import 'package:potato_task/core/constants/timer_unit_type.dart';
 
+import 'package:potato_task/snapshots/timer_unit_snapshot.dart';
 class TimerUnit {
   //TimerUnit状态
   final String _uuid;
@@ -136,5 +137,11 @@ class TimerUnit {
     }
   }
 
-
+  TimerUnitSnapshot toSnapshot() => TimerUnitSnapshot(
+    uuid: _uuid,
+    status: _status,
+    type: _timerUnitType,
+    duration: _duration,
+    referenceTime: _referenceTime,
+  );
 }
