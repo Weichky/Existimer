@@ -51,3 +51,7 @@ app.*.map.json
 /ios
 /web
 /linux
+
+#统计文件
+/lib/tree.md
+/.VSCodeCounter

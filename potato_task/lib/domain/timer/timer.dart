@@ -3,16 +3,12 @@ import 'package:potato_task/core/constants/timer_type.dart';
 
 import 'package:potato_task/core/services/clock.dart';
 
-//要重新设计Timer
-//添加snapshot,来保证数据持久化
 abstract class TimerBase {
   TimerType timerType;
   TimerStatus status;
 
   Clock clock;
-  TimerBase(this.timerType) :
-  status = TimerStatus.inactive,
-  clock = Clock();
+  TimerBase(this.timerType) : status = TimerStatus.inactive, clock = Clock();
 
   //对于forward返回totalTime,对于countdown返回remainTime
   Duration duration();
@@ -28,9 +24,7 @@ class ForwardTimer extends TimerBase {
   Duration totalTime;
   DateTime? startTime;
 
-  ForwardTimer() :
-    totalTime = Duration(),
-    super(TimerType.forward);
+  ForwardTimer() : totalTime = Duration(), super(TimerType.forward);
 
   @override
   Duration duration() {
@@ -41,8 +35,11 @@ class ForwardTimer extends TimerBase {
   }
 
   @override
-  DateTime showTime() => startTime ??
-    (throw StateError("ForwardTimer must be started at once before calling showTime()."));
+  DateTime showTime() =>
+      startTime ??
+      (throw StateError(
+        "ForwardTimer must be started at once before calling showTime().",
+      ));
 
   @override
   void update() {
@@ -65,12 +62,12 @@ class ForwardTimer extends TimerBase {
   void pause() {
     if (status.isActive) {
       // 冗余保障
-        if (startTime != null) {
-          totalTime += clock.currentTime.difference(startTime!);
-        } else {
-          throw StateError("Timer must be started once before paused.");
-        }
-        status = TimerStatus.paused;
+      if (startTime != null) {
+        totalTime += clock.currentTime.difference(startTime!);
+      } else {
+        throw StateError("Timer must be started once before paused.");
+      }
+      status = TimerStatus.paused;
     }
 
     return;
@@ -97,8 +94,7 @@ class CountdownTimer extends TimerBase {
   Duration remainTime;
   DateTime? endTime;
 
-  CountdownTimer(this.remainTime) :
-    super(TimerType.countdown);
+  CountdownTimer(this.remainTime) : super(TimerType.countdown);
 
   @override
   Duration duration() {
@@ -109,8 +105,11 @@ class CountdownTimer extends TimerBase {
   }
 
   @override
-  DateTime showTime() => endTime ??
-    (throw StateError("CountdownTimer must be started at once before calling showTime()."));
+  DateTime showTime() =>
+      endTime ??
+      (throw StateError(
+        "CountdownTimer must be started at once before calling showTime().",
+      ));
 
   @override
   void update() {
@@ -153,13 +152,12 @@ class CountdownTimer extends TimerBase {
     if (status.isActive) {
       pause();
     }
-  
+
     status = TimerStatus.inactive;
   }
 
-
   void reset(Duration duration) {
-      remainTime = duration;
-      endTime = null;
+    remainTime = duration;
+    endTime = null;
   }
 }
