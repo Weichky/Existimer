@@ -17,4 +17,34 @@ class TimerUnitSnapshot {
     this.referenceTime,
     this.lastRemainTime,
   });
+
+  static TimerUnitSnapshot fromMap(Map<String, dynamic> map) {
+    return TimerUnitSnapshot(
+      uuid: map['uuid'],
+      status: TimerUnitStatus.fromString(map['status']),
+      type: TimerUnitType.fromString(map['type']),
+      duration: Duration(milliseconds: map['duration_ms']),
+      referenceTime:
+          map['reference_time'] != null
+              ? DateTime.parse(map['reference_time'])
+              : null,
+      lastRemainTime:
+          map['last_remain_ms'] != null
+              ? Duration(milliseconds: map['last_remain_ms'])
+              : null,
+    );
+  }
+}
+
+extension TimerUnitSnapshotStorage on TimerUnitSnapshot {
+  Map<String, dynamic> toMap() {
+    return {
+      'uuid': uuid,
+      'status': status.name,
+      'type': type.name,
+      'duration_ms': duration.inMilliseconds,
+      'reference_time': referenceTime?.toIso8601String(),
+      'last_remain_ms': lastRemainTime?.inMilliseconds,
+    };
+  }
 }

@@ -166,8 +166,7 @@ class TimerUnit {
 
     //需要检测恢复时的状态
 
-    _currentTimer = _timerUnitType.isCountup ?
-      CountupTimer() :
-      CountdownTimer(_duration);
+    _currentTimer =
+        _timerUnitType.isCountup ? CountupTimer() : CountdownTimer(_duration);
   }
 }
