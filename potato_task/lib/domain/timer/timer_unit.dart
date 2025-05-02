@@ -10,7 +10,7 @@ import 'package:potato_task/snapshots/timer_unit_snapshot.dart';
 
 class TimerUnit {
   //TimerUnit状态
-  final String _uuid;
+  String _uuid;
   TimerUnitStatus _status;
   late TimerUnitType _timerUnitType;
   late TimerBase _currentTimer;
@@ -155,4 +155,19 @@ class TimerUnit {
     referenceTime: _referenceTime,
     lastRemainTime: _lastRemainTime,
   );
+
+  void fromSnapshot(TimerUnitSnapshot timerUnitSnapshot) {
+    _uuid = timerUnitSnapshot.uuid;
+    _status = timerUnitSnapshot.status;
+    _timerUnitType = timerUnitSnapshot.type;
+    _duration = timerUnitSnapshot.duration;
+    _referenceTime = timerUnitSnapshot.referenceTime;
+    _lastRemainTime = timerUnitSnapshot.lastRemainTime;
+
+    //需要检测恢复时的状态
+
+    _currentTimer = _timerUnitType.isCountup ?
+      CountupTimer() :
+      CountdownTimer(_duration);
+  }
 }
