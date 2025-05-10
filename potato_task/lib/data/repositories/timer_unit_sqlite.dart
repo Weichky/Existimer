@@ -17,6 +17,7 @@ class TimerUnitSqlite implements TimerUnitRepository{
     );
   }
 
+  @override
   Future<TimerUnitSnapshot?> loadSnapshot(String uuid) async {
     final result = await db.query(
       'timer_units',
