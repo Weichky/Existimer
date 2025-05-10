@@ -1,18 +1,17 @@
 //timer_unit_model.dart
 import 'package:flutter/foundation.dart';
-import 'package:potato_task/domain/timer/timer_unit.dart';
-import 'package:potato_task/core/constants/timer_type.dart';
+import 'package:potato_task/core/constants/timer_unit_status.dart';
+import 'package:potato_task/core/constants/timer_unit_type.dart';
 
 class TimerUnitModel {
   final String uuid;
-  final TimerType timerType;
-  final int? countdownDurationSeconds;
+  final TimerUnitStatus status;
+  final TimerUnitType type;
+  final Duration duration;
+  final DateTime? referenceTime;
+  final Duration? lastRemainTime;
 
-  TimerUnitModel({
-    required this.uuid,
-    required this.timerType,
-    this.countdownDurationSeconds,
-  });
+  TimerUnitModel();
 
   factory TimerUnitModel.fromDb(Map<String, Object?> map) {
     return TimerUnitModel(
