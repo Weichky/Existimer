@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
-import 'package:potato_task/data/repositories/timer_unit_repository.dart';
+import 'package:potato_task/data/repositories/timer_unit/timer_unit_repository.dart';
 import 'package:potato_task/snapshots/timer_unit_snapshot.dart';
 
 class TimerUnitSqlite implements TimerUnitRepository{

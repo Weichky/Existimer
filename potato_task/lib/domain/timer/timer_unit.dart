@@ -21,6 +21,9 @@ class TimerUnit {
   Duration? _lastRemainTime;
   Clock clock;
 
+  //只作为属性而非实体
+  String? _taskName;
+
   TimerUnit._internal(this._timerUnitType, this._duration)
     : _uuid = UuidHelper.getUuid(),
       _status = TimerUnitStatus.inactive,
@@ -154,6 +157,7 @@ class TimerUnit {
     duration: _duration,
     referenceTime: _referenceTime,
     lastRemainTime: _lastRemainTime,
+    taskName: _taskName,
   );
 
   void fromSnapshot(TimerUnitSnapshot timerUnitSnapshot) {
@@ -163,6 +167,7 @@ class TimerUnit {
     _duration = timerUnitSnapshot.duration;
     _referenceTime = timerUnitSnapshot.referenceTime;
     _lastRemainTime = timerUnitSnapshot.lastRemainTime;
+    _taskName = timerUnitSnapshot.taskName;
 
     //需要检测恢复时的状态
 

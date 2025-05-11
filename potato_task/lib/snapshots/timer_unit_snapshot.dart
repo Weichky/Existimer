@@ -24,14 +24,16 @@ class TimerUnitSnapshot {
       status: TimerUnitStatus.fromString(map['status']),
       type: TimerUnitType.fromString(map['type']),
       duration: Duration(milliseconds: map['duration_ms']),
+      //注意不能写成??形式
+      //因为在判断非空时必然调用Duration构造函数，而此函数只接受非空参数
       referenceTime:
-          map['reference_time'] != null
-              ? DateTime.parse(map['reference_time'])
-              : null,
+        map['reference_time'] != null
+          ? DateTime.parse(map['reference_time'])
+          : null,
       lastRemainTime:
-          map['last_remain_ms'] != null
-              ? Duration(milliseconds: map['last_remain_ms'])
-              : null,
+        map['last_remain_ms'] != null
+          ? Duration(milliseconds: map['last_remain_ms'])
+          : null,
     );
   }
 }
