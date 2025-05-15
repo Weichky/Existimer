@@ -131,6 +131,9 @@ classDiagram
     }
 
     %% Relationships
+    SnapshotWithMeta --> TimerUnitSnapshot
+    SnapshotWithMeta --> TaskMetaSnapshot
+    
     TimerUnit --> TimerUnitSnapshot : toSnapshot/fromSnapshot
     TaskMeta --> TaskMetaSnapshot : toSnapshot/fromSnapshot
 
@@ -139,7 +142,4 @@ classDiagram
 
     TaskMetaSnapshot --> TaskMetaRepository : persist to
     TaskMetaRepository --> TaskMetaSnapshot : load from
-
-    SnapshotWithMeta --> TimerUnitSnapshot
-    SnapshotWithMeta --> TaskMetaSnapshot
 ```
