@@ -1,7 +1,9 @@
 import 'package:potato_task/core/constants/timer_unit_status.dart';
 import 'package:potato_task/core/constants/timer_unit_type.dart';
 
-class TimerUnitSnapshot {
+import 'package:potato_task/snapshots/snapshot_base.dart';
+
+class TimerUnitSnapshot extends SnapshotBase {
   final String uuid;
   final TimerUnitStatus status;
   final TimerUnitType type;
@@ -17,6 +19,18 @@ class TimerUnitSnapshot {
     this.referenceTime,
     this.lastRemainTime,
   });
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'uuid': uuid,
+      'status': status.name,
+      'type': type.name,
+      'duration_ms': duration.inMilliseconds,
+      'reference_time': referenceTime?.toIso8601String(),
+      'last_remain_ms': lastRemainTime?.inMilliseconds,
+    };
+  }
 
   static TimerUnitSnapshot fromMap(Map<String, dynamic> map) {
     return TimerUnitSnapshot(
@@ -38,16 +52,7 @@ class TimerUnitSnapshot {
   }
 }
 
+// 不再使用
 // 扩展方法无法访问类私有成员，不会破坏封装
-extension TimerUnitSnapshotStorage on TimerUnitSnapshot {
-  Map<String, dynamic> toMap() {
-    return {
-      'uuid': uuid,
-      'status': status.name,
-      'type': type.name,
-      'duration_ms': duration.inMilliseconds,
-      'reference_time': referenceTime?.toIso8601String(),
-      'last_remain_ms': lastRemainTime?.inMilliseconds,
-    };
-  }
-}
+// extension TimerUnitSnapshotStorage on TimerUnitSnapshot {
+// }

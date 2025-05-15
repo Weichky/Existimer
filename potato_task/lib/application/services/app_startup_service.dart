@@ -1,14 +1,14 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import 'package:potato_task/data/repositories/timer_unit/timer_unit_repository.dart';
+import 'package:potato_task/data/repositories/snapshot_repository.dart';
 import 'package:potato_task/data/repositories/app_database.dart';
 
 class AppStartupService {
   final AppDatabase _database;
-  final TimerUnitRepository _timerRepository;
+  final SnapshotRepository _snapshotRepository;
 
-  AppStartupService(this._database, this._timerRepository);
+  AppStartupService(this._database, this._snapshotRepository);
 
   Future<void> initializedApp() async {
     await _database.init();

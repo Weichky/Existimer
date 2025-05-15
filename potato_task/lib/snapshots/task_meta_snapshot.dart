@@ -1,4 +1,7 @@
-class TaskMetaSnapshot {
+import 'package:potato_task/snapshots/snapshot_base.dart';
+
+
+class TaskMetaSnapshot extends SnapshotBase {
   final String uuid;
   final String name;
   final String type;
@@ -15,19 +18,7 @@ class TaskMetaSnapshot {
     required this.archived,
   });
 
-  static TaskMetaSnapshot fromMap(Map<String, dynamic> map) {
-    return TaskMetaSnapshot(
-      uuid: map['uuid'],
-      name: map['name'],
-      type: map['type'],
-      createAt: DateTime.parse(map['create_at']),
-      description: map['description'],
-      archived: map['archived'],
-    );
-  }
-}
-
-extension TaskMetaSnapshotStorage on TaskMetaSnapshot {
+  @override
   Map<String, dynamic> toMap() {
     return {
       'uuid': uuid,
@@ -37,5 +28,16 @@ extension TaskMetaSnapshotStorage on TaskMetaSnapshot {
       'description': description,
       'archived': archived,
     };
+  }
+
+  static TaskMetaSnapshot fromMap(Map<String, dynamic> map) {
+    return TaskMetaSnapshot(
+      uuid: map['uuid'],
+      name: map['name'],
+      type: map['type'],
+      createAt: DateTime.parse(map['create_at']),
+      description: map['description'],
+      archived: map['archived'],
+    );
   }
 }
