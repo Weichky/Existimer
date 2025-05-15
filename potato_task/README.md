@@ -1,112 +1,136 @@
 # 架构
 ## UML图
 暂时未完成
+
 ```mermaid
 classDiagram
-    class TimerUnit {
-        - String _uuid
-        - TimerUnitStatus _status
-        - TimerUnitType _timerUnitType
-        - TimerBase _currentTimer
-        - Duration _duration
-        - DateTime? _referenceTime
-        - Duration? _lastRemainTime
-        - Clock clock
+direction LR
 
-        + factory countup()
-        + factory countdown(Duration)
-        - _internal(TimerUnitType, Duration)
+%% 快照基类及实现
+class SnapshotBase {
+  <<abstract>>
+  + Map<String, dynamic> toMap()
+}
 
-        + String get uuid
-        + TimerUnitStatus get status
-        + TimerUnitType get type
+class TaskMetaSnapshot {
+  + String uuid
+  + String name
+  + String type
+  + DateTime createAt
+  + String? description
+  + bool archived
 
-        + void toCountup()
-        + void toCountdown(Duration)
-        + void start()
-        + void pause()
-        + void resume()
-        + void stop()
+  + Map<String, dynamic> toMap()
+  + static TaskMetaSnapshot fromMap(Map<String, dynamic>)
+}
 
-        + TimerUnitSnapshot toSnapshot()
-        + void fromSnapshot(TimerUnitSnapshot)
+class TimerUnitSnapshot {
+  + String uuid
+  + TimerUnitStatus status
+  + TimerUnitType type
+  + Duration duration
+  + DateTime? referenceTime
+  + Duration? lastRemainTime
 
-        - void _update()
-        - void _checkTimeout()
-        - void _reset(Duration?)
-    }
+  + Map<String, dynamic> toMap()
+  + static TimerUnitSnapshot fromMap(Map<String, dynamic>)
+}
 
-    class TimerUnitSnapshot {
-        + final String uuid
-        + final TimerUnitStatus status
-        + final TimerUnitType type
-        + final Duration duration
-        + final DateTime? referenceTime
-        + final Duration? lastRemainTime
+TaskMetaSnapshot ..|> SnapshotBase
+TimerUnitSnapshot ..|> SnapshotBase
 
-        + fromMap(Map)
-        + toMap()
-    }
+%% 实体与快照依赖
+class TimerUnit {
+  - String _uuid
+  - TimerUnitStatus _status
+  - TimerUnitType _timerUnitType
+  - TimerBase _currentTimer
+  - Duration _duration
+  - DateTime? _referenceTime
+  - Duration? _lastRemainTime
+  - Clock clock
 
-    class TaskMeta {
-        - String _uuid
-        - String _name
-        - String _type
-        - DateTime _createAt
-        - String? _description
-        - bool _archived
+  + factory countup()
+  + factory countdown(Duration time)
+  - TimerUnit._internal(TimerUnitType type, Duration duration)
 
-        + constructor(uuid, name, type, createAt, description, archived)
+  + String get uuid
+  + TimerUnitStatus get status
+  + TimerUnitType get type
 
-        + void set name(String)
-        + void set type(String)
-        + void set description(String?)
-        + void set archived(bool)
+  + void toCountup()
+  + void toCountdown(Duration time)
 
-        + TaskMetaSnapshot toSnapshot()
-        + void fromSnapshot(TaskMetaSnapshot)
-    }
+  + void start()
+  + void pause()
+  + void resume()
+  + void stop()
 
-    class TaskMetaSnapshot {
-        + final String uuid
-        + final String name
-        + final String type
-        + final DateTime createAt
-        + final String? description
-        + final bool archived
+  + TimerUnitSnapshot toSnapshot()
+  + void fromSnapshot(TimerUnitSnapshot snapshot)
+}
 
-        + fromMap(Map)
-        + toMap()
-    }
+class TaskMeta {
+  - String _uuid
+  - String _name
+  - String _type
+  - DateTime _createAt
+  - String? _description
+  - bool _archived
 
-    class TimerUnitRepository {
-        + Future<void> saveSnapshot(TimerUnitSnapshot)
-        + Future<TimerUnitSnapshot?> loadSnapshot(String)
-    }
+  + TaskMeta(uuid: String, name: String, type: String, createAt: DateTime, description: String?, archived: bool)
 
-    class TaskMetaRepository {
-        + Future<void> saveTaskMeta(TaskMetaSnapshot)
-        + Future<TaskMetaSnapshot> loadTaskMeta(String)
-    }
+  + void set name(String name)
+  + void set type(String type)
+  + void set description(String? description)
+  + void set archived(bool archived)
 
-    class SnapshotWithMeta {
-        + TimerUnitSnapshot timerSnapshot
-        + TaskMetaSnapshot taskSnapshot
-    }
+  + TaskMetaSnapshot toSnapshot()
+  + void fromSnapshot(TaskMetaSnapshot snapshot)
+}
 
-    %% Relationships
-    SnapshotWithMeta --> TimerUnitSnapshot
-    SnapshotWithMeta --> TaskMetaSnapshot
-    
-    TimerUnit --> TimerUnitSnapshot : toSnapshot/fromSnapshot
-    TaskMeta --> TaskMetaSnapshot : toSnapshot/fromSnapshot
+TimerUnit ..> TimerUnitSnapshot : toSnapshot/fromSnapshot
+TaskMeta ..> TaskMetaSnapshot : toSnapshot/fromSnapshot
 
-    TimerUnitSnapshot --> TimerUnitRepository : persist to
-    TimerUnitRepository --> TimerUnitSnapshot : load from
+%% SnapshotWithMeta 组合关系
+class SnapshotWithMeta~T~ {
+  + T snapshot
+  + TaskMetaSnapshot taskMetaSnapshot
 
-    TaskMetaSnapshot --> TaskMetaRepository : persist to
-    TaskMetaRepository --> TaskMetaSnapshot : load from
+  + Map<String, dynamic> toMap()
+}
+
+SnapshotWithMeta "1" --> "1" SnapshotBase : snapshot
+SnapshotWithMeta "1" --> "1" TaskMetaSnapshot : taskMetaSnapshot
+
+%% 仓库接口及实现
+class SnapshotRepository~T~ {
+  <<abstract>>
+  + Future<void> saveSnapshot(T snapshot)
+  + Future<T?> loadSnapshot(String uuid)
+}
+
+class TimerUnitSqlite {
+  + Database db
+
+  + Future<void> saveSnapshot(TimerUnitSnapshot snapshot)
+  + Future<TimerUnitSnapshot?> loadSnapshot(String uuid)
+}
+
+class TaskMetaSqlite {
+  + Database db
+
+  + Future<void> saveSnapshot(TaskMetaSnapshot snapshot)
+  + Future<TaskMetaSnapshot?> loadSnapshot(String uuid)
+}
+
+TimerUnitSqlite ..|> SnapshotRepository~TimerUnitSnapshot~
+TaskMetaSqlite ..|> SnapshotRepository~TaskMetaSnapshot~
+
+TimerUnitSqlite ..> TimerUnitSnapshot : uses toMap/fromMap
+TaskMetaSqlite ..> TaskMetaSnapshot : uses toMap/fromMap
 ```
+
 ## 前端
 - 使用Timer.periodic()手动刷新，定期与后台同步.
 

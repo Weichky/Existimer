@@ -39,7 +39,7 @@ class AppDatabase {
         type TEXT NOT NULL,
         created_at TEXT,
         archived INTEGER DEFAULT 0,
-        note TEXT
+        description TEXT
       );
     ''');
 
