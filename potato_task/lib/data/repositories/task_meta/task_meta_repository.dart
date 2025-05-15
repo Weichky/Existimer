@@ -1,4 +1,6 @@
+import 'package:potato_task/snapshots/meta_snapshot.dart';
+
 abstract class TaskMetaRepository {
-  Future<void> saveTaskMeta(String taskName);
-  Future<String> loadTaskMeta(String uuid);
+  Future<void> saveTaskMeta(TaskMetaSnapshot taskMetaSnapshot);
+  Future<TaskMetaSnapshot> loadTaskMeta(String uuid);
 }
