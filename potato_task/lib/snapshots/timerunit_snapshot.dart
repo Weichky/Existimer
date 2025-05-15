@@ -38,6 +38,7 @@ class TimerUnitSnapshot {
   }
 }
 
+// 扩展方法无法访问类私有成员，不会破坏封装
 extension TimerUnitSnapshotStorage on TimerUnitSnapshot {
   Map<String, dynamic> toMap() {
     return {

@@ -6,7 +6,7 @@ import 'package:potato_task/core/services/clock.dart';
 
 import 'package:potato_task/domain/timer/timer.dart';
 
-import 'package:potato_task/snapshots/timer_unit_snapshot.dart';
+import 'package:potato_task/snapshots/timerunit_snapshot.dart';
 
 class TimerUnit {
   //TimerUnit状态

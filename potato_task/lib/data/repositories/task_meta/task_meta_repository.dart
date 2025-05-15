@@ -1,4 +1,4 @@
 abstract class TaskMetaRepository {
-  Future<void> saveTaskName(String taskName);
-  Future<String> loadTaskName(String uuid);
+  Future<void> saveTaskMeta(String taskName);
+  Future<String> loadTaskMeta(String uuid);
 }
