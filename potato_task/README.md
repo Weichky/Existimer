@@ -159,7 +159,7 @@ TaskMetaSqlite ..> TaskMetaSnapshot : uses toMap/fromMap
 **12日A**
 - 基于EntityWithMeta派生具体类.
 
-**13&14日**
+**13&14日AB**
 - 休息一下，马上回来（其实14日是有水一下的）
 
 **15日A**
@@ -168,4 +168,7 @@ TaskMetaSqlite ..> TaskMetaSnapshot : uses toMap/fromMap
 - 数据库结构已经搭建了，但是相应的逻辑没有完成（snapshot没有处理好）
 
 **16日A**
-
+- 将snapshot纳入SnapshotBase基类
+- 理清了存储关系
+- 考虑将哲学观点融入项目设计
+- PotatoTask名字并不是很好，考虑改名“Existimer”，不过这不是这个阶段最重要的名字
