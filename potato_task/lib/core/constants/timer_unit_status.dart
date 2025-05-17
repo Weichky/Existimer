@@ -8,20 +8,7 @@ enum TimerUnitStatus {
   bool get isInactive => this == TimerUnitStatus.inactive;
   bool get isPaused => this == TimerUnitStatus.paused;
   bool get isTimeout => this == TimerUnitStatus.timeout;
-
-  String get name {
-    switch (this) {
-      case TimerUnitStatus.active:
-        return "active";
-      case TimerUnitStatus.inactive:
-        return "inactive";
-      case TimerUnitStatus.paused:
-        return "paused";
-      case TimerUnitStatus.timeout:
-        return "timeout";
-    }
-  }
-
+  
   static TimerUnitStatus fromString(String string) {
     switch (string) {
       case "active":

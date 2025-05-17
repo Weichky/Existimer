@@ -12,14 +12,14 @@ class AppDatabase {
       version: 1,
       onCreate: (db, version) async {
         await setupSchema(db);
-        await db.insert('settings', {'key': 'initialized', 'value': '1'});
+        await db.insert('settings', {'id': 1, 'initialized': 1});
       },
     );
   }
 
   Future<void> setupSchema([Database? dbOverride]) async {
     final db = dbOverride ?? _db;
-    //存储状态
+    // 存储状态
     await db.execute('''
       CREATE TABLE IF NOT EXISTS timer_units (
         uuid TEXT PRIMARY KEY,
@@ -31,7 +31,7 @@ class AppDatabase {
       );
     ''');
 
-    //将meta和数据分离
+    // 将meta和数据分离
     await db.execute('''
       CREATE TABLE IF NOT EXISTS task_meta (
         uuid TEXT PRIMARY KEY,
@@ -54,29 +54,67 @@ class AppDatabase {
 
     await db.execute('''
       CREATE TABLE IF NOT EXISTS settings (
-        key TEXT PRIMARY KEY,
-        value TEXT NOT NULL
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        initialized INTEGER NOT NULL,
+
+        language TEXT,
+
+        enable_dark_mode INTEGER,
+        auto_dark_mode INTEGER,
+        dark_mode_follow_system INTEGER,
+
+        theme_color TEXT,
+
+        enable_sound INTEGER,
+        enable_finished_sound INTEGER,
+        enable_notification INTEGER,
+
+        enable_debug INTEGER,
+        enable_log INTEGER,
+
+        default_task_type TEXT,
+        default_timer_unit_type TEXT,
+
+        countdown_duration_ms INTEGER,
       );
     ''');
   }
-
 
   Future<bool> checkInitialized() async {
     try {
       final result = await _db.query(
         'settings',
-        where: 'key = ?',
-        whereArgs: ['initialized'],
+        columns: ['initialized'],
         limit: 1,
       );
-      return result.isNotEmpty;
+
+      if (result.isEmpty) return false;
+
+      final row = result.first;
+      final initializedValue = row['initialized'] as int?;
+      return initializedValue == 1;
     } catch (e) {
       return false;
     }
   }
 
   Future<void> setInitializedFlag() async {
-    await _db.insert('settings', {'key': 'initialized', 'value': 1});
+    // 查询有无记录
+    final countResult = await _db.rawQuery('SELECT COUNT(*) FROM settings');
+    final count = Sqflite.firstIntValue(countResult) ?? 0;
+
+    if (count == 0) {
+      // 没有记录，插入一条
+      await _db.insert('settings', {
+        'initialized': 1,
+      });
+    } else {
+      // 有记录，更新第一条记录
+      await _db.update(
+        'settings',
+        {'initialized': 1},
+      );
+    }
   }
 
   Database get db => _db;

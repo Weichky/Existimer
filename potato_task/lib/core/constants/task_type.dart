@@ -1,0 +1,4 @@
+enum TaskType {
+  timer,
+  note,
+}
