@@ -1,28 +1,30 @@
 import 'package:sqflite/sqflite.dart';
 
 import 'package:potato_task/data/repositories/snapshot_repository.dart';
-import 'package:potato_task/snapshots/timerunit_snapshot.dart';
+import 'package:potato_task/snapshots/timer_unit_snapshot.dart';
 
-class TimerUnitSqlite implements SnapshotRepository<TimerUnitSnapshot>{
+class TimerUnitSqlite implements SnapshotRepository<TimerUnitSnapshot> {
   final Database db;
+  static const _table = 'timer_units';
 
   TimerUnitSqlite(this.db);
 
   @override
   Future<void> saveSnapshot(TimerUnitSnapshot snapshot) async {
     await db.insert(
-      'timer_units',
+      _table,
       snapshot.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      conflictAlgorithm: ConflictAlgorithm.replace
     );
   }
 
   @override
   Future<TimerUnitSnapshot?> loadSnapshot(String uuid) async {
     final result = await db.query(
-      'timer_units',
+      _table,
       where: 'uuid = ?',
       whereArgs: [uuid],
+      limit: 1
     );
 
     if (result.isNotEmpty) {
@@ -30,5 +32,34 @@ class TimerUnitSqlite implements SnapshotRepository<TimerUnitSnapshot>{
     }
 
     return null;
+  }
+}
+
+extension TimerUnitSqliteQueries on TimerUnitSqlite {
+  // 防止注入，虽然没啥用
+  static const validFields = [
+    'uuid',
+    'status',
+    'type',
+    'duration_ms',
+    'reference_time',
+    'last_remain_ms'
+  ];
+
+  Future<List<TimerUnitSnapshot>> queryByField(
+    String field,
+    dynamic value
+  ) async {
+    if (!validFields.contains(field)) {
+      throw ArgumentError('Invalid field name: $field');
+    }
+
+    final result = await db.query(
+      TimerUnitSqlite._table,
+      where: '$field = ?',
+      whereArgs: [value]
+    );
+
+    return result.map((e) => TimerUnitSnapshot.fromMap(e)).toList();
   }
 }

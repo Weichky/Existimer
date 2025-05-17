@@ -1,20 +1,30 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/widgets.dart';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class AppDatabase {
-  late Database _db;
+  static const String defaultDbName = 'app.db';
 
-  Future<void> init() async {
+  late Database _db;
+  bool _initialized = false;
+
+  Future<void> init([String db = defaultDbName]) async {
+    if (_initialized) return;
+
     final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'app.db');
+    final path = join(dbPath, db);
     _db = await openDatabase(
       path,
       version: 1,
       onCreate: (db, version) async {
         await setupSchema(db);
         await db.insert('settings', {'id': 1, 'initialized': 1});
-      },
+      }
     );
+
+    _initialized = true;
   }
 
   Future<void> setupSchema([Database? dbOverride]) async {
@@ -75,7 +85,7 @@ class AppDatabase {
         default_task_type TEXT,
         default_timer_unit_type TEXT,
 
-        countdown_duration_ms INTEGER,
+        countdown_duration_ms INTEGER
       );
     ''');
   }
@@ -85,7 +95,7 @@ class AppDatabase {
       final result = await _db.query(
         'settings',
         columns: ['initialized'],
-        limit: 1,
+        limit: 1
       );
 
       if (result.isEmpty) return false;
@@ -93,26 +103,26 @@ class AppDatabase {
       final row = result.first;
       final initializedValue = row['initialized'] as int?;
       return initializedValue == 1;
-    } catch (e) {
+    }
+    catch (e) {
       return false;
     }
   }
 
   Future<void> setInitializedFlag() async {
-    // 查询有无记录
     final countResult = await _db.rawQuery('SELECT COUNT(*) FROM settings');
     final count = Sqflite.firstIntValue(countResult) ?? 0;
 
     if (count == 0) {
-      // 没有记录，插入一条
-      await _db.insert('settings', {
-        'initialized': 1,
-      });
-    } else {
-      // 有记录，更新第一条记录
+      // 没有记录，插入一条，id 必须是 1
+      await _db.insert('settings', {'id': 1, 'initialized': 1});
+    }
+    else {
       await _db.update(
         'settings',
         {'initialized': 1},
+        where: 'id = ?',
+        whereArgs: [1]
       );
     }
   }

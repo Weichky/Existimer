@@ -6,7 +6,7 @@ import 'package:potato_task/core/utils/clock.dart';
 
 import 'package:potato_task/domain/timer/timer.dart';
 
-import 'package:potato_task/snapshots/timerunit_snapshot.dart';
+import 'package:potato_task/snapshots/timer_unit_snapshot.dart';
 
 class TimerUnit {
   //TimerUnit状态
@@ -23,12 +23,12 @@ class TimerUnit {
 
   TimerUnit._internal(this._timerUnitType, this._duration)
     : _uuid = UuidHelper.getUuid(),
-      _status = TimerUnitStatus.inactive,
-      _currentTimer =
-          _timerUnitType.isCountup ? CountupTimer() : CountdownTimer(_duration),
-      _referenceTime = null,
-      _lastRemainTime = _timerUnitType.isCountdown ? _duration : null,
-      clock = Clock();
+    _status = TimerUnitStatus.inactive,
+    _currentTimer =
+    _timerUnitType.isCountup ? CountupTimer() : CountdownTimer(_duration),
+    _referenceTime = null,
+    _lastRemainTime = _timerUnitType.isCountdown ? _duration : null,
+    clock = Clock();
 
   factory TimerUnit.countup() {
     return TimerUnit._internal(TimerUnitType.countup, Duration());
@@ -72,7 +72,8 @@ class TimerUnit {
       _status = TimerUnitStatus.active;
 
       _update();
-    } else {
+    }
+    else {
       throw StateError("TimerUnit must be inactive before you call start().");
     }
   }
@@ -85,9 +86,11 @@ class TimerUnit {
       _update();
       _reset(_duration);
       _status = TimerUnitStatus.paused;
-    } else if (_status.isTimeout) {
+    }
+    else if (_status.isTimeout) {
       stop();
-    } else {
+    }
+    else {
       throw StateError("You must start TimerUnit before calling pause().");
     }
   }
@@ -98,7 +101,8 @@ class TimerUnit {
       _update();
 
       _status = TimerUnitStatus.active;
-    } else {
+    }
+    else {
       throw StateError("You must pause TimerUnit before calling resume().");
     }
   }
@@ -106,7 +110,8 @@ class TimerUnit {
   void stop() {
     if (_status.isInactive) {
       return;
-    } else {
+    }
+    else {
       _currentTimer.stop(clock.currentTime);
       _update();
       _status = TimerUnitStatus.inactive;
@@ -117,7 +122,8 @@ class TimerUnit {
     if (_timerUnitType.isCountup) {
       _duration += _currentTimer.duration(clock.currentTime);
       _referenceTime = _currentTimer.referenceTime();
-    } else {
+    }
+    else {
       _duration = _currentTimer.duration(clock.currentTime);
       _referenceTime = _currentTimer.referenceTime();
     }
@@ -126,7 +132,7 @@ class TimerUnit {
   void _checkTimeout() {
     if (_currentTimer.isCountdown) {
       if ((_currentTimer as CountdownTimer).duration(clock.currentTime) <=
-          Duration()) {
+        Duration()) {
         _status = TimerUnitStatus.timeout;
       }
     }
@@ -135,14 +141,16 @@ class TimerUnit {
   //注意不要填入负值
   void _reset([Duration? remainTime]) {
     assert(
-      remainTime == null || remainTime > Duration(),
-      "Should not reset from negtive remainTime.",
+    remainTime == null || remainTime > Duration(),
+    "Should not reset from negtive remainTime."
     );
     if (_currentTimer is CountupTimer) {
       (_currentTimer as CountupTimer).reset();
-    } else if (_currentTimer is CountdownTimer && remainTime != null) {
+    }
+    else if (_currentTimer is CountdownTimer && remainTime != null) {
       (_currentTimer as CountdownTimer).reset(remainTime);
-    } else {
+    }
+    else {
       throw ArgumentError("Cannot reset without remainTime.");
     }
   }
@@ -153,7 +161,7 @@ class TimerUnit {
     type: _timerUnitType,
     duration: _duration,
     referenceTime: _referenceTime,
-    lastRemainTime: _lastRemainTime,
+    lastRemainTime: _lastRemainTime
   );
 
   void fromSnapshot(TimerUnitSnapshot timerUnitSnapshot) {
@@ -167,6 +175,6 @@ class TimerUnit {
     //需要检测恢复时的状态
 
     _currentTimer =
-        _timerUnitType.isCountup ? CountupTimer() : CountdownTimer(_duration);
+    _timerUnitType.isCountup ? CountupTimer() : CountdownTimer(_duration);
   }
 }

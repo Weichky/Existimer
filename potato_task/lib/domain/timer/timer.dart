@@ -20,8 +20,8 @@ class CountupTimer extends TimerBase {
   @override
   Duration duration(DateTime now) {
     assert(
-      startTime != null,
-      "You must start CountupTimer before calling Duration().",
+    startTime != null,
+    "You must start CountupTimer before calling Duration()."
     );
     return now.difference(startTime!);
   } //上层需保证非空调用
@@ -29,8 +29,8 @@ class CountupTimer extends TimerBase {
   @override
   DateTime referenceTime() {
     assert(
-      startTime != null,
-      "You must start CountupTimer before calling referenceTime().",
+    startTime != null,
+    "You must start CountupTimer before calling referenceTime()."
     );
     return startTime!;
   } //上层需保证非空调用
@@ -43,8 +43,8 @@ class CountupTimer extends TimerBase {
   @override
   void stop(DateTime now) {
     assert(
-      startTime != null,
-      "You must start CountupTimer before calling stop().",
+    startTime != null,
+    "You must start CountupTimer before calling stop()."
     );
     totalTime += now.difference(startTime!);
   } //上层需保证非空调用
@@ -69,8 +69,8 @@ class CountdownTimer extends TimerBase {
   @override
   Duration duration(DateTime now) {
     assert(
-      endTime != null,
-      "You must start CountdownTimer before calling Duration().",
+    endTime != null,
+    "You must start CountdownTimer before calling Duration()."
     );
     return endTime!.difference(now);
   } //上层需保证非空调用
@@ -78,8 +78,8 @@ class CountdownTimer extends TimerBase {
   @override
   DateTime referenceTime() {
     assert(
-      endTime != null,
-      "You must start CountdownTimer before calling showTime().",
+    endTime != null,
+    "You must start CountdownTimer before calling showTime()."
     );
     return endTime!;
   } //上层需保证非空调用
@@ -92,8 +92,8 @@ class CountdownTimer extends TimerBase {
   @override
   void stop(DateTime now) {
     assert(
-      endTime != null,
-      "You must start CountdownTimer before calling stop().",
+    endTime != null,
+    "You must start CountdownTimer before calling stop()."
     );
     remainTime = endTime!.difference(now);
   } //上层需保证非空调用

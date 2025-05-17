@@ -1,6 +1,8 @@
 import 'package:potato_task/core/constants/task_type.dart';
 import 'package:potato_task/core/constants/timer_unit_type.dart';
 
+import 'package:potato_task/snapshots/user_settings_snapshot.dart';
+
 class DefaultSettings {
   //外观与语言
   static final String language = "zh-CN";
@@ -9,7 +11,7 @@ class DefaultSettings {
   static final bool autoDarkMode = true;
   static final bool darkModeFollowSystem = true; // 未来再加入自订时间
 
-  static final String themeColor = "";  // 暂未填入
+  static final String themeColor = ""; // 暂未填入
 
   // 声音与通知
   static final bool enableSound = true;
@@ -27,4 +29,22 @@ class DefaultSettings {
   static final TimerUnitType defaultTimerUnitType = TimerUnitType.countdown;
 
   static final Duration countdownDuration = Duration(minutes: 35);
+
+  static UserSettingsSnapshot toSnapshot() {
+    return UserSettingsSnapshot(
+      language: language,
+      enableDarkMode: enableDarkMode,
+      autoDarkMode: autoDarkMode,
+      darkModeFollowSystem: darkModeFollowSystem,
+      themeColor: themeColor,
+      enableSound: enableSound,
+      enableFinishedSound: enableFinishedSound,
+      enableNotification: enableNotification,
+      enableDebug: enableDebug,
+      enableLog: enableLog,
+      defaultTaskType: defaultTaskType,
+      defaultTimerUnitType: defaultTimerUnitType,
+      countdownDuration: countdownDuration,
+    );
+  }
 }
