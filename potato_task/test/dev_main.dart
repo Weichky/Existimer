@@ -1,9 +1,16 @@
 import 'package:flutter/widgets.dart';
+import 'dart:io';
+import 'dart:async';
+
 import 'package:potato_task/application/services/app_startup_service.dart';
 import 'package:potato_task/data/repositories/app_database.dart';
+import 'package:potato_task/snapshots/timer_unit_snapshot.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:potato_task/data/repositories/timer_unit/timer_unit_sqlite.dart';
 
-void main() async{
+import 'package:potato_task/domain/timer/timer_unit.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   sqfliteFfiInit();
@@ -11,10 +18,54 @@ void main() async{
 
   final AppDatabase appDatabase = AppDatabase();
   await appDatabase.init();
-  
+
   final AppStartupService appStartupService = AppStartupService(
-    database: appDatabase,
+    database: appDatabase
   );
 
   await appStartupService.initializeApp();
+
+  final TimerUnit timerUnit = TimerUnit.countdown(Duration(minutes: 1));
+  print(timerUnit.status.isInactive);
+  int counter = 0;
+
+  final TimerUnitSqlite timerRepo = appStartupService.timerRepo;
+
+List<TimerUnitSnapshot> snapshots = await timerRepo.queryByField(
+    'status',
+    'active',
+  );
+
+  if (snapshots.isNotEmpty) {
+    TimerUnitSnapshot snapshot = snapshots.first;
+
+    print(timerUnit.uuid);
+    print(snapshot.toMap());
+
+    timerUnit.fromSnapshot(snapshot);
+
+    print(timerUnit.uuid);
+    // 现在可以使用 snapshot 了
+  } else {
+  }
+
+  Future<void> _saveSnapshotAsync() async {
+    await timerRepo.saveSnapshot(timerUnit.toSnapshot());
+    print(timerUnit.toSnapshot().toMap());
+  }
+
+  timerUnit.start();
+
+  Timer.periodic(Duration(seconds: 1), (timer) {
+      counter++;
+      _saveSnapshotAsync();
+      print('$counter seconds.\n');
+
+      if (counter >= 10) {
+        timer.cancel();
+        print('now for 10s.\n');
+      }
+    }
+  );
+
 }

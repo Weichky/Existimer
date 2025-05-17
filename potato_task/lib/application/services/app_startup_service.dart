@@ -38,4 +38,6 @@ class AppStartupService {
   Future<void> _recoverUnfinishedTimers() async {
     // 未完成逻辑
   }
+
+  get timerRepo => _timerRepo;
 }

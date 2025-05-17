@@ -173,3 +173,9 @@ TaskMetaSqlite ..> TaskMetaSnapshot : uses toMap/fromMap
 - [x] ==考虑将哲学观点融入项目设计==
 - [x] PotatoTask名字并不是很好，考虑改名“Existimer”，不过这个阶段最重要的不是名字
 - [x] 删除了SnapshotWithMeta,该类没有起到作用
+
+**17日B**
+- [x] 完成了设置的编写
+- [x] 数不清的工作
+- [x] 数据库基本没问题
+- 发现TimerUnit工作竟然尚未完成，暂且搁置
