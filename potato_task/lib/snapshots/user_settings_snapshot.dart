@@ -54,7 +54,7 @@ class UserSettingsSnapshot extends SnapshotBase {
   });
 
   @override
-Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'language': language,
 
@@ -80,5 +80,51 @@ Map<String, dynamic> toMap() {
 
       'countdown_duration': countdownDuration?.inMilliseconds,
     };
+  }
+
+  static UserSettingsSnapshot fromMap(Map<String, dynamic> map) {
+    return UserSettingsSnapshot(
+      language: map['language'] as String?,
+
+      enableDarkMode:
+          map['enable_dark_mode'] == null
+              ? null
+              : (map['enable_dark_mode'] == 1),
+      autoDarkMode:
+          map['auto_dark_mode'] == null ? null : (map['auto_dark_mode'] == 1),
+      darkModeFollowSystem:
+          map['dark_mode_follow_system'] == null
+              ? null
+              : (map['dark_mode_follow_system'] == 1),
+
+      themeColor: map['theme_color'] as String?,
+
+      enableSound:
+          map['enable_sound'] == null ? null : (map['enable_sound'] == 1),
+      enableFinishedSound:
+          map['enable_finished_sound'] == null
+              ? null
+              : (map['enable_finished_sound'] == 1),
+      enableNotification:
+          map['enable_notification'] == null
+              ? null
+              : (map['enable_notification'] == 1),
+
+      enableDebug:
+          map['enable_debug'] == null ? null : (map['enable_debug'] == 1),
+      enableLog: map['enable_log'] == null ? null : (map['enable_log'] == 1),
+
+      defaultTaskType: TaskType.fromString(
+        map['default_task_type'] as String?,
+      ),
+      defaultTimerUnitType: TimerUnitType.fromString(
+        map['default_timer_unit_type'] as String?,
+      ),
+
+      countdownDuration:
+          map['countdown_duration'] == null
+              ? null
+              : Duration(milliseconds: map['countdown_duration'] as int),
+    );
   }
 }

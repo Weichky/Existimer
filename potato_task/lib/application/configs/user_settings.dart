@@ -1,31 +1,94 @@
 import 'package:potato_task/core/constants/task_type.dart';
 import 'package:potato_task/core/constants/timer_unit_type.dart';
 
+import 'package:potato_task/snapshots/user_settings_snapshot.dart';
+
 class UserSettings {
   //外观与语言
-  String? language;
+  String? _language;
 
-  bool? enableDarkMode;
-  bool? autoDarkMode;
-  bool? darkModeFollowSystem; // 未来再加入自订时间
+  bool? _enableDarkMode;
+  bool? _autoDarkMode;
+  bool? _darkModeFollowSystem; // 未来再加入自订时间
 
-  String? themeColor;
+  String? _themeColor;
 
   // 声音与通知
-  bool? enableSound;
-  bool? enableFinishedSound;
-  bool? enableNotification;
+  bool? _enableSound;
+  bool? _enableFinishedSound;
+  bool? _enableNotification;
 
   // 调试默认配置
-  bool? enableDebug;
-  bool? enableLog;
+  bool? _enableDebug;
+  bool? _enableLog;
 
   // 任务默认配置
-  TaskType? defaultTaskType;
+  TaskType? _defaultTaskType;
 
   // 计时默认配置
-  TimerUnitType? defaultTimerUnitType;
+  TimerUnitType? _defaultTimerUnitType;
 
-  Duration? countdownDuration;
-  int? countdownDurationSeconds;
+  Duration? _countdownDuration;
+
+  UserSettings({
+    String? language,
+    bool? enableDarkMode,
+    bool? autoDarkMode,
+    bool? darkModeFollowSystem,
+    String? themeColor,
+    bool? enableSound,
+    bool? enableFinishedSound,
+    bool? enableNotification,
+    bool? enableDebug,
+    bool? enableLog,
+    TaskType? defaultTaskType,
+    TimerUnitType? defaultTimerUnitType,
+    Duration? countdownDuration,
+  }) : _language = language,
+       _enableDarkMode = enableDarkMode,
+       _autoDarkMode = autoDarkMode,
+       _darkModeFollowSystem = darkModeFollowSystem,
+       _themeColor = themeColor,
+       _enableSound = enableSound,
+       _enableFinishedSound = enableFinishedSound,
+       _enableNotification = enableNotification,
+       _enableDebug = enableDebug,
+       _enableLog = enableLog,
+       _defaultTaskType = defaultTaskType,
+       _defaultTimerUnitType = defaultTimerUnitType,
+       _countdownDuration = countdownDuration;
+
+  UserSettingsSnapshot toSnapshot() {
+    return UserSettingsSnapshot(
+      language: _language,
+      enableDarkMode: _enableDarkMode,
+      autoDarkMode: _autoDarkMode,
+      darkModeFollowSystem: _darkModeFollowSystem,
+      themeColor: _themeColor,
+      enableSound: _enableSound,
+      enableFinishedSound: _enableFinishedSound,
+      enableNotification: _enableNotification,
+      enableDebug: _enableDebug,
+      enableLog: _enableLog,
+      defaultTaskType: _defaultTaskType,
+      defaultTimerUnitType: _defaultTimerUnitType,
+      countdownDuration: _countdownDuration,
+    );
+  }
+
+  void fromSnapshot(UserSettingsSnapshot userSettingsSnapshot) {
+        _language = userSettingsSnapshot.language;
+    _enableDarkMode = userSettingsSnapshot.enableDarkMode;
+    _autoDarkMode = userSettingsSnapshot.autoDarkMode;
+    _darkModeFollowSystem = userSettingsSnapshot.darkModeFollowSystem;
+    _themeColor = userSettingsSnapshot.themeColor;
+    _enableSound = userSettingsSnapshot.enableSound;
+    _enableFinishedSound = userSettingsSnapshot.enableFinishedSound;
+    _enableNotification = userSettingsSnapshot.enableNotification;
+    _enableDebug = userSettingsSnapshot.enableDebug;
+    _enableLog = userSettingsSnapshot.enableLog;
+    _defaultTaskType = userSettingsSnapshot.defaultTaskType;
+    _defaultTimerUnitType = userSettingsSnapshot.defaultTimerUnitType;
+    _countdownDuration = userSettingsSnapshot.countdownDuration;
+  }
 }
