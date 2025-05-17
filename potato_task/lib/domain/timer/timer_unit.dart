@@ -2,7 +2,7 @@ import 'package:potato_task/core/constants/timer_unit_status.dart';
 import 'package:potato_task/core/constants/timer_unit_type.dart';
 
 import 'package:potato_task/core/utils/helper.dart';
-import 'package:potato_task/core/services/clock.dart';
+import 'package:potato_task/core/utils/clock.dart';
 
 import 'package:potato_task/domain/timer/timer.dart';
 

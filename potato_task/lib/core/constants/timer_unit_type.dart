@@ -5,8 +5,10 @@ enum TimerUnitType {
   bool get isCountup => this == TimerUnitType.countup;
   bool get isCountdown => this == TimerUnitType.countdown;
 
-  static TimerUnitType? fromString(String? string) {
-    if (string == null) return null;
+  static TimerUnitType fromString(String? string) {
+    if (string == null) {
+      throw ArgumentError("Bad Argument. String cannot be NULL.");
+    }
     switch (string) {
       case "Countup":
         return TimerUnitType.countup;

@@ -2,8 +2,10 @@ enum TaskType {
   timer,
   note;
 
-  static TaskType? fromString(String? string) {
-    if (string == null) return null;
+  static TaskType fromString(String? string) {
+    if (string == null) {
+      throw ArgumentError("Bad Argument. String cannot be NULL.");
+    }
     switch (string) {
       case 'timer':
         return TaskType.timer;
