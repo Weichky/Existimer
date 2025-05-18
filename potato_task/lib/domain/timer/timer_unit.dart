@@ -68,10 +68,10 @@ class TimerUnit {
 
   void start() {
     if (_status.isInactive) {
+      _update();
       _currentTimer.start(clock.currentTime);
       _status = TimerUnitStatus.active;
 
-      _update();
     }
     else {
       throw StateError("TimerUnit must be inactive before you call start().");
@@ -79,11 +79,12 @@ class TimerUnit {
   }
 
   void pause() {
+
     _checkTimeout();
 
     if (_status.isActive) {
-      _currentTimer.stop(clock.currentTime);
       _update();
+      _currentTimer.stop(clock.currentTime);
       _reset(_duration);
       _status = TimerUnitStatus.paused;
     }
@@ -97,8 +98,8 @@ class TimerUnit {
 
   void resume() {
     if (_status.isPaused) {
-      _currentTimer.start(clock.currentTime);
       _update();
+      _currentTimer.start(clock.currentTime);
 
       _status = TimerUnitStatus.active;
     }
@@ -112,14 +113,23 @@ class TimerUnit {
       return;
     }
     else {
-      _currentTimer.stop(clock.currentTime);
       _update();
+      _currentTimer.stop(clock.currentTime);
+
       _status = TimerUnitStatus.inactive;
     }
   }
 
+  // 注意：务必在同时使用_update()和_currentTimer.stop()时
+  // 先使用_update()再使用使用_currentTimer.stop()
+  // 后续务必处理此处逻辑！
   void _update() {
+    if (!_currentTimer.isWorking) {
+      _currentTimer.start(clock.currentTime);
+    } // 避免空endTime和startTime
+
     if (_timerUnitType.isCountup) {
+      // 对于正计时是总时长
       _duration += _currentTimer.duration(clock.currentTime);
       _referenceTime = _currentTimer.referenceTime();
     }
@@ -129,7 +139,12 @@ class TimerUnit {
     }
   }
 
+  // 一定要看上面的_update()提示！
   void _checkTimeout() {
+    if (!_currentTimer.isWorking) {
+      _currentTimer.start(clock.currentTime);
+    } // 避免空endTime和startTime
+
     if (_currentTimer.isCountdown) {
       if ((_currentTimer as CountdownTimer).duration(clock.currentTime) <=
         Duration()) {

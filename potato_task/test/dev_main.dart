@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/widgets.dart';
 import 'dart:io';
 import 'dart:async';
@@ -25,15 +27,15 @@ void main() async {
 
   await appStartupService.initializeApp();
 
-  final TimerUnit timerUnit = TimerUnit.countdown(Duration(minutes: 1));
+  final TimerUnit timerUnit = TimerUnit.countdown(Duration(minutes: 10));
   print(timerUnit.status.isInactive);
   int counter = 0;
 
   final TimerUnitSqlite timerRepo = appStartupService.timerRepo;
 
-List<TimerUnitSnapshot> snapshots = await timerRepo.queryByField(
+  List<TimerUnitSnapshot> snapshots = await timerRepo.queryByField(
     'status',
-    'active',
+    'active'
   );
 
   if (snapshots.isNotEmpty) {
@@ -44,9 +46,10 @@ List<TimerUnitSnapshot> snapshots = await timerRepo.queryByField(
 
     timerUnit.fromSnapshot(snapshot);
 
-    print(timerUnit.uuid);
+    print(timerUnit.toSnapshot().toMap());
     // 现在可以使用 snapshot 了
-  } else {
+  }
+  else {
   }
 
   Future<void> _saveSnapshotAsync() async {
@@ -54,18 +57,31 @@ List<TimerUnitSnapshot> snapshots = await timerRepo.queryByField(
     print(timerUnit.toSnapshot().toMap());
   }
 
-  timerUnit.start();
+  if (timerUnit.status.isPaused) {
+    timerUnit.resume();
+  }
+
+  final completer = Completer<void>();
 
   Timer.periodic(Duration(seconds: 1), (timer) {
       counter++;
-      _saveSnapshotAsync();
       print('$counter seconds.\n');
 
-      if (counter >= 10) {
+      if (counter >= 5) {
         timer.cancel();
-        print('now for 10s.\n');
+        print('now for $counter.\n');
+        completer.complete();
       }
     }
   );
 
+  await completer.future;
+
+  if (timerUnit.status.isActive) {
+    timerUnit.pause();
+  }
+
+  print(timerUnit.toSnapshot().toMap());
+
+  _saveSnapshotAsync();
 }

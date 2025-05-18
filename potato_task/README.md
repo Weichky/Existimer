@@ -179,3 +179,6 @@ TaskMetaSqlite ..> TaskMetaSnapshot : uses toMap/fromMap
 - [x] 数不清的工作
 - [x] 数据库基本没问题
 - 发现TimerUnit工作竟然尚未完成，暂且搁置
+
+**18日A**
+- 还在调试数据库和计时模块. 上次重构后没有进行测试. 必须重写一部分Timer，解决初始化时endTime等没有生成的问题，以及倒计时的逻辑问题. 
