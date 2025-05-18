@@ -35,14 +35,11 @@ void main() async {
 
   List<TimerUnitSnapshot> snapshots = await timerRepo.queryByField(
     'status',
-    'active'
+    'paused'
   );
 
   if (snapshots.isNotEmpty) {
     TimerUnitSnapshot snapshot = snapshots.first;
-
-    print(timerUnit.uuid);
-    print(snapshot.toMap());
 
     timerUnit.fromSnapshot(snapshot);
 
@@ -59,6 +56,11 @@ void main() async {
 
   if (timerUnit.status.isPaused) {
     timerUnit.resume();
+    print(timerUnit.toSnapshot().toMap());
+  }
+
+  if (timerUnit.status.isInactive) {
+    timerUnit.start();
   }
 
   final completer = Completer<void>();
@@ -80,8 +82,6 @@ void main() async {
   if (timerUnit.status.isActive) {
     timerUnit.pause();
   }
-
-  print(timerUnit.toSnapshot().toMap());
 
   _saveSnapshotAsync();
 }
