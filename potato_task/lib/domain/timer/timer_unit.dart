@@ -125,7 +125,7 @@ class TimerUnit {
   // 后续务必处理此处逻辑！
   void _update() {
     if (!_currentTimer.isWorking) {
-      _currentTimer.start(clock.currentTime);
+      _currentTimer.start(_innerTime());
     } // 避免空endTime和startTime
 
     if (_timerUnitType.isCountup) {
@@ -134,8 +134,10 @@ class TimerUnit {
       _referenceTime = _currentTimer.referenceTime();
     }
     else {
-      _duration = _currentTimer.duration(clock.currentTime);
+      print('before _update' + _duration.toString());
+      _duration = _currentTimer.duration(_innerTime());
       _referenceTime = _currentTimer.referenceTime();
+      print('after _update' + _duration.toString());
     }
   }
 
@@ -169,6 +171,8 @@ class TimerUnit {
       throw ArgumentError("Cannot reset without remainTime.");
     }
   }
+
+  DateTime _innerTime() => _timerUnitType.isCountdown ? _referenceTime ?? clock.currentTime : clock.currentTime;
 
   TimerUnitSnapshot toSnapshot() => TimerUnitSnapshot(
     uuid: _uuid,
