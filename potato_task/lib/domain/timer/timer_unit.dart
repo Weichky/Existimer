@@ -124,10 +124,6 @@ class TimerUnit {
   // 先使用_update()再使用使用_currentTimer.stop()
   // 后续务必处理此处逻辑！
   void _update() {
-    if (!_currentTimer.isWorking) {
-      _currentTimer.start(_innerTime());
-    } // 避免空endTime和startTime
-
     if (_timerUnitType.isCountup) {
       // 对于正计时是总时长
       _duration += _currentTimer.duration(clock.currentTime);
@@ -143,10 +139,6 @@ class TimerUnit {
 
   // 一定要看上面的_update()提示！
   void _checkTimeout() {
-    if (!_currentTimer.isWorking) {
-      _currentTimer.start(clock.currentTime);
-    } // 避免空endTime和startTime
-
     if (_currentTimer.isCountdown) {
       if ((_currentTimer as CountdownTimer).duration(clock.currentTime) <=
         Duration()) {
