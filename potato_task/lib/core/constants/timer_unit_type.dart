@@ -10,7 +10,7 @@ enum TimerUnitType {
       throw ArgumentError("Bad Argument. String cannot be NULL.");
     }
     switch (string) {
-      case "Countup":
+      case "countup":
         return TimerUnitType.countup;
       case "countdown":
         return TimerUnitType.countdown;

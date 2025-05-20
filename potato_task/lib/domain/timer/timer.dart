@@ -1,5 +1,5 @@
 abstract class TimerBase {
-  //对于Countup返回totalTime,对于countdown返回remainTime
+  //对于Countup返回totalDuration,对于countdown返回remainDuration
   Duration duration(DateTime now);
   //用于数据库保存状态，对于Countup返回startTime，对于countdown返回endTime
   DateTime referenceTime();
@@ -12,101 +12,116 @@ abstract class TimerBase {
 }
 
 class CountupTimer extends TimerBase {
-  Duration totalTime;
-  DateTime? startTime;
+  Duration _totalDuration;
+  DateTime? _startTime;
 
-  CountupTimer() : totalTime = Duration();
+  CountupTimer() : _totalDuration = Duration();
 
   @override
   Duration duration(DateTime now) {
     assert(
-    startTime != null,
+    _startTime != null,
     "You must start CountupTimer before calling Duration()."
     );
-    return now.difference(startTime!);
+    return _totalDuration;
   } //上层需保证非空调用
 
   @override
   DateTime referenceTime() {
     assert(
-    startTime != null,
+    _startTime != null,
     "You must start CountupTimer before calling referenceTime()."
     );
-    return startTime!;
+    return _startTime!;
   } //上层需保证非空调用
 
   @override
   void start(DateTime now) {
-    startTime = now;
+    _startTime = now;
   }
 
   @override
   void stop(DateTime now) {
     assert(
-    startTime != null,
+    _startTime != null,
     "You must start CountupTimer before calling stop()."
     );
 
-    totalTime += now.difference(startTime!);
+    _totalDuration += now.difference(_startTime!);
   } //上层需保证非空调用
 
   void reset() {
-    totalTime = Duration();
-    startTime = null;
-
+    _totalDuration = Duration();
+    _startTime = null;
   }
 
   @override
   bool get isCountup => true;
   @override
   bool get isCountdown => false;
+
+  set totalDuration(Duration duration) {
+    _totalDuration = duration;
+  }
+
+  set startTime(DateTime time) {
+    _startTime = time;
+  }
 }
 
 class CountdownTimer extends TimerBase {
-  Duration remainTime;
-  DateTime? endTime;
+  Duration _remainDuration;
+  DateTime? _endTime;
 
-  CountdownTimer(this.remainTime);
+  CountdownTimer(this._remainDuration);
 
   @override
   Duration duration(DateTime now) {
     assert(
-    endTime != null,
+    _endTime != null,
     "You must start CountdownTimer before calling Duration()."
     );
-    return endTime!.difference(now);
+    return _remainDuration;
   } //上层需保证非空调用
 
   @override
   DateTime referenceTime() {
     assert(
-    endTime != null,
+    _endTime != null,
     "You must start CountdownTimer before calling showTime()."
     );
-    return endTime!;
+    return _endTime!;
   } //上层需保证非空调用
 
   @override
   void start(DateTime now) {
-    endTime = now.add(remainTime);
+    _endTime = now.add(_remainDuration);
   }
 
   @override
   void stop(DateTime now) {
     assert(
-    endTime != null,
+    _endTime != null,
     "You must start CountdownTimer before calling stop()."
     );
-    remainTime = endTime!.difference(now);
+    _remainDuration = _endTime!.difference(now);
   } //上层需保证非空调用
 
   void reset(Duration time) {
-    remainTime = time;
-    endTime = null;
+    _remainDuration = time;
+    _endTime = null;
   }
 
   @override
   bool get isCountup => false;
   @override
   bool get isCountdown => true;
+
+  set remainDuration(Duration duration) {
+    _remainDuration = duration;
+  }
+
+  set endTime(DateTime time) {
+    _endTime = time;
+  }
 }

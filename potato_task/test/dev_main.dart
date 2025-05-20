@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/widgets.dart';
 import 'dart:io';
 import 'dart:async';
@@ -27,8 +25,7 @@ void main() async {
 
   await appStartupService.initializeApp();
 
-  final TimerUnit timerUnit = TimerUnit.countdown(Duration(minutes: 10));
-  print(timerUnit.status.isInactive);
+  final TimerUnit timerUnit = TimerUnit.countup();
   int counter = 0;
 
   final TimerUnitSqlite timerRepo = appStartupService.timerRepo;
@@ -69,7 +66,7 @@ void main() async {
       counter++;
       print('$counter seconds.\n');
 
-      if (counter >= 5) {
+      if (counter >= 6) {
         timer.cancel();
         print('now for $counter.\n');
         completer.complete();

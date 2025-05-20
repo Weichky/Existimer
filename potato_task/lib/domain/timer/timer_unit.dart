@@ -8,6 +8,9 @@ import 'package:potato_task/domain/timer/timer.dart';
 
 import 'package:potato_task/snapshots/timer_unit_snapshot.dart';
 
+
+// 注意_currentTimer.start()和_currentTimer.stop()分别更新了什么
+// 需要对外提供时长接口
 class TimerUnit {
   //TimerUnit状态
   String _uuid;
@@ -18,10 +21,11 @@ class TimerUnit {
   //TimerUnit计时数据
   Duration _duration;
   DateTime? _referenceTime;
-  Duration? _lastRemainTime;
-  Clock clock;
 
-  bool _isFromSnapshot;
+  //
+  Duration? _lastRemainTime;
+  
+  Clock clock;
 
   TimerUnit._internal(this._timerUnitType, this._duration)
     : _uuid = UuidHelper.getUuid(),
@@ -30,8 +34,7 @@ class TimerUnit {
     _timerUnitType.isCountup ? CountupTimer() : CountdownTimer(_duration),
     _referenceTime = null,
     _lastRemainTime = _timerUnitType.isCountdown ? _duration : null,
-    clock = Clock(),
-    _isFromSnapshot = false;
+    clock = Clock();
 
   factory TimerUnit.countup() {
     return TimerUnit._internal(TimerUnitType.countup, Duration());
@@ -71,7 +74,6 @@ class TimerUnit {
 
   void start() {
     if (_status.isInactive) {
-      _update();
       _currentTimer.start(clock.currentTime);
       _status = TimerUnitStatus.active;
 
@@ -82,26 +84,26 @@ class TimerUnit {
   }
 
   void pause() {
-
-    _checkTimeout();
-
     if (_status.isActive) {
-      _update();
       _currentTimer.stop(clock.currentTime);
-      _reset(_duration);
+      _update();
       _status = TimerUnitStatus.paused;
+      _checkTimeout();
     }
-    else if (_status.isTimeout) {
+
+    if (_status.isPaused) {
+
+    } else if (_status.isActive) {
+        _reset(_duration);
+    } else if (_status.isTimeout) {
       stop();
-    }
-    else {
+    } else {
       throw StateError("You must start TimerUnit before calling pause().");
     }
   }
 
   void resume() {
     if (_status.isPaused) {
-      _update();
       _currentTimer.start(clock.currentTime);
 
       _status = TimerUnitStatus.active;
@@ -116,8 +118,8 @@ class TimerUnit {
       return;
     }
     else {
-      _update();
       _currentTimer.stop(clock.currentTime);
+      _update();
 
       _status = TimerUnitStatus.inactive;
     }
@@ -126,6 +128,9 @@ class TimerUnit {
   // 注意：务必在同时使用_update()和_currentTimer.stop()时
   // 先使用_update()再使用使用_currentTimer.stop()
   // 后续务必处理此处逻辑！
+
+  // 触发_update()的时机：
+  // 要在其他操作进行前触发，其他操作也要避免重复修改
   void _update() {
     if (_timerUnitType.isCountup) {
       // 对于正计时是总时长
@@ -133,17 +138,15 @@ class TimerUnit {
       _referenceTime = _currentTimer.referenceTime();
     }
     else {
-      print('before _update' + _duration.toString());
-      _duration = _currentTimer.duration(_innerTime());
+      _duration = _currentTimer.duration(clock.currentTime);
       _referenceTime = _currentTimer.referenceTime();
-      print('after _update' + _duration.toString());
     }
   }
 
   // 一定要看上面的_update()提示！
   void _checkTimeout() {
     if (_currentTimer.isCountdown) {
-      if ((_currentTimer as CountdownTimer).duration(clock.currentTime) <=
+      if (_currentTimer.duration(clock.currentTime) <=
         Duration()) {
         _status = TimerUnitStatus.timeout;
       }
@@ -167,8 +170,6 @@ class TimerUnit {
     }
   }
 
-  DateTime _innerTime() => _timerUnitType.isCountdown ? _referenceTime ?? clock.currentTime : clock.currentTime;
-
   TimerUnitSnapshot toSnapshot() => TimerUnitSnapshot(
     uuid: _uuid,
     status: _status,
@@ -190,6 +191,24 @@ class TimerUnit {
     _currentTimer =
     _timerUnitType.isCountup ? CountupTimer() : CountdownTimer(_duration);
 
-    _isFromSnapshot = true;
+    // 恢复计时器
+    if (_timerUnitType.isCountup) {
+      if (!_status.isInactive) {
+        // 此时已有referenceTime
+        (_currentTimer as CountupTimer).startTime = _referenceTime!;
+      }
+    } else {
+      if (!_status.isInactive) {
+        (_currentTimer as CountdownTimer).remainDuration = _duration;
+        // 此时已有referenceTime
+        (_currentTimer as CountdownTimer).endTime = _referenceTime!;
+
+        if (!_status.isPaused) {
+          _currentTimer.stop(clock.currentTime);
+        }
+
+        _checkTimeout();
+      }
+    }
   }
 }
