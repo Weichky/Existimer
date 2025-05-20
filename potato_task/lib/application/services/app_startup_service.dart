@@ -15,7 +15,7 @@ class AppStartupService {
   final UserSettingsSqlite _settingsRepo;
 
   AppStartupService({
-    required AppDatabase database,
+    required AppDatabase database
   }) :
     _database = database,
     _taskRepo = TaskMetaSqlite(database.db),

@@ -24,7 +24,7 @@ class TimerUnit {
 
   //
   Duration? _lastRemainTime;
-  
+
   Clock clock;
 
   TimerUnit._internal(this._timerUnitType, this._duration)
@@ -93,11 +93,14 @@ class TimerUnit {
 
     if (_status.isPaused) {
 
-    } else if (_status.isActive) {
-        _reset(_duration);
-    } else if (_status.isTimeout) {
+    }
+    else if (_status.isActive) {
+      _reset(_duration);
+    }
+    else if (_status.isTimeout) {
       stop();
-    } else {
+    }
+    else {
       throw StateError("You must start TimerUnit before calling pause().");
     }
   }
@@ -197,7 +200,8 @@ class TimerUnit {
         // 此时已有referenceTime
         (_currentTimer as CountupTimer).startTime = _referenceTime!;
       }
-    } else {
+    }
+    else {
       if (!_status.isInactive) {
         (_currentTimer as CountdownTimer).remainDuration = _duration;
         // 此时已有referenceTime
