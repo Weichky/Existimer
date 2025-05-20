@@ -21,6 +21,8 @@ class TimerUnit {
   Duration? _lastRemainTime;
   Clock clock;
 
+  bool _isFromSnapshot;
+
   TimerUnit._internal(this._timerUnitType, this._duration)
     : _uuid = UuidHelper.getUuid(),
     _status = TimerUnitStatus.inactive,
@@ -28,7 +30,8 @@ class TimerUnit {
     _timerUnitType.isCountup ? CountupTimer() : CountdownTimer(_duration),
     _referenceTime = null,
     _lastRemainTime = _timerUnitType.isCountdown ? _duration : null,
-    clock = Clock();
+    clock = Clock(),
+    _isFromSnapshot = false;
 
   factory TimerUnit.countup() {
     return TimerUnit._internal(TimerUnitType.countup, Duration());
@@ -184,8 +187,9 @@ class TimerUnit {
     _lastRemainTime = timerUnitSnapshot.lastRemainTime;
 
     //需要检测恢复时的状态
-
     _currentTimer =
     _timerUnitType.isCountup ? CountupTimer() : CountdownTimer(_duration);
+
+    _isFromSnapshot = true;
   }
 }
