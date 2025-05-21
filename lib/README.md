@@ -6,24 +6,11 @@
 classDiagram
 direction LR
 
-%% 快照基类及实现
+%% Snapshot部分
 class SnapshotBase {
   <<abstract>>
   + Map<String, dynamic> toMap()
 }
-
-class TaskMetaSnapshot {
-  + String uuid
-  + String name
-  + String type
-  + DateTime createAt
-  + String? description
-  + bool archived
-
-  + Map<String, dynamic> toMap()
-  + static TaskMetaSnapshot fromMap(Map<String, dynamic>)
-}
-
 class TimerUnitSnapshot {
   + String uuid
   + TimerUnitStatus status
@@ -35,11 +22,9 @@ class TimerUnitSnapshot {
   + Map<String, dynamic> toMap()
   + static TimerUnitSnapshot fromMap(Map<String, dynamic>)
 }
-
-TaskMetaSnapshot ..|> SnapshotBase
 TimerUnitSnapshot ..|> SnapshotBase
 
-%% 实体与快照依赖
+%% TimerUnit 和 TimerBase 层
 class TimerUnit {
   - String _uuid
   - TimerUnitStatus _status
@@ -52,56 +37,57 @@ class TimerUnit {
 
   + factory countup()
   + factory countdown(Duration time)
-  - TimerUnit._internal(TimerUnitType type, Duration duration)
-
-  + String get uuid
-  + TimerUnitStatus get status
-  + TimerUnitType get type
-
   + void toCountup()
   + void toCountdown(Duration time)
-
   + void start()
   + void pause()
   + void resume()
   + void stop()
-
+  + Duration get duration
   + TimerUnitSnapshot toSnapshot()
   + void fromSnapshot(TimerUnitSnapshot snapshot)
 }
 
-class TaskMeta {
-  - String _uuid
-  - String _name
-  - String _type
-  - DateTime _createAt
-  - String? _description
-  - bool _archived
-
-  + TaskMeta(uuid: String, name: String, type: String, createAt: DateTime, description: String?, archived: bool)
-
-  + void set name(String name)
-  + void set type(String type)
-  + void set description(String? description)
-  + void set archived(bool archived)
-
-  + TaskMetaSnapshot toSnapshot()
-  + void fromSnapshot(TaskMetaSnapshot snapshot)
+class TimerBase {
+  <<abstract>>
+  + Duration duration(DateTime now)
+  + DateTime referenceTime()
+  + void start(DateTime now)
+  + void stop(DateTime now)
+  + bool get isCountup
+  + bool get isCountdown
 }
 
-TimerUnit ..> TimerUnitSnapshot : toSnapshot/fromSnapshot
-TaskMeta ..> TaskMetaSnapshot : toSnapshot/fromSnapshot
+class CountupTimer {
+  - Duration _totalDuration
+  - DateTime? _startTime
 
-%% SnapshotWithMeta 组合关系
-class SnapshotWithMeta~T~ {
-  + T snapshot
-  + TaskMetaSnapshot taskMetaSnapshot
-
-  + Map<String, dynamic> toMap()
+  + Duration duration(DateTime now)
+  + DateTime referenceTime()
+  + void start(DateTime now)
+  + void stop(DateTime now)
+  + void reset()
+  + bool get isCountup
+  + bool get isCountdown
 }
 
-SnapshotWithMeta "1" --> "1" SnapshotBase : snapshot
-SnapshotWithMeta "1" --> "1" TaskMetaSnapshot : taskMetaSnapshot
+class CountdownTimer {
+  - Duration _remainDuration
+  - DateTime? _endTime
+
+  + Duration duration(DateTime now)
+  + DateTime referenceTime()
+  + void start(DateTime now)
+  + void stop(DateTime now)
+  + void reset(Duration time)
+  + bool get isCountup
+  + bool get isCountdown
+}
+
+TimerUnit --> TimerUnitSnapshot : toSnapshot/fromSnapshot
+TimerUnit --> TimerBase : _currentTimer
+CountupTimer ..|> TimerBase
+CountdownTimer ..|> TimerBase
 
 %% 仓库接口及实现
 class SnapshotRepository~T~ {
@@ -117,18 +103,8 @@ class TimerUnitSqlite {
   + Future<TimerUnitSnapshot?> loadSnapshot(String uuid)
 }
 
-class TaskMetaSqlite {
-  + Database db
-
-  + Future<void> saveSnapshot(TaskMetaSnapshot snapshot)
-  + Future<TaskMetaSnapshot?> loadSnapshot(String uuid)
-}
-
 TimerUnitSqlite ..|> SnapshotRepository~TimerUnitSnapshot~
-TaskMetaSqlite ..|> SnapshotRepository~TaskMetaSnapshot~
-
 TimerUnitSqlite ..> TimerUnitSnapshot : uses toMap/fromMap
-TaskMetaSqlite ..> TaskMetaSnapshot : uses toMap/fromMap
 ```
 
 ## 前端
@@ -171,7 +147,7 @@ TaskMetaSqlite ..> TaskMetaSnapshot : uses toMap/fromMap
 - [x] 将snapshot纳入SnapshotBase基类
 - [x] 理清了存储关系
 - [x] ==考虑将哲学观点融入项目设计==
-- [x] PotatoTask名字并不是很好，考虑改名“Existimer”，不过这个阶段最重要的不是名字
+- [x] ~~PotatoTask名字并不是很好，考虑改名“Existimer”，不过这个阶段最重要的不是名字~~ `已改名`
 - [x] 删除了SnapshotWithMeta,该类没有起到作用
 
 **17日B**
@@ -182,3 +158,7 @@ TaskMetaSqlite ..> TaskMetaSnapshot : uses toMap/fromMap
 
 **18日A**
 - 还在调试数据库和计时模块. 上次重构后没有进行测试. 必须重写一部分Timer，解决初始化时endTime等没有生成的问题，以及倒计时的逻辑问题. 
+
+**19日至21日**
+- [x] 数据库和TimerUnit模块等调试完毕，修复了发现的所有问题，准备水两天休息一下
+- 下阶段准备完善一下settings/config的部分，然后准备riverpod架构的设计
