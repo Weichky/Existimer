@@ -1,7 +1,7 @@
-import 'package:potato_task/snapshots/snapshot_base.dart';
+import 'package:existimer/snapshots/snapshot_base.dart';
 
-import 'package:potato_task/core/constants/task_type.dart';
-import 'package:potato_task/core/constants/timer_unit_type.dart';
+import 'package:existimer/core/constants/task_type.dart';
+import 'package:existimer/core/constants/timer_unit_type.dart';
 
 class UserSettingsSnapshot extends SnapshotBase {
   //外观与语言

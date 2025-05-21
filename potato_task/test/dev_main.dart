@@ -2,13 +2,13 @@ import 'package:flutter/widgets.dart';
 import 'dart:io';
 import 'dart:async';
 
-import 'package:potato_task/application/services/app_startup_service.dart';
-import 'package:potato_task/data/repositories/app_database.dart';
-import 'package:potato_task/snapshots/timer_unit_snapshot.dart';
+import 'package:existimer/application/services/app_startup_service.dart';
+import 'package:existimer/data/repositories/app_database.dart';
+import 'package:existimer/snapshots/timer_unit_snapshot.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:potato_task/data/repositories/timer_unit/timer_unit_sqlite.dart';
+import 'package:existimer/data/repositories/timer_unit/timer_unit_sqlite.dart';
 
-import 'package:potato_task/domain/timer/timer_unit.dart';
+import 'package:existimer/domain/timer/timer_unit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

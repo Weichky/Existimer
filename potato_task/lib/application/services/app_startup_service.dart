@@ -1,12 +1,12 @@
-import 'package:potato_task/core/constants/default_config.dart';
-import 'package:potato_task/snapshots/task_meta_snapshot.dart';
+import 'package:existimer/core/constants/default_config.dart';
+import 'package:existimer/snapshots/task_meta_snapshot.dart';
 
-import 'package:potato_task/data/repositories/configs/user_settings_sqlite.dart';
-import 'package:potato_task/data/repositories/timer_unit/timer_unit_sqlite.dart';
-import 'package:potato_task/data/repositories/task_meta/task_meta_sqlite.dart';
+import 'package:existimer/data/repositories/configs/user_settings_sqlite.dart';
+import 'package:existimer/data/repositories/timer_unit/timer_unit_sqlite.dart';
+import 'package:existimer/data/repositories/task_meta/task_meta_sqlite.dart';
 
-import 'package:potato_task/data/repositories/snapshot_repository.dart';
-import 'package:potato_task/data/repositories/app_database.dart';
+import 'package:existimer/data/repositories/snapshot_repository.dart';
+import 'package:existimer/data/repositories/app_database.dart';
 
 class AppStartupService {
   final AppDatabase _database;

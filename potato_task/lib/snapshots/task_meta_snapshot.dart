@@ -1,4 +1,4 @@
-import 'package:potato_task/snapshots/snapshot_base.dart';
+import 'package:existimer/snapshots/snapshot_base.dart';
 
 
 class TaskMetaSnapshot extends SnapshotBase {

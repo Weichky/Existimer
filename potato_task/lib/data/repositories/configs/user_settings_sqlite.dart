@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:potato_task/data/repositories/snapshot_repository.dart';
-import 'package:potato_task/snapshots/user_settings_snapshot.dart';
+import 'package:existimer/data/repositories/snapshot_repository.dart';
+import 'package:existimer/snapshots/user_settings_snapshot.dart';
 
 class UserSettingsSqlite implements SnapshotRepository<UserSettingsSnapshot> {
   final Database db;

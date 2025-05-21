@@ -1,12 +1,12 @@
-import 'package:potato_task/core/constants/timer_unit_status.dart';
-import 'package:potato_task/core/constants/timer_unit_type.dart';
+import 'package:existimer/core/constants/timer_unit_status.dart';
+import 'package:existimer/core/constants/timer_unit_type.dart';
 
-import 'package:potato_task/core/utils/helper.dart';
-import 'package:potato_task/core/utils/clock.dart';
+import 'package:existimer/core/utils/helper.dart';
+import 'package:existimer/core/utils/clock.dart';
 
-import 'package:potato_task/domain/timer/timer.dart';
+import 'package:existimer/domain/timer/timer.dart';
 
-import 'package:potato_task/snapshots/timer_unit_snapshot.dart';
+import 'package:existimer/snapshots/timer_unit_snapshot.dart';
 
 
 // 注意_currentTimer.start()和_currentTimer.stop()分别更新了什么
