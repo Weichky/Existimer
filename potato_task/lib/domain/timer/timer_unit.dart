@@ -129,7 +129,7 @@ class TimerUnit {
   }
 
   // 注意：务必在同时使用_update()和_currentTimer.stop()时
-  // 先使用_update()再使用使用_currentTimer.stop()
+  // 先使用_currentTimer.stop()
   // 后续务必处理此处逻辑！
 
   // 触发_update()的时机：
@@ -214,5 +214,24 @@ class TimerUnit {
         _checkTimeout();
       }
     }
+  }
+
+  Duration get duration {
+    if (_timerUnitType.isCountup) {
+      if (_status.isPaused || _status.isInactive) {
+        return _duration;
+      } else if (_status.isActive) {
+        // 此时还未更新
+        return _duration + clock.currentTime.difference(_currentTimer.referenceTime());
+      }
+    } else {
+      if (_status.isPaused || _status.isInactive) {
+        return _duration;
+      } else if (_status.isActive || _status.isTimeout) {
+        return _currentTimer.referenceTime().difference(clock.currentTime);
+      }
+    }
+
+    throw StateError('Unexpected Error! This error should not appear.');
   }
 }

@@ -25,14 +25,14 @@ void main() async {
 
   await appStartupService.initializeApp();
 
-  final TimerUnit timerUnit = TimerUnit.countup();
+  final TimerUnit timerUnit = TimerUnit.countdown(Duration(seconds: 20));
   int counter = 0;
 
   final TimerUnitSqlite timerRepo = appStartupService.timerRepo;
 
   List<TimerUnitSnapshot> snapshots = await timerRepo.queryByField(
     'status',
-    'paused'
+    'timeout'
   );
 
   if (snapshots.isNotEmpty) {
@@ -64,7 +64,7 @@ void main() async {
 
   Timer.periodic(Duration(seconds: 1), (timer) {
       counter++;
-      print('$counter seconds.\n');
+      print(timerUnit.duration);
 
       if (counter >= 6) {
         timer.cancel();
@@ -76,9 +76,21 @@ void main() async {
 
   await completer.future;
 
-  if (timerUnit.status.isActive) {
+  if (timerUnit.status.isActive || timerUnit.status.isTimeout) {
     timerUnit.pause();
   }
+
+  counter = 0;
+
+  Timer.periodic(Duration(seconds: 1), (timer) {
+    counter++;
+    print(timerUnit.duration);
+
+    if (counter >= 6) {
+      timer.cancel();
+      print('now for $counter.\n');
+    }
+  });
 
   _saveSnapshotAsync();
 }
