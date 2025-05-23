@@ -164,4 +164,4 @@ TimerUnitSqlite ..> TimerUnitSnapshot : uses toMap/fromMap
 - 下阶段准备完善一下settings/config的部分，然后准备riverpod架构的设计
 
 **23日**
-keep alive. 预计25日继续项目，最近专注于考研复习和各种课程的期末项目.
+- keep alive. 预计25日继续项目，最近专注于考研复习和各种课程的期末项目.
