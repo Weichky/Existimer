@@ -163,5 +163,5 @@ TimerUnitSqlite ..> TimerUnitSnapshot : uses toMap/fromMap
 - [x] 数据库和TimerUnit模块等调试完毕，修复了发现的所有问题，准备水两天休息一下
 - 下阶段准备完善一下settings/config的部分，然后准备riverpod架构的设计
 
-**23日&24日**
+**TILL 25日**
 - keep alive. 预计25日继续项目，最近专注于考研复习和各种课程的期末项目.
