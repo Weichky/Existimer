@@ -1,6 +1,6 @@
 # 架构
 ## UML图
-暂时未完成
+暂时未完成，待更正
 
 ```mermaid
 classDiagram

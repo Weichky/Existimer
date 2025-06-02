@@ -130,10 +130,6 @@ class TimerUnit {
 
   // 注意：务必在同时使用_update()和_currentTimer.stop()时
   // 先使用_currentTimer.stop()
-  // 后续务必处理此处逻辑！
-
-  // 触发_update()的时机：
-  // 要在其他操作进行前触发，其他操作也要避免重复修改
   void _update() {
     if (_timerUnitType.isCountup) {
       // 对于正计时是总时长
