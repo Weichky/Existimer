@@ -168,5 +168,5 @@ TimerUnitSqlite ..> TimerUnitSnapshot : uses toMap/fromMap
 
 
 ### 6月
-**1日B**
+**TILL 3日**
 - 我回来啦
