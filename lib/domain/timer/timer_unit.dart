@@ -83,6 +83,8 @@ class TimerUnit {
     }
   }
 
+  // pause()考虑不用条件语句处理
+  // 未来记得重构，现在有点太dirty了
   void pause() {
     if (_status.isActive) {
       _currentTimer.stop(clock.currentTime);
@@ -92,7 +94,7 @@ class TimerUnit {
     }
 
     if (_status.isPaused) {
-
+      // 空语句是应对上面的判断，有可能仍为paused，防止状态为paused时落入异常处理
     }
     else if (_status.isActive) {
       _reset(_duration);
