@@ -23,7 +23,7 @@ class AppStartupService {
     _settingsRepo = UserSettingsSqlite(database.db);
 
   Future<void> initializeApp() async {
-    await _database.init();
+    // 数据库初始化在databaseProvider中
 
     final isInitialized = await _database.checkInitialized();
     if (!isInitialized) {
