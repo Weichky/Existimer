@@ -82,6 +82,30 @@ class UserSettingsSnapshot extends SnapshotBase {
     };
   }
 
+  UserSettingsSnapshot mergeWith(UserSettingsSnapshot override) {
+    return UserSettingsSnapshot(
+      language: override.language ?? language,
+
+      enableDarkMode: override.enableDarkMode ?? enableDarkMode,
+      autoDarkMode: override.autoDarkMode ?? autoDarkMode,
+      darkModeFollowSystem: override.darkModeFollowSystem ?? darkModeFollowSystem,
+      
+      themeColor: override.themeColor ?? themeColor,
+      
+      enableSound: override.enableSound ?? enableSound,
+      enableFinishedSound: override.enableFinishedSound ?? enableFinishedSound,
+      enableNotification: override.enableNotification ?? enableNotification,
+      
+      enableDebug: override.enableDebug ?? enableDebug,
+      enableLog: override.enableLog ?? enableLog,
+      
+      defaultTaskType: override.defaultTaskType ?? defaultTaskType,
+      defaultTimerUnitType: override.defaultTimerUnitType ?? defaultTimerUnitType,
+      
+      countdownDuration: override.countdownDuration ?? countdownDuration,
+    );
+  }
+
   static UserSettingsSnapshot fromMap(Map<String, dynamic> map) {
     return UserSettingsSnapshot(
       language: map['language'] as String?,
