@@ -32,7 +32,7 @@ void main() async {
 
   List<TimerUnitSnapshot> snapshots = await timerRepo.queryByField(
     'status',
-    'timeout'
+    'active'
   );
 
   if (snapshots.isNotEmpty) {
