@@ -15,7 +15,6 @@ class AppDatabase {
 
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, db);
-    print(path);
     
     _db = await openDatabase(
       path,

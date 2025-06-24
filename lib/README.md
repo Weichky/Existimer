@@ -169,7 +169,7 @@ TimerUnitSqlite ..> TimerUnitSnapshot : uses toMap/fromMap
 
 ### 6月
 **TILL 3日**
-- 我回来啦
+- 进入期末周复习，暂停更新
 
-**6日B**
-- 
+**24日**
+- code review
