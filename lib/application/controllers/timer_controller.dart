@@ -1,34 +1,35 @@
 import 'dart:async';
 
-import 'package:existimer/application/providers/database_provider.dart';
 import 'package:existimer/application/providers/settings_provider.dart';
+import 'package:existimer/application/providers/timer_repo_provider.dart';
 import 'package:existimer/data/repositories/timer_unit/timer_unit_sqlite.dart';
 import 'package:existimer/domain/timer/timer_unit.dart';
 import 'package:existimer/snapshots/timer_unit_snapshot.dart';
+import 'package:existimer/snapshots/user_settings_snapshot.dart';
 import 'package:riverpod/riverpod.dart';
 
 //timer_controller.dart
 class TimerController extends AsyncNotifier<TimerUnit> {
-  late final TimerUnitSqlite repo;
+  late TimerUnitSqlite _repo;
+  late UserSettingsSnapshot _settings;
 
   @override
   FutureOr<TimerUnit> build() async {
-    final db = await ref.watch(databaseProvider.future);
-    repo = TimerUnitSqlite(db.db);
+    _repo = await ref.read(timerRepoProvider.future);
+    _settings = await ref.watch(settingsProvider.future);
 
-    final settings = await ref.watch(settingsProvider.future);
-    return settings.defaultTimerUnitType!.isCountup ?
+    return _settings.defaultTimerUnitType!.isCountup ?
       TimerUnit.countup() :
-      TimerUnit.countdown(settings.countdownDuration!);
+      TimerUnit.countdown(_settings.countdownDuration!);
   }
 
   // 计时器读写
   Future<void> loadFromUuid(String uuid) async {
-    final TimerUnitSnapshot? snapshot = await repo.loadSnapshot(uuid);
+    final TimerUnitSnapshot? snapshot = await _repo.loadSnapshot(uuid);
     if (snapshot != null) {
       state = AsyncData(TimerUnit.fromSnapshot(snapshot));
     } else {
-      state = AsyncError("Timer not found", StackTrace.current);
+      state = AsyncError(StateError('Timer not found'), StackTrace.current);
     }
   }
 
