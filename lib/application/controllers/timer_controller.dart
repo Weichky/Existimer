@@ -25,7 +25,7 @@ class TimerController extends AsyncNotifier<TimerUnit> {
   Future<void> loadFromUuid(String uuid) async {
     final TimerUnitSnapshot? snapshot = await repo.loadSnapshot(uuid);
     if (snapshot != null) {
-      state = AsyncData(TimerUnit.fromSnapshot)
+      state = AsyncData(TimerUnit.fromSnapshot(snapshot));
     }
   }
 }
