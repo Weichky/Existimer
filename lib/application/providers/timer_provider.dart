@@ -1,4 +1,7 @@
+import 'package:existimer/application/controllers/timer_controller.dart';
 import 'package:existimer/domain/timer/timer_unit.dart';
 import 'package:riverpod/riverpod.dart';
 
-final timerProvider = StateProvider<TimerUnit?>((ref) => null);
+final timerProvider = AsyncNotifierProvider<TimerController, TimerUnit>(
+  () => TimerController(),
+);
