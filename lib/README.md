@@ -173,3 +173,11 @@ TimerUnitSqlite ..> TimerUnitSnapshot : uses toMap/fromMap
 
 **24日**
 - code review
+
+**25日**
+- 重新开工
+- 缕清了Riverpod的基本概念
+- 重构了timer_controller.dart、timer_provider.dart等相关代码，该部分代码尚未完成
+
+**26日**
+- 考虑重新组织UML图
