@@ -18,9 +18,9 @@ class TimerController extends AsyncNotifier<TimerUnit> {
     _repo = await ref.read(timerRepoProvider.future);
     _settings = await ref.watch(settingsProvider.future);
 
-    return _settings.defaultTimerUnitType!.isCountup ?
-      TimerUnit.countup() :
-      TimerUnit.countdown(_settings.countdownDuration!);
+    return _settings.defaultTimerUnitType!.isCountup
+        ? TimerUnit.countup()
+        : TimerUnit.countdown(_settings.countdownDuration!);
   }
 
   // 计时器读写
@@ -43,6 +43,42 @@ class TimerController extends AsyncNotifier<TimerUnit> {
       state = AsyncData(unit); // 更新状态
     } catch (e, st) {
       // 捕获错误并将错误更新到 state
+      state = AsyncError(e, st);
+    }
+  }
+
+  Future<void> stop() async {
+    final unit = state.valueOrNull;
+    if (unit == null) return;
+
+    try {
+      unit.stop();
+      state = AsyncData(unit);
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
+  }
+
+  Future<void> pause() async {
+    final unit = state.valueOrNull;
+    if (unit == null) return;
+
+    try {
+      unit.pause();
+      state = AsyncData(unit);
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
+  }
+
+  Future<void> resume() async {
+    final unit = state.valueOrNull;
+    if (unit == null) return;
+
+    try {
+      unit.resume();
+      state = AsyncData(unit);
+    } catch (e, st) {
       state = AsyncError(e, st);
     }
   }
