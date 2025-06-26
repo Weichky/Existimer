@@ -33,6 +33,19 @@ class TimerController extends AsyncNotifier<TimerUnit> {
     }
   }
 
+  Future<void> save() async {
+    final TimerUnit? unit = state.valueOrNull;
+    if(unit == null) {
+      state = AsyncError(StateError('Not timer to save'), StackTrace.current)
+    } else {
+      try {
+        await _repo.saveSnapshot(unit.toSnapshot());
+      } catch (e, st) {
+        state = AsyncError(e, st);
+      }
+    }
+  }
+
   // 计时器控制
   Future<void> start() async {
     final unit = state.valueOrNull;
