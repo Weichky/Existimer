@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'dart:io';
 import 'dart:async';
 
 import 'package:existimer/application/services/app_startup_service.dart';

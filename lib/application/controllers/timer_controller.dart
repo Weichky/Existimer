@@ -41,7 +41,6 @@ class TimerController extends AsyncNotifier<TimerUnit> {
     final TimerUnit? unit = state.valueOrNull;
     if(unit == null) {
       if (state.isLoading) {
-        print('Still loading.');
       }
       state = AsyncError(StateError('Not timer to save'), StackTrace.current);
     } else {

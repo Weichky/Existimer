@@ -5,9 +5,6 @@ import 'package:riverpod/riverpod.dart';
 
 import 'package:existimer/application/providers/timer_provider.dart';
 import 'package:existimer/application/providers/app_startup_service_provider.dart';
-import 'package:existimer/application/providers/database_provider.dart';
-
-import 'package:existimer/domain/timer/timer_unit.dart';
 import 'package:existimer/core/constants/timer_unit_status.dart';
 import 'package:existimer/core/constants/timer_unit_type.dart';
 
@@ -55,12 +52,8 @@ void main() {
 
     final uuid = timer.uuid;
 
-    print(timer.status);
-
     // 加载刚保存的计时器
     await controller.loadFromUuid(uuid);
-
-    print(timer.duration);
 
     final loadedTimer = container.read(timerProvider).value!;
     print('loaded timer uuid: ${loadedTimer.uuid}');
