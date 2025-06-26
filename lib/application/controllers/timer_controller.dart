@@ -16,7 +16,7 @@ class TimerController extends AsyncNotifier<TimerUnit> {
   @override
   FutureOr<TimerUnit> build() async {
     _repo = await ref.read(timerRepoProvider.future);
-    _settings = await ref.watch(settingsProvider.future);
+    _settings = await ref.read(settingsProvider.future);
 
     return _settings.defaultTimerUnitType!.isCountup
         ? TimerUnit.countup()
@@ -36,7 +36,7 @@ class TimerController extends AsyncNotifier<TimerUnit> {
   Future<void> save() async {
     final TimerUnit? unit = state.valueOrNull;
     if(unit == null) {
-      state = AsyncError(StateError('Not timer to save'), StackTrace.current)
+      state = AsyncError(StateError('Not timer to save'), StackTrace.current);
     } else {
       try {
         await _repo.saveSnapshot(unit.toSnapshot());

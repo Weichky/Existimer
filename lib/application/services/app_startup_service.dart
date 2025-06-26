@@ -40,4 +40,5 @@ class AppStartupService {
   }
 
   get timerRepo => _timerRepo;
+  get settingsRepo => _settingsRepo;
 }

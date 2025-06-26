@@ -32,7 +32,7 @@ class UserSettingsSnapshot extends SnapshotBase {
 
   UserSettingsSnapshot({
     required this.language,
-    
+
     required this.enableDarkMode,
     required this.autoDarkMode,
     required this.darkModeFollowSystem,
@@ -49,7 +49,7 @@ class UserSettingsSnapshot extends SnapshotBase {
     required this.defaultTaskType,
 
     required this.defaultTimerUnitType,
-    
+
     required this.countdownDuration,
   });
 
@@ -88,20 +88,22 @@ class UserSettingsSnapshot extends SnapshotBase {
 
       enableDarkMode: override.enableDarkMode ?? enableDarkMode,
       autoDarkMode: override.autoDarkMode ?? autoDarkMode,
-      darkModeFollowSystem: override.darkModeFollowSystem ?? darkModeFollowSystem,
-      
+      darkModeFollowSystem:
+          override.darkModeFollowSystem ?? darkModeFollowSystem,
+
       themeColor: override.themeColor ?? themeColor,
-      
+
       enableSound: override.enableSound ?? enableSound,
       enableFinishedSound: override.enableFinishedSound ?? enableFinishedSound,
       enableNotification: override.enableNotification ?? enableNotification,
-      
+
       enableDebug: override.enableDebug ?? enableDebug,
       enableLog: override.enableLog ?? enableLog,
-      
+
       defaultTaskType: override.defaultTaskType ?? defaultTaskType,
-      defaultTimerUnitType: override.defaultTimerUnitType ?? defaultTimerUnitType,
-      
+      defaultTimerUnitType:
+          override.defaultTimerUnitType ?? defaultTimerUnitType,
+
       countdownDuration: override.countdownDuration ?? countdownDuration,
     );
   }
@@ -110,45 +112,38 @@ class UserSettingsSnapshot extends SnapshotBase {
     return UserSettingsSnapshot(
       language: map['language'] as String?,
 
-      enableDarkMode:
-          map['enable_dark_mode'] == null
-              ? null
-              : (map['enable_dark_mode'] == 1),
-      autoDarkMode:
-          map['auto_dark_mode'] == null ? null : (map['auto_dark_mode'] == 1),
-      darkModeFollowSystem:
-          map['dark_mode_follow_system'] == null
-              ? null
-              : (map['dark_mode_follow_system'] == 1),
+      enableDarkMode: _boolFromInt(map['enable_dark_mode']),
+      autoDarkMode: _boolFromInt(map['auto_dark_mode']),
+      darkModeFollowSystem: _boolFromInt(map['dark_mode_follow_system']),
 
       themeColor: map['theme_color'] as String?,
 
-      enableSound:
-          map['enable_sound'] == null ? null : (map['enable_sound'] == 1),
-      enableFinishedSound:
-          map['enable_finished_sound'] == null
-              ? null
-              : (map['enable_finished_sound'] == 1),
-      enableNotification:
-          map['enable_notification'] == null
-              ? null
-              : (map['enable_notification'] == 1),
+      enableSound: _boolFromInt(map['enable_sound']),
+      enableFinishedSound: _boolFromInt(map['enable_finished_sound']),
+      enableNotification: _boolFromInt(map['enable_notification']),
 
-      enableDebug:
-          map['enable_debug'] == null ? null : (map['enable_debug'] == 1),
-      enableLog: map['enable_log'] == null ? null : (map['enable_log'] == 1),
+      enableDebug: _boolFromInt(map['enable_debug']),
+      enableLog: _boolFromInt(map['enable_log']),
 
-      defaultTaskType: TaskType.fromString(
-        map['default_task_type'] as String?,
-      ),
-      defaultTimerUnitType: TimerUnitType.fromString(
-        map['default_timer_unit_type'] as String?,
-      ),
+      defaultTaskType:
+          map['default_task_type'] == null
+              ? null
+              : TaskType.fromString(map['default_task_type'] as String?),
+      defaultTimerUnitType:
+          map['default_timer_unit_type'] == null
+              ? null
+              : TimerUnitType.fromString(
+                map['default_timer_unit_type'] as String?,
+              ),
 
       countdownDuration:
-          map['countdown_duration'] == null
+          map['countdown_duration_ms'] == null
               ? null
-              : Duration(milliseconds: map['countdown_duration'] as int),
+              : Duration(milliseconds: map['countdown_duration_ms'] as int),
     );
+  }
+
+  static bool? _boolFromInt(dynamic value) {
+    return value == null ? null : value == 1;
   }
 }

@@ -7,7 +7,9 @@ import 'package:existimer/core/constants/default_config.dart';
 
 final settingsProvider = FutureProvider<UserSettingsSnapshot>((ref) async {
   final repo = await ref.watch(userSettingsRepoProvider.future);
+
   final userSettings = await repo.loadSnapshot();
+    print(userSettings);
 
   final defaultSettings = DefaultSettings.toSnapshot();
 

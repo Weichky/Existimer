@@ -1,3 +1,4 @@
+import 'package:existimer/core/constants/default_config.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:existimer/data/repositories/snapshot_repository.dart';
 import 'package:existimer/snapshots/user_settings_snapshot.dart';
@@ -21,9 +22,11 @@ class UserSettingsSqlite implements SnapshotRepository<UserSettingsSnapshot> {
     final result = await db.query(_table, where: 'id = ?', whereArgs: [1]);
 
     if (result.isNotEmpty) {
+      print(result.first);
       return UserSettingsSnapshot.fromMap(result.first);
     }
 
-    return null;
+    // 查询失败返回默认值
+    return DefaultSettings.toSnapshot();
   }
 }
