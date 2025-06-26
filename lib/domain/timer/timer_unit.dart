@@ -86,6 +86,7 @@ class TimerUnit {
     if (_status.isInactive) {
       _currentTimer.start(clock.currentTime);
       _status = TimerUnitStatus.active;
+      _referenceTime = _currentTimer.referenceTime();
     } else {
       throw StateError("TimerUnit must be inactive before you call start().");
     }

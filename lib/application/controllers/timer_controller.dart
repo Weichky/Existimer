@@ -22,6 +22,10 @@ class TimerController extends AsyncNotifier<TimerUnit> {
         ? TimerUnit.countup()
         : TimerUnit.countdown(_settings.countdownDuration!);
   }
+  // 计时器创建
+  Future<void> create(TimerUnitSnapshot snapshot) async {
+    state = AsyncData(TimerUnit.fromSnapshot(snapshot));
+  }
 
   // 计时器读写
   Future<void> loadFromUuid(String uuid) async {
@@ -36,6 +40,9 @@ class TimerController extends AsyncNotifier<TimerUnit> {
   Future<void> save() async {
     final TimerUnit? unit = state.valueOrNull;
     if(unit == null) {
+      if (state.isLoading) {
+        print('Still loading.');
+      }
       state = AsyncError(StateError('Not timer to save'), StackTrace.current);
     } else {
       try {

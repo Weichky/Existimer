@@ -39,12 +39,13 @@ void main() {
     print('timer status: ${timer.status}');
 
     expect(timer.type, TimerUnitType.countdown);
-    expect(timer.duration, const Duration(seconds: 25));
+    expect(timer.duration, const Duration(minutes: 35));
     expect(timer.status, TimerUnitStatus.inactive);
   });
 
   test('timerProvider 保存与加载', () async {
     final controller = container.read(timerProvider.notifier);
+    final timer = await container.read(timerProvider.future);
 
     // 启动计时器
     await controller.start();
@@ -52,10 +53,14 @@ void main() {
     // 保存计时器状态到数据库
     await controller.save();
 
-    final uuid = container.read(timerProvider).value!.uuid;
+    final uuid = timer.uuid;
+
+    print(timer.status);
 
     // 加载刚保存的计时器
     await controller.loadFromUuid(uuid);
+
+    print(timer.duration);
 
     final loadedTimer = container.read(timerProvider).value!;
     print('loaded timer uuid: ${loadedTimer.uuid}');

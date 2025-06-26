@@ -76,9 +76,9 @@ void main() async {
 
   await completer.future;
 
-  if (timerUnit.status.isActive || timerUnit.status.isTimeout) {
-    timerUnit.pause();
-  }
+  // if (timerUnit.status.isActive || timerUnit.status.isTimeout) {
+  //   timerUnit.pause();
+  // }
 
   counter = 0;
 

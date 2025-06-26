@@ -22,7 +22,6 @@ class UserSettingsSqlite implements SnapshotRepository<UserSettingsSnapshot> {
     final result = await db.query(_table, where: 'id = ?', whereArgs: [1]);
 
     if (result.isNotEmpty) {
-      print(result.first);
       return UserSettingsSnapshot.fromMap(result.first);
     }
 
