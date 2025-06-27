@@ -21,11 +21,11 @@ class TimerUnit {
   Duration _duration;
   DateTime? _referenceTime;
 
-  //
   Duration? _lastRemainTime;
 
   Clock clock;
 
+  /// 内部构造函数，用于创建倒计时或正计时器实例
   TimerUnit._internal(this._timerUnitType, this._duration)
     : _uuid = UuidHelper.getUuid(),
       _status = TimerUnitStatus.inactive,
@@ -35,14 +35,17 @@ class TimerUnit {
       _lastRemainTime = _timerUnitType.isCountdown ? _duration : null,
       clock = Clock();
 
+  /// 工厂构造函数，用于创建正计时器实例
   factory TimerUnit.countup() {
     return TimerUnit._internal(TimerUnitType.countup, Duration());
   }
 
+  /// 工厂构造函数，用于创建倒计时器实例
   factory TimerUnit.countdown(Duration time) {
     return TimerUnit._internal(TimerUnitType.countdown, time);
   }
 
+  /// 根据快照数据恢复TimerUnit实例
   factory TimerUnit.fromSnapshot(TimerUnitSnapshot snapshot) {
     final unit =
         snapshot.type.isCountup
@@ -59,6 +62,7 @@ class TimerUnit {
   TimerUnitStatus get status => _status;
   TimerUnitType get type => _timerUnitType;
 
+  /// 将计时器类型切换为正计时。
   void toCountup() {
     if (!_status.isInactive) {
       _status = TimerUnitStatus.inactive;
@@ -70,6 +74,7 @@ class TimerUnit {
     _referenceTime = null;
   }
 
+  /// 将计时器类型切换为倒计时。
   void toCountdown(Duration time) {
     if (!_status.isInactive) {
       _status = TimerUnitStatus.inactive;
@@ -82,6 +87,7 @@ class TimerUnit {
     _lastRemainTime = time;
   }
 
+  /// 启动计时器
   void start() {
     if (_status.isInactive) {
       _currentTimer.start(clock.currentTime);
@@ -92,8 +98,7 @@ class TimerUnit {
     }
   }
 
-  // pause()考虑不用条件语句处理
-  // 未来记得重构，现在有点太dirty了
+  /// 暂停计时器
   void pause() {
     if (_status.isActive) {
       _currentTimer.stop(clock.currentTime);
@@ -114,6 +119,7 @@ class TimerUnit {
   }
 
   void resume() {
+    /// 恢复计时器
     if (_status.isPaused) {
       _currentTimer.start(clock.currentTime);
 
@@ -124,6 +130,7 @@ class TimerUnit {
   }
 
   void stop() {
+    /// 停止计时器。
     if (_status.isInactive) {
       return;
     } else {
@@ -137,6 +144,7 @@ class TimerUnit {
   // 注意：务必在同时使用_update()和_currentTimer.stop()时
   // 先使用_currentTimer.stop()
   void _update() {
+    /// 更新计时器
     if (_timerUnitType.isCountup) {
       // 对于正计时是总时长
       _duration += _currentTimer.duration(clock.currentTime);
@@ -149,6 +157,7 @@ class TimerUnit {
 
   // 一定要看上面的_update()提示！
   void _checkTimeout() {
+    /// 检查计时器是否超时
     if (_currentTimer.isCountdown) {
       if (_currentTimer.duration(clock.currentTime) <= Duration()) {
         _status = TimerUnitStatus.timeout;
@@ -158,6 +167,7 @@ class TimerUnit {
 
   //注意不要填入负值
   void _reset([Duration? remainTime]) {
+    /// 重置计时器，如果计时器为倒计时，则需要传入剩余时间
     assert(
       remainTime == null || remainTime > Duration(),
       "Should not reset from negtive remainTime.",
