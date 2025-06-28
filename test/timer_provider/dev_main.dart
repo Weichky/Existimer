@@ -62,4 +62,21 @@ void main() {
     expect(loadedTimer.uuid, uuid);
     expect(loadedTimer.status, TimerUnitStatus.active);
   });
+
+  test('timerProvider 控制与状态', () async {
+    final controller = container.read(timerProvider.notifier);
+    final timer = await container.read(timerProvider.future);
+
+    final uuid = timer.uuid;
+
+    await controller.start();
+    // await controller.start();
+
+    print(timer.duration);
+
+    print(timer.toSnapshot().toMap());
+
+    await controller.start();
+
+  });
 }

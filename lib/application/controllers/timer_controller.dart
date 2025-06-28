@@ -1,22 +1,23 @@
 import 'dart:async';
 
-import 'package:existimer/application/providers/settings_provider.dart';
+import 'package:existimer/application/configs/user_settings.dart';
+import 'package:existimer/application/providers/config_provider.dart';
 import 'package:existimer/application/providers/timer_repo_provider.dart';
 import 'package:existimer/data/repositories/timer_unit/timer_unit_sqlite.dart';
 import 'package:existimer/domain/timer/timer_unit.dart';
 import 'package:existimer/snapshots/timer_unit_snapshot.dart';
-import 'package:existimer/snapshots/user_settings_snapshot.dart';
 import 'package:riverpod/riverpod.dart';
 
 //timer_controller.dart
 class TimerController extends AsyncNotifier<TimerUnit> {
   late TimerUnitSqlite _repo;
-  late UserSettingsSnapshot _settings;
+  late UserSettings _settings;
 
   @override
   Future<TimerUnit> build() async {
+    // ref.read()不会触发build()，因此此处build相当于初始化方法，关于热重载的问题还需考察
     _repo = await ref.read(timerRepoProvider.future);
-    _settings = await ref.read(settingsProvider.future);
+    _settings = await ref.read(configProvider.future);
 
     return _settings.defaultTimerUnitType!.isCountup
         ? TimerUnit.countup()
@@ -37,25 +38,36 @@ class TimerController extends AsyncNotifier<TimerUnit> {
     }
   }
 
+  // 保存
   Future<void> save() async {
-    final TimerUnit? unit = state.valueOrNull;
-    if(unit == null) {
-      if (state.isLoading) {
-      }
-      state = AsyncError(StateError('Not timer to save'), StackTrace.current);
-    } else {
-      try {
-        await _repo.saveSnapshot(unit.toSnapshot());
-      } catch (e, st) {
-        state = AsyncError(e, st);
-      }
+    // 一般认为加载完成
+    // final TimerUnit? unit = state.valueOrNull;
+    // if (unit == null) {
+    //   if (state.isLoading) {
+    //     return;
+    //   }
+    //   state = AsyncError(StateError('Not timer to save'), StackTrace.current);
+    // } else {
+    //   try {
+    //     await _repo.saveSnapshot(unit.toSnapshot());
+    //   } catch (e, st) {
+    //     state = AsyncError(e, st);
+    //   }
+    // }
+    final TimerUnit unit = await future;
+
+    try {
+      await _repo.saveSnapshot(unit.toSnapshot());
+    } catch (e, st) {
+      state = AsyncError(e, st);
     }
+
   }
 
   // 计时器控制
   Future<void> start() async {
-    final unit = state.valueOrNull;
-    if (unit == null) return;
+    // 不作state.valueOrNull处理，此时State不应该为Null
+    final unit = state.requireValue;
 
     try {
       unit.start();
@@ -67,8 +79,7 @@ class TimerController extends AsyncNotifier<TimerUnit> {
   }
 
   Future<void> stop() async {
-    final unit = state.valueOrNull;
-    if (unit == null) return;
+    final unit = state.requireValue;
 
     try {
       unit.stop();
@@ -79,8 +90,7 @@ class TimerController extends AsyncNotifier<TimerUnit> {
   }
 
   Future<void> pause() async {
-    final unit = state.valueOrNull;
-    if (unit == null) return;
+    final unit = state.requireValue;
 
     try {
       unit.pause();
@@ -91,8 +101,7 @@ class TimerController extends AsyncNotifier<TimerUnit> {
   }
 
   Future<void> resume() async {
-    final unit = state.valueOrNull;
-    if (unit == null) return;
+    final unit = state.requireValue;
 
     try {
       unit.resume();

@@ -181,3 +181,10 @@ TimerUnitSqlite ..> TimerUnitSnapshot : uses toMap/fromMap
 
 **26日**
 - 考虑重新组织UML图
+
+**27日**
+- 编写调试完成timer_provider.dart
+- 测试了timer_provider.dart
+
+**28日**
+- 编写了config_controller.dart

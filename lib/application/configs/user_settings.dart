@@ -97,4 +97,19 @@ class UserSettings {
     settings.fromSnapshot(userSettingsSnapshot);
     return settings;
   }
+
+  // getter
+  String? get language => _language;
+  bool? get enableDarkMode => _enableDarkMode;
+  bool? get autoDarkMode => _autoDarkMode;
+  bool? get darkModeFollowSystem => _darkModeFollowSystem;
+  String? get themeColor => _themeColor;
+  bool? get enableSound => _enableSound;
+  bool? get enableFinishedSound => _enableFinishedSound;
+  bool? get enableNotification => _enableNotification;
+  bool? get enableDebug => _enableDebug;
+  bool? get enableLog => _enableLog;
+  TaskType? get defaultTaskType => _defaultTaskType;
+  TimerUnitType? get defaultTimerUnitType => _defaultTimerUnitType;
+  Duration? get countdownDuration => _countdownDuration;
 }
