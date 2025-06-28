@@ -77,7 +77,7 @@ class UserSettings {
   }
 
   void fromSnapshot(UserSettingsSnapshot userSettingsSnapshot) {
-        _language = userSettingsSnapshot.language;
+    _language = userSettingsSnapshot.language;
     _enableDarkMode = userSettingsSnapshot.enableDarkMode;
     _autoDarkMode = userSettingsSnapshot.autoDarkMode;
     _darkModeFollowSystem = userSettingsSnapshot.darkModeFollowSystem;
@@ -90,5 +90,11 @@ class UserSettings {
     _defaultTaskType = userSettingsSnapshot.defaultTaskType;
     _defaultTimerUnitType = userSettingsSnapshot.defaultTimerUnitType;
     _countdownDuration = userSettingsSnapshot.countdownDuration;
+  }
+
+  factory UserSettings.fromSnapshot(UserSettingsSnapshot userSettingsSnapshot) {
+    final settings = UserSettings();
+    settings.fromSnapshot(userSettingsSnapshot);
+    return settings;
   }
 }

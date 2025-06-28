@@ -14,7 +14,7 @@ class TimerController extends AsyncNotifier<TimerUnit> {
   late UserSettingsSnapshot _settings;
 
   @override
-  FutureOr<TimerUnit> build() async {
+  Future<TimerUnit> build() async {
     _repo = await ref.read(timerRepoProvider.future);
     _settings = await ref.read(settingsProvider.future);
 
