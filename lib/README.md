@@ -421,3 +421,6 @@ TaskMeta : +fromSnapshot() void
 - 编写了config_controller.dart
 - 编写了config_provider.dart
 - 生成了类图
+
+**29日**
+- 架构&review Task、Meta
