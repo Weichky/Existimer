@@ -4,7 +4,7 @@
 
 ## Meta的身份
 
-Meta的目的是什么？为了以后的笔记、计次任务等，以及历史统计的方便. 不是一个一定要有的东西，不是核心要素. 主要区别在于，不涉及业务逻辑，往往只是读写，而且内容会比较大. 
+Meta的目的是什么？为了以后的笔记、计次任务等，以及历史统计的方便. 不是一个一定要有的东西，不是核心要素. 主要区别在于，不涉及业务逻辑，往往只是自动读写，而且内容会比较大. 
 
 
 
@@ -28,4 +28,30 @@ Meta的目的是什么？为了以后的笔记、计次任务等，以及历史�
 - 2）保持，(A1.name == A2.name) == true
 - 3）A2记录a2.uuid
 
-其中1如何优雅的同时记录a1.uuid和a2.uuid是个问题. 
+其中1如何优雅的同时记录a1.uuid和a2.uuid是个问题.  天然的，我们想到在Task中添加JSON字段. 不过建立一个映射表可能是更好的选择.
+
+```sqlite
+Task {
+  uuid TEXT PRIMARY KEY,
+  ... // 其他字段
+}
+
+TimerUnit {
+  uuid TEXT PRIMARY KEY,
+  ... // 其他字段
+}
+
+TaskTimerMapping {
+  taskUuid TEXT,
+  timerUuid TEXT,
+  PRIMARY KEY (taskUuid, timerUuid) // 组合主键（composite primary key）
+}
+```
+
+看起来我们要维护另外一个表，希望这是值得的. 
+
+以上最后还是需要用户决定.
+
+## 不同的Meta
+
+上面我们允许了Task的重名. 除了在UI显示中引入颜色，也应当允许用户备注. 这个note不应该是Meta. 
