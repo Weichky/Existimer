@@ -1,5 +1,8 @@
+import 'package:riverpod/riverpod.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+
+import 'package:existimer/core/constants/database_version.dart';
 
 class AppDatabase {
   static const String defaultDbName = 'app.db';
@@ -15,14 +18,33 @@ class AppDatabase {
     
     _db = await openDatabase(
       path,
-      version: 1,
+      // 100 * major + minor, from 'database_version.dart'
+      // from 100
+      version: databaseVersion,
       onCreate: (db, version) async {
         await setupSchema(db);
         await db.insert('settings', {'id': 1, 'initialized': 1});
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        await upgradeSchema(db, oldVersion, newVersion);
       }
     );
 
     _initialized = true;
+  }
+
+  Future<void> upgradeSchema(Database db, int fromVersion, int toVersion) async {
+    // 开发阶段留空
+
+    // 例
+    if (fromVersion < 101 && toVersion >= 101) {
+      // await db.execute('''
+        // CREATE TABLE IF NOT EXISTS new_table (
+          // id TEXT PRIMARY KEY,
+          // name TEXT NOT NULL
+        // )
+      // ''');
+    }
   }
 
   Future<void> setupSchema([Database? dbOverride]) async {
