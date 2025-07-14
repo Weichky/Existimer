@@ -91,8 +91,8 @@ class AppDatabase {
 
     await db.execute('''
       CREATE TABLE IF NOT EXISTS task_mapping (
-        task_id TEXT,
-        entity_id TEXT,
+        task_id TEXT NOT NULL,
+        entity_id TEXT NOT NULL,
         PRIMARY KEY (task_id, entity_id)
       );
     ''');// PRIMARY KEY (task_id, entity_id) 组合主键
