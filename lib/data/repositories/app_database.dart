@@ -10,12 +10,16 @@ class AppDatabase {
   late Database _db;
   bool _initialized = false;
 
-  Future<void> init([String db = defaultDbName]) async {
+  Future<void> init([String db = defaultDbName, bool reset = false]) async {
     if (_initialized) return;
 
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, db);
     
+    if (reset && await databaseExists(path)) {
+      await deleteDatabase(path);
+    }
+
     _db = await openDatabase(
       path,
       // 100 * major + minor, from 'database_version.dart'
@@ -93,6 +97,7 @@ class AppDatabase {
       CREATE TABLE IF NOT EXISTS task_mapping (
         task_id TEXT NOT NULL,
         entity_id TEXT NOT NULL,
+        entity_type TEXT NOT NULL,
         PRIMARY KEY (task_id, entity_id)
       );
     ''');// PRIMARY KEY (task_id, entity_id) 组合主键
