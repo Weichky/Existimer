@@ -64,24 +64,10 @@ class AppDatabase {
       );
     ''');
 
-    // 将meta和数据分离
-    
-    // 暂且去除task_meta
-    // await db.execute('''
-      // CREATE TABLE IF NOT EXISTS task_meta (
-        // uuid TEXT PRIMARY KEY,
-        // name TEXT NOT NULL,
-        // type TEXT NOT NULL,
-        // created_at TEXT,
-        // archived INTEGER DEFAULT 0,
-        // description TEXT
-      // );
-    // ''');
-
     await db.execute('''
       CREATE TABLE IF NOT EXISTS history (
-        id TEXT PRIMARY KEY,
-        uuid TEXT NOT NULL,
+        history_uuid TEXT PRIMARY KEY,
+        entity_uuid TEXT NOT NULL,
         start_time TEXT NOT NULL,
         note TEXT
       );
@@ -89,17 +75,17 @@ class AppDatabase {
 
     await db.execute('''
       CREATE TABLE IF NOT EXISTS tasks (
-        id TEXT PRIMARY KEY,
+        uuid TEXT PRIMARY KEY,
         name TEXT NOT NULL
       );
     ''');
 
     await db.execute('''
       CREATE TABLE IF NOT EXISTS task_mapping (
-        task_id TEXT NOT NULL,
-        entity_id TEXT NOT NULL,
+        task_uuid TEXT NOT NULL,
+        entity_uuid TEXT NOT NULL,
         entity_type TEXT NOT NULL,
-        PRIMARY KEY (task_id, entity_id)
+        PRIMARY KEY (task_uuid, entity_uuid)
       );
     ''');// PRIMARY KEY (task_id, entity_id) 组合主键
 
@@ -129,6 +115,19 @@ class AppDatabase {
         countdown_duration_ms INTEGER
       );
     ''');
+
+    // 将meta和数据分离
+    // 暂且去除task_meta
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS task_meta (
+        uuid TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        type TEXT NOT NULL,
+        created_at TEXT,
+        archived INTEGER DEFAULT 0,
+        description TEXT
+      );
+    ''');    
   }
 
   Future<bool> checkInitialized() async {
