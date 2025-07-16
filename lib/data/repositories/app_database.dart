@@ -76,7 +76,7 @@ class AppDatabase {
 
     // 对于task而言无需task_meta
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS task (
+      CREATE TABLE IF NOT EXISTS tasks (
         uuid TEXT PRIMARY KEY,
         name TEXT NOT NULL,
         type TEXT NOT NULL,
