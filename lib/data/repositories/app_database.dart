@@ -65,16 +65,18 @@ class AppDatabase {
     ''');
 
     // 将meta和数据分离
-    await db.execute('''
-      CREATE TABLE IF NOT EXISTS task_meta (
-        uuid TEXT PRIMARY KEY,
-        name TEXT NOT NULL,
-        type TEXT NOT NULL,
-        created_at TEXT,
-        archived INTEGER DEFAULT 0,
-        description TEXT
-      );
-    ''');
+    
+    // 暂且去除task_meta
+    // await db.execute('''
+      // CREATE TABLE IF NOT EXISTS task_meta (
+        // uuid TEXT PRIMARY KEY,
+        // name TEXT NOT NULL,
+        // type TEXT NOT NULL,
+        // created_at TEXT,
+        // archived INTEGER DEFAULT 0,
+        // description TEXT
+      // );
+    // ''');
 
     await db.execute('''
       CREATE TABLE IF NOT EXISTS history (
