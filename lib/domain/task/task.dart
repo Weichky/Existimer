@@ -1,4 +1,4 @@
-import 'package:existimer/snapshots/task_meta_snapshot.dart';
+import 'package:existimer/snapshots/task_snapshot.dart';
 
 class TaskMeta {
   String _uuid;
@@ -39,7 +39,7 @@ class TaskMeta {
     _archived =archived;
   }
 
-  TaskMetaSnapshot toSnapshot() => TaskMetaSnapshot(
+  TaskSnapshot toSnapshot() => TaskSnapshot(
     uuid: _uuid,
     name: _name,
     type: _type,
@@ -48,7 +48,7 @@ class TaskMeta {
     archived: _archived,
   );
 
-  void fromSnapshot(TaskMetaSnapshot taskMetaSnapshot) {
+  void fromSnapshot(TaskSnapshot taskMetaSnapshot) {
     _uuid = taskMetaSnapshot.uuid;
     _name = taskMetaSnapshot.name;
     _type = taskMetaSnapshot.type;

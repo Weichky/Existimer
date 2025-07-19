@@ -1,7 +1,7 @@
 import 'package:existimer/snapshots/snapshot_base.dart';
 
 
-class TaskMetaSnapshot extends SnapshotBase {
+class TaskSnapshot extends SnapshotBase {
   final String uuid;
   final String name;
   final String type;
@@ -9,7 +9,7 @@ class TaskMetaSnapshot extends SnapshotBase {
   final String? description;
   final bool archived;
 
-  TaskMetaSnapshot({
+  TaskSnapshot({
     required this.uuid,
     required this.name,
     required this.type,
@@ -30,8 +30,8 @@ class TaskMetaSnapshot extends SnapshotBase {
     };
   }
 
-  static TaskMetaSnapshot fromMap(Map<String, dynamic> map) {
-    return TaskMetaSnapshot(
+  static TaskSnapshot fromMap(Map<String, dynamic> map) {
+    return TaskSnapshot(
       uuid: map['uuid'],
       name: map['name'],
       type: map['type'],

@@ -1,16 +1,16 @@
 import 'package:sqflite/sqflite.dart';
 
 import 'package:existimer/data/repositories/snapshot_repository.dart';
-import 'package:existimer/snapshots/task_meta_snapshot.dart';
+import 'package:existimer/snapshots/task_snapshot.dart';
 
-class TaskMetaSqlite implements SnapshotRepository<TaskMetaSnapshot> {
+class TaskMetaSqlite implements SnapshotRepository<TaskSnapshot> {
   final Database db;
-  static const String _table = 'task_meta';
+  static const String _table = 'tasks';
 
   TaskMetaSqlite(this.db);
 
   @override
-  Future<void> saveSnapshot(TaskMetaSnapshot snapshot) async {
+  Future<void> saveSnapshot(TaskSnapshot snapshot) async {
     await db.insert(
       _table,
       snapshot.toMap(),
@@ -19,7 +19,7 @@ class TaskMetaSqlite implements SnapshotRepository<TaskMetaSnapshot> {
   }
 
   @override
-  Future<TaskMetaSnapshot?> loadSnapshot(String uuid) async {
+  Future<TaskSnapshot?> loadSnapshot(String uuid) async {
     final result = await db.query(
       _table,
       where: 'uuid = ?',
@@ -28,7 +28,7 @@ class TaskMetaSqlite implements SnapshotRepository<TaskMetaSnapshot> {
     );
 
     if (result.isNotEmpty) {
-      return TaskMetaSnapshot.fromMap(result.first);
+      return TaskSnapshot.fromMap(result.first);
     }
 
     return null;
@@ -45,7 +45,7 @@ extension TaskMetaSqliteQueries on TaskMetaSqlite {
     'description'
   ];
 
-  Future<List<TaskMetaSnapshot>> queryByField(
+  Future<List<TaskSnapshot>> queryByField(
     String field,
     dynamic value
   ) async {
@@ -59,6 +59,6 @@ extension TaskMetaSqliteQueries on TaskMetaSqlite {
       whereArgs: [value]
     );
 
-    return result.map((e) => TaskMetaSnapshot.fromMap(e)).toList();
+    return result.map((e) => TaskSnapshot.fromMap(e)).toList();
   }
 }
