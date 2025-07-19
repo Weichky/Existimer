@@ -6,16 +6,22 @@ class TaskSnapshot extends SnapshotBase {
   final String name;
   final String type;
   final DateTime createAt;
+  final DateTime? lastUsedAt;
+  final bool isArchived;
+  final bool isHighlighted;
+  final String? color;
   final String? description;
-  final bool archived;
 
   TaskSnapshot({
     required this.uuid,
     required this.name,
     required this.type,
     required this.createAt,
+    this.lastUsedAt,
+    required this.isArchived,    
+    required this.isHighlighted,
+    this.color,
     this.description,
-    required this.archived,
   });
 
   @override
@@ -26,7 +32,7 @@ class TaskSnapshot extends SnapshotBase {
       'type': type,
       'create_at': createAt.toIso8601String(),
       'description': description,
-      'archived': archived,
+      'is_archived': isArchived,
     };
   }
 
@@ -36,8 +42,11 @@ class TaskSnapshot extends SnapshotBase {
       name: map['name'],
       type: map['type'],
       createAt: DateTime.parse(map['create_at']),
+      lastUsedAt: DateTime.parse(map['last_used_at']),
+      isArchived: map['is_archived'],
+      isHighlighted: map['is_highlighted'],
+      color: map['color'],
       description: map['description'],
-      archived: map['archived'],
     );
   }
 }
