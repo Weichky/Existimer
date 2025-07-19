@@ -41,7 +41,10 @@ extension TaskMetaSqliteQueries on TaskMetaSqlite {
     'name',
     'type',
     'created_at',
-    'archived',
+    'last_used_at',
+    'is_archived',
+    'is_highlighted',
+    'color',
     'description'
   ];
 

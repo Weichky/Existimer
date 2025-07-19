@@ -2,7 +2,7 @@ import 'package:existimer/core/constants/default_config.dart';
 
 import 'package:existimer/data/repositories/configs/user_settings_sqlite.dart';
 import 'package:existimer/data/repositories/timer_unit/timer_unit_sqlite.dart';
-import 'package:existimer/data/repositories/task_meta/task_meta_sqlite.dart';
+import 'package:existimer/data/repositories/task_meta/task_sqlite.dart';
 
 import 'package:existimer/data/repositories/app_database.dart';
 
