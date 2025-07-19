@@ -1,6 +1,6 @@
 import 'package:existimer/snapshots/task_snapshot.dart';
 
-class TaskMeta {
+class Task {
   String _uuid;
   String _name;
   String _type;
@@ -11,7 +11,7 @@ class TaskMeta {
   String? _color;
   String? _description;
 
-  TaskMeta({
+  Task({
     required String uuid,
     required String name,
     required String type,
