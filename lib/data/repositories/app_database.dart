@@ -59,8 +59,8 @@ class AppDatabase {
         status TEXT NOT NULL,
         type TEXT NOT NULL,
         duration_ms INTEGER NOT NULL,
-        reference_time TEXT,
-        last_remain_ms INTEGER
+        reference_time INTEGER, -- 原先是TEXT
+        last_remain_ms INTEGER  -- 原先是TEXT
       );
     ''');
 
@@ -69,7 +69,7 @@ class AppDatabase {
         history_uuid TEXT PRIMARY KEY,
         task_uuid TEXT NOT NULL,
         task_name TEXT,
-        started_at TEXT NOT NULL,
+        started_at INTEGER NOT NULL,  -- 原先是TEXT
         description TEXT
       );
     ''');
@@ -80,8 +80,8 @@ class AppDatabase {
         uuid TEXT PRIMARY KEY,
         name TEXT NOT NULL,
         type TEXT NOT NULL,
-        created_at TEXT,
-        last_used_at TEXT,
+        created_at INTEGER,
+        last_used_at INTEGER, -- 原先是TEXT
         is_archived INTEGER DEFAULT 0,
         is_highlighted INTEGER DEFAULT 0,
         color TEXT,

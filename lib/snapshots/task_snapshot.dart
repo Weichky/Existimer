@@ -1,10 +1,11 @@
+import 'package:existimer/core/constants/task_type.dart';
 import 'package:existimer/snapshots/snapshot_base.dart';
 
 
 class TaskSnapshot extends SnapshotBase {
   final String uuid;
   final String name;
-  final String type;
+  final TaskType type;
   final DateTime createAt;
   final DateTime? lastUsedAt;
   final bool isArchived;
@@ -29,10 +30,13 @@ class TaskSnapshot extends SnapshotBase {
     return {
       'uuid': uuid,
       'name': name,
-      'type': type,
-      'create_at': createAt.toIso8601String(),
-      'description': description,
+      'type': type.name,
+      'create_at': createAt.millisecondsSinceEpoch,
+      'last_used_at': lastUsedAt?.millisecondsSinceEpoch,
       'is_archived': isArchived,
+      'is_highlighted': isHighlighted,
+      'color': color,
+      'description': description,
     };
   }
 
@@ -40,9 +44,9 @@ class TaskSnapshot extends SnapshotBase {
     return TaskSnapshot(
       uuid: map['uuid'],
       name: map['name'],
-      type: map['type'],
-      createAt: DateTime.parse(map['create_at']),
-      lastUsedAt: DateTime.parse(map['last_used_at']),
+      type: TaskType.fromString(map['type']),
+      createAt: DateTime.fromMillisecondsSinceEpoch(map['create_at']),
+      lastUsedAt: DateTime.fromMillisecondsSinceEpoch(map['last_used_at']),
       isArchived: map['is_archived'],
       isHighlighted: map['is_highlighted'],
       color: map['color'],

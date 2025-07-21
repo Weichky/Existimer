@@ -1,9 +1,11 @@
 import 'package:existimer/snapshots/task_snapshot.dart';
+import 'package:existimer/core/utils/helper.dart';
+import 'package:existimer/core/constants/task_type.dart';
 
 class Task {
   String _uuid;
   String _name;
-  String _type;
+  TaskType _type;
   DateTime _createAt;
   DateTime? _lastUsedAt;
   bool _isArchived;
@@ -12,16 +14,15 @@ class Task {
   String? _description;
 
   Task({
-    required String uuid,
     required String name,
-    required String type,
+    required TaskType type,
     required DateTime createAt,
     DateTime? lastUsedAt,
     bool? isArchived,
     bool? isHighlighted,
     String? color,
     String? description,
-  }) : _uuid = uuid,
+  }) : _uuid = UuidHelper.getUuid(),
        _name = name,
        _type = type,
        _createAt = createAt,
@@ -30,6 +31,18 @@ class Task {
        _isHighlighted = isHighlighted ?? false,
        _color = color,
        _description = description;
+
+  factory Task.fromSnapshot(TaskSnapshot snapshot) {
+    Task task = Task(
+      name: 'null', 
+      type: TaskType.timer, 
+      createAt: DateTime.now()
+    );
+
+    task.fromSnapshot(snapshot);
+
+    return task;    
+  }
 
   // setter
   set uuid(String uuid) {
@@ -40,7 +53,7 @@ class Task {
     _name = name;
   }
 
-  set type(String type) {
+  set type(TaskType type) {
     _type = type;
   }
 
