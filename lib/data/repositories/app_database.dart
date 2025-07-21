@@ -60,7 +60,7 @@ class AppDatabase {
         type TEXT NOT NULL,
         duration_ms INTEGER NOT NULL,
         reference_time INTEGER, -- 原先是TEXT
-        last_remain_ms INTEGER  -- 原先是TEXT
+        last_remain_ms INTEGER  
       );
     ''');
 
@@ -80,7 +80,7 @@ class AppDatabase {
         uuid TEXT PRIMARY KEY,
         name TEXT NOT NULL,
         type TEXT NOT NULL,
-        created_at INTEGER,
+        created_at INTEGER, -- 原先是TEXT
         last_used_at INTEGER, -- 原先是TEXT
         is_archived INTEGER DEFAULT 0,
         is_highlighted INTEGER DEFAULT 0,

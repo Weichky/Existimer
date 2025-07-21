@@ -27,7 +27,7 @@ class TimerUnitSnapshot extends SnapshotBase {
       'status': status.name,
       'type': type.name,
       'duration_ms': duration.inMilliseconds,
-      'reference_time': referenceTime?.toIso8601String(),
+      'reference_time': referenceTime?.millisecondsSinceEpoch,
       'last_remain_ms': lastRemainTime?.inMilliseconds,
     };
   }
@@ -42,7 +42,7 @@ class TimerUnitSnapshot extends SnapshotBase {
       //因为在判断非空时必然调用Duration构造函数，而此函数只接受非空参数
       referenceTime:
         map['reference_time'] != null
-          ? DateTime.parse(map['reference_time'])
+          ? DateTime.fromMillisecondsSinceEpoch(map['reference_time'])
           : null,
       lastRemainTime:
         map['last_remain_ms'] != null
