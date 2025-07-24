@@ -78,7 +78,7 @@ class AppDatabase {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS tasks (
         uuid TEXT PRIMARY KEY,
-        name TEXT NOT NULL,
+        name TEXT,
         type TEXT NOT NULL,
         created_at INTEGER, -- 原先是TEXT
         last_used_at INTEGER, -- 原先是TEXT

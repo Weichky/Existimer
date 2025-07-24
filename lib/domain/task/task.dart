@@ -4,7 +4,7 @@ import 'package:existimer/core/constants/task_type.dart';
 
 class Task {
   String _uuid;
-  String _name;
+  String? _name;
   TaskType _type;
   DateTime _createAt;
   DateTime? _lastUsedAt;
@@ -14,7 +14,7 @@ class Task {
   String? _description;
 
   Task({
-    required String name,
+    String? name,
     required TaskType type,
     required DateTime createAt,
     DateTime? lastUsedAt,
@@ -45,41 +45,49 @@ class Task {
   }
 
   // setter
-  set uuid(String uuid) {
-    _uuid = uuid;
-  }
-
-  set name(String name) {
+  set setName(String name) {
     _name = name;
   }
 
-  set type(TaskType type) {
+  set setType(TaskType type) {
     _type = type;
   }
 
-  set createAt(DateTime createAt) {
-    _createAt = createAt;
-  }
-
-  set lastUsedAt(DateTime? lastUsedAt) {
-    _lastUsedAt = lastUsedAt;
-  }
-
-  set isArchived(bool isArchived) {
+  set setIsArchived(bool isArchived) {
     _isArchived = isArchived;
   }
 
-  set isHighlighted(bool isHighlighted) {
+  set setIsHighlighted(bool isHighlighted) {
     _isHighlighted = isHighlighted;
   }
 
-  set color(String? color) {
+  set setColor(String? color) {
     _color = color;
   }
 
-  set description(String? description) {
+  set setDescription(String? description) {
     _description = description;
   }
+
+  // getter
+  String get uuid => _uuid;
+
+String? get name => _name;
+
+TaskType get type => _type;
+
+DateTime get createAt => _createAt;
+
+DateTime? get lastUsedAt => _lastUsedAt;
+
+bool get isArchived => _isArchived;
+
+bool get isHighlighted => _isHighlighted;
+
+String? get color => _color;
+
+String? get description => _description;
+
 
   TaskSnapshot toSnapshot() => TaskSnapshot(
     uuid: _uuid,

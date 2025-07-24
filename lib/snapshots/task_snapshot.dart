@@ -4,7 +4,7 @@ import 'package:existimer/snapshots/snapshot_base.dart';
 
 class TaskSnapshot extends SnapshotBase {
   final String uuid;
-  final String name;
+  final String? name;
   final TaskType type;
   final DateTime createAt;
   final DateTime? lastUsedAt;
@@ -15,7 +15,7 @@ class TaskSnapshot extends SnapshotBase {
 
   TaskSnapshot({
     required this.uuid,
-    required this.name,
+    this.name,
     required this.type,
     required this.createAt,
     this.lastUsedAt,
