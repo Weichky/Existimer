@@ -1,15 +1,17 @@
 import 'package:existimer/core/constants/task_type.dart';
 import 'package:existimer/snapshots/snapshot_base.dart';
 
-
 class TaskSnapshot extends SnapshotBase {
   final String uuid;
   final String? name;
   final TaskType type;
+
   final DateTime createAt;
   final DateTime? lastUsedAt;
+
   final bool isArchived;
   final bool isHighlighted;
+
   final String? color;
   final String? description;
 
@@ -19,7 +21,7 @@ class TaskSnapshot extends SnapshotBase {
     required this.type,
     required this.createAt,
     this.lastUsedAt,
-    required this.isArchived,    
+    required this.isArchived,
     required this.isHighlighted,
     this.color,
     this.description,

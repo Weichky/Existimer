@@ -6,10 +6,13 @@ class Task {
   String _uuid;
   String? _name;
   TaskType _type;
+
   DateTime _createAt;
   DateTime? _lastUsedAt;
+
   bool _isArchived;
   bool _isHighlighted;
+
   String? _color;
   String? _description;
 
@@ -34,14 +37,14 @@ class Task {
 
   factory Task.fromSnapshot(TaskSnapshot snapshot) {
     Task task = Task(
-      name: 'null', 
-      type: TaskType.timer, 
-      createAt: DateTime.now()
+      name: 'null',
+      type: TaskType.timer,
+      createAt: DateTime.now(),
     );
 
     task.fromSnapshot(snapshot);
 
-    return task;    
+    return task;
   }
 
   // setter
@@ -72,22 +75,21 @@ class Task {
   // getter
   String get uuid => _uuid;
 
-String? get name => _name;
+  String? get name => _name;
 
-TaskType get type => _type;
+  TaskType get type => _type;
 
-DateTime get createAt => _createAt;
+  DateTime get createAt => _createAt;
 
-DateTime? get lastUsedAt => _lastUsedAt;
+  DateTime? get lastUsedAt => _lastUsedAt;
 
-bool get isArchived => _isArchived;
+  bool get isArchived => _isArchived;
 
-bool get isHighlighted => _isHighlighted;
+  bool get isHighlighted => _isHighlighted;
 
-String? get color => _color;
+  String? get color => _color;
 
-String? get description => _description;
-
+  String? get description => _description;
 
   TaskSnapshot toSnapshot() => TaskSnapshot(
     uuid: _uuid,
