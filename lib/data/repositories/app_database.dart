@@ -26,7 +26,7 @@ class AppDatabase {
       version: databaseVersion,
       onCreate: (db, version) async {
         await setupSchema(db);
-        await db.insert('settings', {'id': 1, 'initialized': 1});
+        await db.insert('settings', {'id': 1, 'is_initialized': 1});
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         await upgradeSchema(db, oldVersion, newVersion);
@@ -82,8 +82,8 @@ class AppDatabase {
         type TEXT NOT NULL,
         created_at INTEGER, -- 原先是TEXT
         last_used_at INTEGER, -- 原先是TEXT
-        is_archived INTEGER DEFAULT 0,
-        is_highlighted INTEGER DEFAULT 0,
+        is_archived BOOLEAN DEFAULT 0,
+        is_highlighted BOOLEAN DEFAULT 0,
         color TEXT,
         description TEXT
       );
@@ -101,22 +101,22 @@ class AppDatabase {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS settings (
         id INTEGER PRIMARY KEY CHECK (id = 1),
-        initialized INTEGER NOT NULL,
+        is_initialized BOOLEAN NOT NULL,
 
         language TEXT,
 
-        enable_dark_mode INTEGER,
-        auto_dark_mode INTEGER,
-        dark_mode_follow_system INTEGER,
+        enable_dark_mode BOOLEAN,
+        auto_dark_mode BOOLEAN,
+        dark_mode_follow_system BOOLEAN,
 
         theme_color TEXT,
 
-        enable_sound INTEGER,
-        enable_finished_sound INTEGER,
-        enable_notification INTEGER,
+        enable_sound BOOLEAN,
+        enable_finished_sound BOOLEAN,
+        enable_notification BOOLEAN,
 
-        enable_debug INTEGER,
-        enable_log INTEGER,
+        enable_debug BOOLEAN,
+        enable_log BOOLEAN,
 
         default_task_type TEXT,
         default_timer_unit_type TEXT,
@@ -130,14 +130,14 @@ class AppDatabase {
     try {
       final result = await _db.query(
         'settings',
-        columns: ['initialized'],
+        columns: ['is_initialized'],
         limit: 1
       );
 
       if (result.isEmpty) return false;
 
       final row = result.first;
-      final initializedValue = row['initialized'] as int?;
+      final initializedValue = row['is_initialized'] as int?;
       return initializedValue == 1;
     }
     catch (e) {
@@ -151,12 +151,12 @@ class AppDatabase {
 
     if (count == 0) {
       // 没有记录，插入一条，id 必须是 1
-      await _db.insert('settings', {'id': 1, 'initialized': 1});
+      await _db.insert('settings', {'id': 1, 'is_initialized': 1});
     }
     else {
       await _db.update(
         'settings',
-        {'initialized': 1},
+        {'is_initialized': 1},
         where: 'id = ?',
         whereArgs: [1]
       );
