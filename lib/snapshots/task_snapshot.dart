@@ -13,6 +13,8 @@ class TaskSnapshot extends SnapshotBase {
   final bool isHighlighted;
 
   final String? color;
+  final double opacity;
+
   final String? description;
 
   TaskSnapshot({
@@ -24,6 +26,7 @@ class TaskSnapshot extends SnapshotBase {
     required this.isArchived,
     required this.isHighlighted,
     this.color,
+    required this.opacity,
     this.description,
   });
 
@@ -38,6 +41,7 @@ class TaskSnapshot extends SnapshotBase {
       'is_archived': isArchived,
       'is_highlighted': isHighlighted,
       'color': color,
+      'opacity': opacity,
       'description': description,
     };
   }
@@ -52,6 +56,7 @@ class TaskSnapshot extends SnapshotBase {
       isArchived: map['is_archived'],
       isHighlighted: map['is_highlighted'],
       color: map['color'],
+      opacity: map['opacity'],
       description: map['description'],
     );
   }

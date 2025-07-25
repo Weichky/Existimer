@@ -74,7 +74,7 @@ class AppDatabase {
       );
     ''');
 
-    // 对于task而言无需task_meta
+    // Task和TaskMeta分离
     await db.execute('''
       CREATE TABLE IF NOT EXISTS tasks (
         uuid TEXT PRIMARY KEY,
@@ -85,6 +85,7 @@ class AppDatabase {
         is_archived BOOLEAN DEFAULT 0,
         is_highlighted BOOLEAN DEFAULT 0,
         color TEXT,
+        opacity REAL,
         description TEXT
       );
     ''');  
