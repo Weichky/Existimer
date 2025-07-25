@@ -68,7 +68,6 @@ class AppDatabase {
       CREATE TABLE IF NOT EXISTS history (
         history_uuid TEXT PRIMARY KEY,
         task_uuid TEXT NOT NULL,
-        task_name TEXT,
         started_at INTEGER NOT NULL,  -- 原先是TEXT
       );
     ''');
