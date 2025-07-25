@@ -70,7 +70,6 @@ class AppDatabase {
         task_uuid TEXT NOT NULL,
         task_name TEXT,
         started_at INTEGER NOT NULL,  -- 原先是TEXT
-        description TEXT
       );
     ''');
 
@@ -86,7 +85,6 @@ class AppDatabase {
         is_highlighted BOOLEAN DEFAULT 0,
         color TEXT,
         opacity REAL,
-        description TEXT
       );
     ''');  
 

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 class TaskMeta {
   String _taskUuid;
@@ -15,4 +14,30 @@ class TaskMeta {
   String? _baseColor;
 
   String? _description;
+
+  TaskMeta({
+    required String taskUuid,
+
+    required DateTime createAt,
+    DateTime? firstUsedAt,
+    DateTime? lastUsedAt,
+
+    required int totalUsedCount,
+    Duration? avgSessionLength,
+
+    String? icon,
+
+    String? baseColor,
+
+    String? description,
+  }) : _taskUuid = taskUuid,
+      _createAt = createAt,
+      _firstUsedAt = firstUsedAt,
+      _lastUsedAt = lastUsedAt,
+      _totalUsedCount = totalUsedCount,
+      _avgSessionLength = avgSessionLength,
+      _icon = icon,
+      _baseColor = baseColor,
+      _description = description;
+
 }

@@ -15,8 +15,6 @@ class TaskSnapshot extends SnapshotBase {
   final String? color;
   final double opacity;
 
-  final String? description;
-
   TaskSnapshot({
     required this.uuid,
     this.name,
@@ -27,7 +25,6 @@ class TaskSnapshot extends SnapshotBase {
     required this.isHighlighted,
     this.color,
     required this.opacity,
-    this.description,
   });
 
   @override
@@ -42,7 +39,6 @@ class TaskSnapshot extends SnapshotBase {
       'is_highlighted': isHighlighted,
       'color': color,
       'opacity': opacity,
-      'description': description,
     };
   }
 
@@ -57,7 +53,6 @@ class TaskSnapshot extends SnapshotBase {
       isHighlighted: map['is_highlighted'],
       color: map['color'],
       opacity: map['opacity'],
-      description: map['description'],
     );
   }
 }

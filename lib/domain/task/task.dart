@@ -1,23 +1,20 @@
 import 'package:existimer/snapshots/task_snapshot.dart';
 import 'package:existimer/core/utils/helper.dart';
 import 'package:existimer/core/constants/task_type.dart';
-import 'package:flutter/widgets.dart';
 
 class Task {
   String _uuid;
   String? _name;
   TaskType _type;
 
-  DateTime _createAt;//waiting 未来转移到 TaskMeta 中
-  DateTime? _lastUsedAt;//waiting 未来转移到 TaskMeta 中
+  DateTime _createAt;// 保留字段，方便查找
+  DateTime? _lastUsedAt;// 保留字段，方便查找
 
   bool _isArchived;
   bool _isHighlighted;
 
   String? _color;
   double _opacity;
-
-  String? _description;
 
   Task({
     String? name,
@@ -28,7 +25,6 @@ class Task {
     bool? isHighlighted,
     String? color,
     required double opacity,
-    String? description,
   }) : _uuid = UuidHelper.getUuid(),
        _name = name,
        _type = type,
@@ -37,8 +33,7 @@ class Task {
        _isArchived = isArchived ?? false,
        _isHighlighted = isHighlighted ?? false,
        _color = color,
-       _opacity = opacity,
-       _description = description;
+       _opacity = opacity;
 
   factory Task.fromSnapshot(TaskSnapshot snapshot) {
     Task task = Task(
@@ -78,10 +73,6 @@ class Task {
     _opacity = opacity;
   }
 
-  set setDescription(String? description) {
-    _description = description;
-  }
-
   // getter
   String get uuid => _uuid;
 
@@ -101,8 +92,6 @@ class Task {
 
   double get opacity => _opacity;
 
-  String? get description => _description;
-
   TaskSnapshot toSnapshot() => TaskSnapshot(
     uuid: _uuid,
     name: _name,
@@ -113,7 +102,6 @@ class Task {
     isHighlighted: _isHighlighted,
     color: _color,
     opacity: _opacity,
-    description: _description,
   );
 
   void fromSnapshot(TaskSnapshot taskSnapshot) {
@@ -126,6 +114,5 @@ class Task {
     _isHighlighted = taskSnapshot.isHighlighted;
     _color = taskSnapshot.color;
     _opacity = taskSnapshot.opacity;
-    _description = taskSnapshot.description;
   }
 }
