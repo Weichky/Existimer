@@ -1,3 +1,4 @@
+import 'package:existimer/core/utils/clock.dart';
 import 'package:existimer/snapshots/task_snapshot.dart';
 import 'package:existimer/core/utils/helper.dart';
 import 'package:existimer/core/constants/task_type.dart';
@@ -38,7 +39,7 @@ class Task {
   factory Task.fromSnapshot(TaskSnapshot snapshot) {
     Task task = Task(
       type: TaskType.timer,
-      createAt: DateTime.now(),
+      createAt: Clock.instance.currentTime,
       opacity: 0.0,
     );
 

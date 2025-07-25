@@ -1,6 +1,7 @@
 // history.dart
 import 'package:existimer/core/utils/helper.dart';
 import 'package:existimer/snapshots/history_snapshot.dart';
+import 'package:existimer/core/utils/clock.dart';
 
 class History {
   String _historyUuid;
@@ -26,7 +27,15 @@ class History {
        _isArchived = isArchived;
 
   factory History.fromSnapshot(HistorySnapshot snapshot) {
-    
+    History history = History(
+      taskUuid: '',
+      startedAt: Clock.instance.currentTime,
+      isArchived: false,
+    );
+
+    history.fromSnapshot(snapshot);
+
+    return history;
   }
 
   // setter
@@ -58,4 +67,13 @@ class History {
     count: _count,
     isArchived: _isArchived,
   );
+
+  void fromSnapshot(HistorySnapshot snapshot) {
+    _historyUuid = snapshot.historyUuid;
+    _taskUuid = snapshot.taskUuid;
+    _startedAt = snapshot.startedAt;
+    _sessionDuration = snapshot.sessionDuration;
+    _count = snapshot.count;
+    _isArchived = snapshot.isArchived;
+  }
 }

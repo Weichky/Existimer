@@ -9,16 +9,18 @@ class Clock {
 
   factory Clock() => _instance;
 
+  static get instance => _instance;
+
   DateTime get currentTime {
     DateTime now = DateTime.now().add(Duration(milliseconds: _timeDrift));
     return now.add(Duration(hours: _timezoneOffset));
   }
 
-  void setTimeDrift(int milliseconds) {
+  set setTimeDrift(int milliseconds) {
     _timeDrift = milliseconds;
   }
 
-  void setTimezoneOffset(int hours) {
+  set setTimezoneOffset(int hours) {
     _timezoneOffset = hours;
   }
 
