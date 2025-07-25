@@ -37,7 +37,6 @@ class Task {
 
   factory Task.fromSnapshot(TaskSnapshot snapshot) {
     Task task = Task(
-      name: 'null',
       type: TaskType.timer,
       createAt: DateTime.now(),
       opacity: 0.0,

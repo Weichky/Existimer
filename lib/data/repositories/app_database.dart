@@ -69,6 +69,9 @@ class AppDatabase {
         history_uuid TEXT PRIMARY KEY,
         task_uuid TEXT NOT NULL,
         started_at INTEGER NOT NULL,  -- 原先是TEXT
+        session_duration_ms INTEGER,
+        count INTEGER,
+        is_archived BOOLEAN DEFAULT 0,
       );
     ''');
 
