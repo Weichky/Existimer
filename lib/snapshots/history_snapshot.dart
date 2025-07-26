@@ -1,4 +1,5 @@
-import 'package:existimer/core/constants/task_type.dart';
+// history_snapshot.dart
+
 import 'package:existimer/snapshots/snapshot_base.dart';
 
 class HistorySnapshot extends SnapshotBase {

@@ -14,7 +14,7 @@ class AppDatabase {
 
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, db);
-    
+
     if (reset && await databaseExists(path)) {
       await deleteDatabase(path);
     }
@@ -30,22 +30,26 @@ class AppDatabase {
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         await upgradeSchema(db, oldVersion, newVersion);
-      }
+      },
     );
 
     _initialized = true;
   }
 
-  Future<void> upgradeSchema(Database db, int fromVersion, int toVersion) async {
+  Future<void> upgradeSchema(
+    Database db,
+    int fromVersion,
+    int toVersion,
+  ) async {
     // 开发阶段留空
 
     // 例
     if (fromVersion < 101 && toVersion >= 101) {
       // await db.execute('''
-        // CREATE TABLE IF NOT EXISTS new_table (
-          // id TEXT PRIMARY KEY,
-          // name TEXT NOT NULL
-        // )
+      // CREATE TABLE IF NOT EXISTS new_table (
+      // id TEXT PRIMARY KEY,
+      // name TEXT NOT NULL
+      // )
       // ''');
     }
   }
@@ -67,7 +71,7 @@ class AppDatabase {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS history (
         history_uuid TEXT PRIMARY KEY,
-        task_uuid TEXT NOT NULL,
+        task_uuid TEXT NOT NULL,  -- 弱约束， histroy引用的task_uuid可能不存在
         started_at INTEGER NOT NULL,  -- 原先是TEXT
         session_duration_ms INTEGER,
         count INTEGER,
@@ -88,7 +92,22 @@ class AppDatabase {
         color TEXT,
         opacity REAL,
       );
-    ''');  
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS task_meta (
+        task_uuid TEXT PRIMARY KEY,
+        created_at INTEGER NOT NULL,
+        first_used_at INTEGER,
+        last_used_at INTEGER,
+        total_used_count INTEGER NOT NULL,
+        total_count INTEGER,
+        avg_session_duration_ms INTEGER,
+        icon TEXT,
+        base_color TEXT,
+        description TEXT,
+      );
+    ''');
 
     await db.execute('''
       CREATE TABLE IF NOT EXISTS task_mapping (
@@ -97,34 +116,14 @@ class AppDatabase {
         entity_type TEXT NOT NULL,
         PRIMARY KEY (task_uuid, entity_uuid)
       );
-    ''');// PRIMARY KEY (task_id, entity_id) 组合主键
+    '''); // PRIMARY KEY (task_id, entity_id) 组合主键
 
     await db.execute('''
       CREATE TABLE IF NOT EXISTS settings (
         id INTEGER PRIMARY KEY CHECK (id = 1),
-        is_initialized BOOLEAN NOT NULL,
-
-        language TEXT,
-
-        enable_dark_mode BOOLEAN,
-        auto_dark_mode BOOLEAN,
-        dark_mode_follow_system BOOLEAN,
-
-        theme_color TEXT,
-
-        enable_sound BOOLEAN,
-        enable_finished_sound BOOLEAN,
-        enable_notification BOOLEAN,
-
-        enable_debug BOOLEAN,
-        enable_log BOOLEAN,
-
-        default_task_type TEXT,
-        default_timer_unit_type TEXT,
-
-        countdown_duration_ms INTEGER
+        json TEXT NOT NULL,
       );
-    ''');  
+    ''');
   }
 
   Future<bool> checkInitialized() async {
@@ -132,7 +131,7 @@ class AppDatabase {
       final result = await _db.query(
         'settings',
         columns: ['is_initialized'],
-        limit: 1
+        limit: 1,
       );
 
       if (result.isEmpty) return false;
@@ -140,8 +139,7 @@ class AppDatabase {
       final row = result.first;
       final initializedValue = row['is_initialized'] as int?;
       return initializedValue == 1;
-    }
-    catch (e) {
+    } catch (e) {
       return false;
     }
   }
@@ -153,13 +151,12 @@ class AppDatabase {
     if (count == 0) {
       // 没有记录，插入一条，id 必须是 1
       await _db.insert('settings', {'id': 1, 'is_initialized': 1});
-    }
-    else {
+    } else {
       await _db.update(
         'settings',
         {'is_initialized': 1},
         where: 'id = ?',
-        whereArgs: [1]
+        whereArgs: [1],
       );
     }
   }

@@ -1,4 +1,3 @@
-
 class TaskMeta {
   String _taskUuid;
 
@@ -6,8 +5,10 @@ class TaskMeta {
   DateTime? _firstUsedAt;
   DateTime? _lastUsedAt;
 
-  int _totalUsedCount;
-  Duration? _avgSessionLength;
+  int _totalUsedCount; // 作为任务完成的次数
+
+  int? _totalCount; // 记次任务的总次数
+  Duration? _avgSessionDuration;
 
   String? _icon;
 
@@ -17,27 +18,23 @@ class TaskMeta {
 
   TaskMeta({
     required String taskUuid,
-
     required DateTime createAt,
     DateTime? firstUsedAt,
     DateTime? lastUsedAt,
-
     required int totalUsedCount,
-    Duration? avgSessionLength,
-
+    int? totalCount,
+    Duration? avgSessionDuration,
     String? icon,
-
     String? baseColor,
-
     String? description,
   }) : _taskUuid = taskUuid,
-      _createAt = createAt,
-      _firstUsedAt = firstUsedAt,
-      _lastUsedAt = lastUsedAt,
-      _totalUsedCount = totalUsedCount,
-      _avgSessionLength = avgSessionLength,
-      _icon = icon,
-      _baseColor = baseColor,
-      _description = description;
-
+       _createAt = createAt,
+       _firstUsedAt = firstUsedAt,
+       _lastUsedAt = lastUsedAt,
+       _totalUsedCount = totalUsedCount,
+       _totalCount = totalCount,
+       _avgSessionDuration = avgSessionDuration,
+       _icon = icon,
+       _baseColor = baseColor,
+       _description = description;
 }
