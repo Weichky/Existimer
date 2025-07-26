@@ -50,11 +50,14 @@ class TaskSnapshot extends SnapshotBase {
       name: map['name'],
       type: TaskType.fromString(map['type']),
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at']),
-      lastUsedAt: DateTime.fromMillisecondsSinceEpoch(map['last_used_at']),
-      isArchived: map['is_archived'],
-      isHighlighted: map['is_highlighted'],
+      lastUsedAt:
+          map['last_used_at'] != null
+              ? DateTime.fromMillisecondsSinceEpoch(map['last_used_at'])
+              : null,
+      isArchived: map['is_archived'] == 1, // 若是 SQLite 中的整数值
+      isHighlighted: map['is_highlighted'] == 1,
       color: map['color'],
-      opacity: map['opacity'],
+      opacity: (map['opacity'] as num).toDouble(),
     );
   }
 }

@@ -26,12 +26,42 @@ class TaskMetaSnapshot extends SnapshotBase {
     this.avgSessionDuration,
     this.icon,
     this.baseColor,
-  }); 
-
+  });
   @override
   Map<String, dynamic> toMap() {
     return {
       'task_uuid': taskUuid,
+      'create_at': createAt.millisecondsSinceEpoch,
+      'first_used_at': firstUsedAt?.millisecondsSinceEpoch,
+      'last_used_at': lastUsedAt?.millisecondsSinceEpoch,
+      'total_used_count': totalUsedCount,
+      'total_count': totalCount,
+      'avg_session_duration': avgSessionDuration?.inMilliseconds,
+      'icon': icon,
+      'base_color': baseColor,
     };
+  }
+
+  static TaskMetaSnapshot fromMap(Map<String, dynamic> map) {
+    return TaskMetaSnapshot(
+      taskUuid: map['task_uuid'],
+      createAt: DateTime.fromMillisecondsSinceEpoch(map['create_at']),
+      firstUsedAt:
+          map['first_used_at'] != null
+              ? DateTime.fromMillisecondsSinceEpoch(map['first_used_at'])
+              : null,
+      lastUsedAt:
+          map['last_used_at'] != null
+              ? DateTime.fromMillisecondsSinceEpoch(map['last_used_at'])
+              : null,
+      totalUsedCount: map['total_used_count'],
+      totalCount: map['total_count'],
+      avgSessionDuration:
+          map['avg_session_duration'] != null
+              ? Duration(milliseconds: map['avg_session_duration'])
+              : null,
+      icon: map['icon'],
+      baseColor: map['base_color'],
+    );
   }
 }
