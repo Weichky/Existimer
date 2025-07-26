@@ -1,50 +1,21 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.build/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
 # Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
+.build/
+.buildlog/
 /build/
+**/doc/api/
+**/ios/Flutter/.last_build_id
 
-# Symbolication related
-app.*.symbols
-
-# Obfuscation related
-app.*.map.json
-
-# Android Studio will place build artifacts here
+# Build artifacts
 /android/app/debug
 /android/app/profile
 /android/app/release
 
-# 工程文件
+# Platform specific files
 /windows
 /android
 /macos
@@ -52,7 +23,36 @@ app.*.map.json
 /web
 /linux
 
-#统计文件
-**/tree.txt
+# IDE related
+*.iml
+*.ipr
+*.iws
+.idea/
+.atom/
+.vscode/
 
+# Editor files
+*.swp
+*.swo
+*~
+.DS_Store
+.history
+
+# Log and temporary files
+*.log
+*.pyc
+*.class
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# Statistics and counter files
+**/tree.txt
 .VSCodeCounter/
+
+# Metadata files (optional)
+.metadata
+
+# Symbolication and obfuscation
+app.*.symbols
+app.*.map.json
