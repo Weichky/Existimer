@@ -1,7 +1,7 @@
 class TaskMeta {
   String _taskUuid;
 
-  DateTime _createAt;
+  DateTime _createdAt;
   DateTime? _firstUsedAt;
   DateTime? _lastUsedAt;
 
@@ -26,7 +26,7 @@ class TaskMeta {
     String? baseColor,
     String? description,
   }) : _taskUuid = taskUuid,
-       _createAt = createAt,
+       _createdAt = createAt,
        _firstUsedAt = firstUsedAt,
        _lastUsedAt = lastUsedAt,
        _totalUsedCount = totalUsedCount,

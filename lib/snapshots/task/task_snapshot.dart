@@ -8,7 +8,7 @@ class TaskSnapshot extends SnapshotBase {
   final String? name;
   final TaskType type;
 
-  final DateTime createAt;
+  final DateTime createdAt;
   final DateTime? lastUsedAt;
 
   final bool isArchived;
@@ -21,7 +21,7 @@ class TaskSnapshot extends SnapshotBase {
     required this.uuid,
     this.name,
     required this.type,
-    required this.createAt,
+    required this.createdAt,
     this.lastUsedAt,
     required this.isArchived,
     required this.isHighlighted,
@@ -35,7 +35,7 @@ class TaskSnapshot extends SnapshotBase {
       'uuid': uuid,
       'name': name,
       'type': type.name,
-      'create_at': createAt.millisecondsSinceEpoch,
+      'created_at': createdAt.millisecondsSinceEpoch,
       'last_used_at': lastUsedAt?.millisecondsSinceEpoch,
       'is_archived': isArchived,
       'is_highlighted': isHighlighted,
@@ -49,7 +49,7 @@ class TaskSnapshot extends SnapshotBase {
       uuid: map['uuid'],
       name: map['name'],
       type: TaskType.fromString(map['type']),
-      createAt: DateTime.fromMillisecondsSinceEpoch(map['create_at']),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at']),
       lastUsedAt: DateTime.fromMillisecondsSinceEpoch(map['last_used_at']),
       isArchived: map['is_archived'],
       isHighlighted: map['is_highlighted'],

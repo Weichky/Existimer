@@ -27,4 +27,11 @@ class TaskMetaSnapshot extends SnapshotBase {
     this.icon,
     this.baseColor,
   }); 
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'task_uuid': taskUuid,
+    };
+  }
 }

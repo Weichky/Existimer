@@ -10,7 +10,7 @@ class Task {
   String? _name;
   TaskType _type;
 
-  DateTime _createAt;// 保留字段，方便查找
+  DateTime _createdAt;// 保留字段，方便查找
   DateTime? _lastUsedAt;// 保留字段，方便查找
 
   bool _isArchived;
@@ -31,7 +31,7 @@ class Task {
   }) : _uuid = UuidHelper.getUuid(),
        _name = name,
        _type = type,
-       _createAt = createAt,
+       _createdAt = createAt,
        _lastUsedAt = lastUsedAt,
        _isArchived = isArchived ?? false,
        _isHighlighted = isHighlighted ?? false,
@@ -82,7 +82,7 @@ class Task {
 
   TaskType get type => _type;
 
-  DateTime get createAt => _createAt;
+  DateTime get createdAt => _createdAt;
 
   DateTime? get lastUsedAt => _lastUsedAt;
 
@@ -98,7 +98,7 @@ class Task {
     uuid: _uuid,
     name: _name,
     type: _type,
-    createAt: _createAt,
+    createdAt: _createdAt,
     lastUsedAt: _lastUsedAt,
     isArchived: _isArchived,
     isHighlighted: _isHighlighted,
@@ -110,7 +110,7 @@ class Task {
     _uuid = taskSnapshot.uuid;
     _name = taskSnapshot.name;
     _type = taskSnapshot.type;
-    _createAt = taskSnapshot.createAt;
+    _createdAt = taskSnapshot.createdAt;
     _lastUsedAt = taskSnapshot.lastUsedAt;
     _isArchived = taskSnapshot.isArchived;
     _isHighlighted = taskSnapshot.isHighlighted;
