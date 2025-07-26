@@ -84,7 +84,7 @@ class AppDatabase {
         started_at INTEGER NOT NULL,  -- 原先是TEXT
         session_duration_ms INTEGER,
         count INTEGER,
-        is_archived BOOLEAN DEFAULT 0,
+        is_archived BOOLEAN DEFAULT 0
       );
     ''');
 
@@ -99,7 +99,7 @@ class AppDatabase {
         is_archived BOOLEAN DEFAULT 0,
         is_highlighted BOOLEAN DEFAULT 0,
         color TEXT,
-        opacity REAL,
+        opacity REAL
       );
     ''');
 
@@ -113,7 +113,7 @@ class AppDatabase {
         total_count INTEGER,
         avg_session_duration_ms INTEGER,
         icon TEXT,
-        base_color TEXT,
+        base_color TEXT
       );
     ''');
 
@@ -140,7 +140,7 @@ class AppDatabase {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS settings (
         id INTEGER PRIMARY KEY CHECK (id = 1),
-        json TEXT NOT NULL,
+        json TEXT NOT NULL
       );
     ''');
   }

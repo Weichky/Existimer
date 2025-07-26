@@ -53,6 +53,9 @@ migrate_working_dir/
 # Metadata files (optional)
 .metadata
 
+# lock
+pubspec.lock
+
 # Symbolication and obfuscation
 app.*.symbols
 app.*.map.json
