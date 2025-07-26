@@ -6,7 +6,7 @@ import 'package:existimer/core/utils/clock.dart';
 
 import 'package:existimer/domain/timer/timer.dart';
 
-import 'package:existimer/snapshots/timer_unit_snapshot.dart';
+import 'package:existimer/snapshots/timer/timer_unit_snapshot.dart';
 
 // 注意_currentTimer.start()和_currentTimer.stop()分别更新了什么
 // 需要对外提供时长接口

@@ -3,7 +3,7 @@ import 'dart:async';
 
 import 'package:existimer/application/services/app_startup_service.dart';
 import 'package:existimer/data/repositories/app_database.dart';
-import 'package:existimer/snapshots/timer_unit_snapshot.dart';
+import 'package:existimer/snapshots/timer/timer_unit_snapshot.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:existimer/data/repositories/timer_unit/timer_unit_sqlite.dart';
 

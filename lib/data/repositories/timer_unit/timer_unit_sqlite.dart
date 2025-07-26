@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
 import 'package:existimer/data/repositories/snapshot_repository.dart';
-import 'package:existimer/snapshots/timer_unit_snapshot.dart';
+import 'package:existimer/snapshots/timer/timer_unit_snapshot.dart';
 
 class TimerUnitSqlite implements SnapshotRepository<TimerUnitSnapshot> {
   final Database db;

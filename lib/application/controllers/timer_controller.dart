@@ -5,7 +5,7 @@ import 'package:existimer/application/providers/config_provider.dart';
 import 'package:existimer/application/providers/timer_repo_provider.dart';
 import 'package:existimer/data/repositories/timer_unit/timer_unit_sqlite.dart';
 import 'package:existimer/domain/timer/timer_unit.dart';
-import 'package:existimer/snapshots/timer_unit_snapshot.dart';
+import 'package:existimer/snapshots/timer/timer_unit_snapshot.dart';
 import 'package:riverpod/riverpod.dart';
 
 //timer_controller.dart
