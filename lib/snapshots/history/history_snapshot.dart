@@ -26,10 +26,10 @@ class HistorySnapshot extends SnapshotBase {
     return {
       'history_uuid': historyUuid,
       'task_uuid': taskUuid,
-      'started_at': startedAt,
-      'session_duration_ms': sessionDuration,
+      'started_at': startedAt.millisecondsSinceEpoch,
+      'session_duration_ms': sessionDuration?.inMilliseconds,
       'count': count,
-      'is_archived': isArchived,
+      'is_archived': isArchived ? 1 : 0,
     };
   }
 
@@ -37,10 +37,12 @@ class HistorySnapshot extends SnapshotBase {
     return HistorySnapshot(
       historyUuid: map['history_uuid'],
       taskUuid: map['task_uuid'],
-      startedAt: map['started_at'],
-      sessionDuration: map['session_duration_ms'],
+      startedAt: DateTime.fromMillisecondsSinceEpoch(map['started_at']),
+      sessionDuration: map['session_duration_ms'] != null
+          ? Duration(milliseconds: map['session_duration_ms'])
+          : null,
       count: map['count'],
-      isArchived: map['is_archived'],
+      isArchived: map['is_archived'] == 1,
     );
   }
 }
