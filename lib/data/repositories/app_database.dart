@@ -30,7 +30,7 @@ class AppDatabase {
         await setupSchema(db);
         await db.insert('settings', {
           'id': 1,
-          'json': jsonEncode(DefaultSettings.toMap()), // 你的默认设置JSON字符串
+          'json': jsonEncode(DefaultSettings.toMap()),
         });
       },
       onUpgrade: (db, oldVersion, newVersion) async {
