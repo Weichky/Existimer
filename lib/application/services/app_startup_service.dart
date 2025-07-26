@@ -8,7 +8,7 @@ import 'package:existimer/data/repositories/app_database.dart';
 
 class AppStartupService {
   final AppDatabase _database;
-  final TaskMetaSqlite _taskRepo;
+  final TaskSqlite _taskRepo;
   final TimerUnitSqlite _timerRepo;
   final UserSettingsSqlite _settingsRepo;
 
@@ -16,7 +16,7 @@ class AppStartupService {
     required AppDatabase database
   }) :
     _database = database,
-    _taskRepo = TaskMetaSqlite(database.db),
+    _taskRepo = TaskSqlite(database.db),
     _timerRepo = TimerUnitSqlite(database.db),
     _settingsRepo = UserSettingsSqlite(database.db);
 

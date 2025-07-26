@@ -3,11 +3,11 @@ import 'package:sqflite/sqflite.dart';
 import 'package:existimer/data/repositories/snapshot_repository.dart';
 import 'package:existimer/snapshots/task_snapshot.dart';
 
-class TaskMetaSqlite implements SnapshotRepository<TaskSnapshot> {
+class TaskSqlite implements SnapshotRepository<TaskSnapshot> {
   final Database db;
   static const String _table = 'tasks';
 
-  TaskMetaSqlite(this.db);
+  TaskSqlite(this.db);
 
   @override
   Future<void> saveSnapshot(TaskSnapshot snapshot) async {
@@ -35,7 +35,7 @@ class TaskMetaSqlite implements SnapshotRepository<TaskSnapshot> {
   }
 }
 
-extension TaskMetaSqliteQueries on TaskMetaSqlite {
+extension TaskMetaSqliteQueries on TaskSqlite {
   static const validFields = [
     'uuid',
     'name',
@@ -45,7 +45,7 @@ extension TaskMetaSqliteQueries on TaskMetaSqlite {
     'is_archived',
     'is_highlighted',
     'color',
-    'description'
+    'opacity'
   ];
 
   Future<List<TaskSnapshot>> queryByField(
@@ -57,7 +57,7 @@ extension TaskMetaSqliteQueries on TaskMetaSqlite {
     }
 
     final result = await db.query(
-      TaskMetaSqlite._table,
+      TaskSqlite._table,
       where: '$field = ?',
       whereArgs: [value]
     );
