@@ -14,8 +14,6 @@ class TaskMeta {
 
   String? _baseColor;
 
-  String? _description;
-
   TaskMeta({
     required String taskUuid,
     required DateTime createAt,
@@ -35,6 +33,5 @@ class TaskMeta {
        _totalCount = totalCount,
        _avgSessionDuration = avgSessionDuration,
        _icon = icon,
-       _baseColor = baseColor,
-       _description = description;
+       _baseColor = baseColor;
 }

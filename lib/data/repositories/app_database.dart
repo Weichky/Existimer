@@ -110,7 +110,6 @@ class AppDatabase {
         avg_session_duration_ms INTEGER,
         icon TEXT,
         base_color TEXT,
-        description TEXT,
       );
     ''');
 
