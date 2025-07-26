@@ -1,5 +1,7 @@
+import 'package:existimer/core/constants/default_settings.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'dart:convert';
 
 import 'package:existimer/core/constants/database_version.dart';
 
@@ -26,7 +28,10 @@ class AppDatabase {
       version: databaseVersion,
       onCreate: (db, version) async {
         await setupSchema(db);
-        await db.insert('settings', {'id': 1, 'is_initialized': 1});
+        await db.insert('settings', {
+          'id': 1,
+          'json': jsonEncode(DefaultSettings.toMap()), // 你的默认设置JSON字符串
+        });
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         await upgradeSchema(db, oldVersion, newVersion);
@@ -71,7 +76,7 @@ class AppDatabase {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS history (
         history_uuid TEXT PRIMARY KEY,
-        task_uuid TEXT NOT NULL,  -- 弱约束， histroy引用的task_uuid可能不存在
+        task_uuid TEXT NOT NULL,
         started_at INTEGER NOT NULL,  -- 原先是TEXT
         session_duration_ms INTEGER,
         count INTEGER,
@@ -127,38 +132,9 @@ class AppDatabase {
   }
 
   Future<bool> checkInitialized() async {
-    try {
-      final result = await _db.query(
-        'settings',
-        columns: ['is_initialized'],
-        limit: 1,
-      );
+    final result = await _db.query('settings', columns: ['json'], limit: 1);
 
-      if (result.isEmpty) return false;
-
-      final row = result.first;
-      final initializedValue = row['is_initialized'] as int?;
-      return initializedValue == 1;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<void> setInitializedFlag() async {
-    final countResult = await _db.rawQuery('SELECT COUNT(*) FROM settings');
-    final count = Sqflite.firstIntValue(countResult) ?? 0;
-
-    if (count == 0) {
-      // 没有记录，插入一条，id 必须是 1
-      await _db.insert('settings', {'id': 1, 'is_initialized': 1});
-    } else {
-      await _db.update(
-        'settings',
-        {'is_initialized': 1},
-        where: 'id = ?',
-        whereArgs: [1],
-      );
-    }
+    return result.isNotEmpty;
   }
 
   Database get db => _db;

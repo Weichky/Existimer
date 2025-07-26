@@ -3,7 +3,7 @@ import 'package:existimer/core/constants/timer_unit_type.dart';
 
 import 'package:existimer/snapshots/user_settings_snapshot.dart';
 
-class DefaultSettings {
+class DefaultSettings{
   //外观与语言
   static final String language = "zh-CN";
 
@@ -47,4 +47,22 @@ class DefaultSettings {
       countdownDuration: countdownDuration,
     );
   }
+
+static Map<String, dynamic> toMap() {
+  return {
+    'language': language,
+    'enable_dark_mode': enableDarkMode,
+    'auto_dark_mode': autoDarkMode,
+    'dark_mode_follow_system': darkModeFollowSystem,
+    'theme_color': themeColor,
+    'enable_sound': enableSound,
+    'enable_finished_sound': enableFinishedSound,
+    'enable_notification': enableNotification,
+    'enable_debug': enableDebug,
+    'enable_log': enableLog,
+    'default_task_type': defaultTaskType.name,
+    'default_timer_unit_type': defaultTimerUnitType.name,
+    'countdown_duration_ms': countdownDuration.inMilliseconds,
+  };
+}
 }

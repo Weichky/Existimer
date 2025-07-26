@@ -1,4 +1,4 @@
-import 'package:existimer/core/constants/default_config.dart';
+import 'package:existimer/core/constants/default_settings.dart';
 
 import 'package:existimer/data/repositories/configs/user_settings_sqlite.dart';
 import 'package:existimer/data/repositories/timer_unit/timer_unit_sqlite.dart';
@@ -25,7 +25,6 @@ class AppStartupService {
 
     final isInitialized = await _database.checkInitialized();
     if (!isInitialized) {
-      await _database.setInitializedFlag();
       await _settingsRepo.saveSnapshot(DefaultSettings.toSnapshot());
     }
 

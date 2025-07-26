@@ -1,4 +1,4 @@
-import 'package:existimer/core/constants/default_config.dart';
+import 'package:existimer/core/constants/default_settings.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:existimer/data/repositories/snapshot_repository.dart';
 import 'package:existimer/snapshots/user_settings_snapshot.dart';
@@ -16,7 +16,7 @@ class UserSettingsSqlite implements SnapshotRepository<UserSettingsSnapshot> {
     map['id'] = 1; // 强制 id = 1
     await db.insert(_table, {
       'id': 1,
-      'json': jsonEncode(snapshot.toMap()), // 如果已有 toMap
+      'json': jsonEncode(snapshot.toMap()),
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 

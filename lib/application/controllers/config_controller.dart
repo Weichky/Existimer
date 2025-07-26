@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:existimer/application/configs/user_settings.dart';
 import 'package:existimer/application/providers/user_settings_repo_provider.dart';
-import 'package:existimer/core/constants/default_config.dart';
+import 'package:existimer/core/constants/default_settings.dart';
 import 'package:existimer/data/repositories/configs/user_settings_sqlite.dart';
 import 'package:existimer/snapshots/user_settings_snapshot.dart';
 import 'package:riverpod/riverpod.dart';
