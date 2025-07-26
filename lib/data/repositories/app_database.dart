@@ -49,14 +49,18 @@ class AppDatabase {
     // 开发阶段留空
 
     // 例
-    if (fromVersion < 101 && toVersion >= 101) {
-      // await db.execute('''
-      // CREATE TABLE IF NOT EXISTS new_table (
-      // id TEXT PRIMARY KEY,
-      // name TEXT NOT NULL
-      // )
-      // ''');
-    }
+    // if (fromVersion < 101 && toVersion >= 101) {
+    //   await db.execute('''
+    //     CREATE TABLE IF NOT EXISTS task_relation (
+    //       from_uuid TEXT NOT NULL,
+    //       to_uuid TEXT NOT NULL,
+    //       weight REAL,
+    //       is_manually_linked BOOLEAN NOT NULL DEFAULT 0,
+    //       description TEXT,
+    //       PRIMARY KEY (from_uuid, to_uuid)
+    //     );
+    //   ''');
+    // }
   }
 
   Future<void> setupSchema([Database? dbOverride]) async {
@@ -121,6 +125,17 @@ class AppDatabase {
         PRIMARY KEY (task_uuid, entity_uuid)
       );
     '''); // PRIMARY KEY (task_id, entity_id) 组合主键
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS task_relation (
+        from_uuid TEXT NOT NULL,
+        to_uuid TEXT NOT NULL,
+        weight REAL,
+        is_manually_linked BOOLEAN NOT NULL DEFAULT 0,
+        description TEXT,
+        PRIMARY KEY (from_uuid, to_uuid)
+      );
+    ''');
 
     await db.execute('''
       CREATE TABLE IF NOT EXISTS settings (
