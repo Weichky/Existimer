@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:existimer/application/configs/user_settings.dart';
+import 'package:existimer/application/settings/settings.dart';
 import 'package:existimer/application/providers/config_provider.dart';
 import 'package:existimer/application/providers/timer_repo_provider.dart';
 import 'package:existimer/data/repositories/timer_unit/timer_unit_sqlite.dart';
@@ -11,7 +11,7 @@ import 'package:riverpod/riverpod.dart';
 //timer_controller.dart
 class TimerController extends AsyncNotifier<TimerUnit> {
   late TimerUnitSqlite _repo;
-  late UserSettings _settings;
+  late Settings _settings;
 
   @override
   Future<TimerUnit> build() async {

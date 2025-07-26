@@ -1,7 +1,7 @@
 // history.dart
 
 import 'package:existimer/core/utils/helper.dart';
-import 'package:existimer/snapshots/history_snapshot.dart';
+import 'package:existimer/snapshots/history/history_snapshot.dart';
 import 'package:existimer/core/utils/clock.dart';
 
 class History {

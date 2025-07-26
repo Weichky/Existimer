@@ -1,9 +1,9 @@
 import 'package:existimer/core/constants/task_type.dart';
 import 'package:existimer/core/constants/timer_unit_type.dart';
 
-import 'package:existimer/snapshots/user_settings_snapshot.dart';
+import 'package:existimer/snapshots/settings/settings_snapshot.dart';
 
-class UserSettings {
+class Settings {
   //外观与语言
   String? _language;
 
@@ -30,7 +30,7 @@ class UserSettings {
 
   Duration? _countdownDuration;
 
-  UserSettings({
+  Settings({
     String? language,
     bool? enableDarkMode,
     bool? autoDarkMode,
@@ -58,8 +58,8 @@ class UserSettings {
        _defaultTimerUnitType = defaultTimerUnitType,
        _countdownDuration = countdownDuration;
 
-  UserSettingsSnapshot toSnapshot() {
-    return UserSettingsSnapshot(
+  SettingsSnapshot toSnapshot() {
+    return SettingsSnapshot(
       language: _language,
       enableDarkMode: _enableDarkMode,
       autoDarkMode: _autoDarkMode,
@@ -76,7 +76,7 @@ class UserSettings {
     );
   }
 
-  void fromSnapshot(UserSettingsSnapshot userSettingsSnapshot) {
+  void fromSnapshot(SettingsSnapshot userSettingsSnapshot) {
     _language = userSettingsSnapshot.language;
     _enableDarkMode = userSettingsSnapshot.enableDarkMode;
     _autoDarkMode = userSettingsSnapshot.autoDarkMode;
@@ -92,8 +92,8 @@ class UserSettings {
     _countdownDuration = userSettingsSnapshot.countdownDuration;
   }
 
-  factory UserSettings.fromSnapshot(UserSettingsSnapshot userSettingsSnapshot) {
-    final settings = UserSettings();
+  factory Settings.fromSnapshot(SettingsSnapshot userSettingsSnapshot) {
+    final settings = Settings();
     settings.fromSnapshot(userSettingsSnapshot);
     return settings;
   }

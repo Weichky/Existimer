@@ -1,17 +1,17 @@
 import 'dart:async';
 
-import 'package:existimer/application/configs/user_settings.dart';
+import 'package:existimer/application/settings/settings.dart';
 import 'package:existimer/application/providers/user_settings_repo_provider.dart';
 import 'package:existimer/core/constants/default_settings.dart';
-import 'package:existimer/data/repositories/settings/user_settings_sqlite.dart';
-import 'package:existimer/snapshots/user_settings_snapshot.dart';
+import 'package:existimer/data/repositories/settings/settings_sqlite.dart';
+import 'package:existimer/snapshots/settings/settings_snapshot.dart';
 import 'package:riverpod/riverpod.dart';
 
-class ConfigController extends AsyncNotifier<UserSettings> {
-  late UserSettingsSqlite _repo;
+class ConfigController extends AsyncNotifier<Settings> {
+  late SettingsSqlite _repo;
 
   @override
-  Future<UserSettings> build() async {
+  Future<Settings> build() async {
     _repo = await ref.read(userSettingsRepoProvider.future);
 
     final loadedSnapshot = await _repo.loadSnapshot();
@@ -22,14 +22,14 @@ class ConfigController extends AsyncNotifier<UserSettings> {
             ? defaultSnapshot
             : defaultSnapshot.mergeWith(loadedSnapshot);
 
-    return UserSettings.fromSnapshot(mergedSnapshot);
+    return Settings.fromSnapshot(mergedSnapshot);
   }
 
   // 读取，设置唯一
   Future<void> load() async {
-    final UserSettingsSnapshot? snapshot = await _repo.loadSnapshot();
+    final SettingsSnapshot? snapshot = await _repo.loadSnapshot();
     if (snapshot != null) {
-      state = AsyncData(UserSettings.fromSnapshot(snapshot));
+      state = AsyncData(Settings.fromSnapshot(snapshot));
     } else {
       state = AsyncError(StateError('Cannot load settings from database'), StackTrace.current);
     }
@@ -37,7 +37,7 @@ class ConfigController extends AsyncNotifier<UserSettings> {
 
   // 保存
   Future<void> save() async {
-    final UserSettings settings = await future;
+    final Settings settings = await future;
 
     try {
       await _repo.saveSnapshot(settings.toSnapshot());

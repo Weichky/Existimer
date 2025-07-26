@@ -1,17 +1,17 @@
 import 'package:existimer/core/constants/default_settings.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:existimer/data/repositories/snapshot_repository.dart';
-import 'package:existimer/snapshots/user_settings_snapshot.dart';
+import 'package:existimer/snapshots/settings/settings_snapshot.dart';
 import 'dart:convert';
 
-class UserSettingsSqlite implements SnapshotRepository<UserSettingsSnapshot> {
+class SettingsSqlite implements SnapshotRepository<SettingsSnapshot> {
   final Database db;
   static const String _table = 'settings';
 
-  UserSettingsSqlite(this.db);
+  SettingsSqlite(this.db);
 
   @override
-  Future<void> saveSnapshot(UserSettingsSnapshot snapshot) async {
+  Future<void> saveSnapshot(SettingsSnapshot snapshot) async {
     final map = snapshot.toMap();
     map['id'] = 1; // 强制 id = 1
     await db.insert(_table, {
@@ -22,13 +22,13 @@ class UserSettingsSqlite implements SnapshotRepository<UserSettingsSnapshot> {
 
   // 实现接口要求，为了兼容SnapshotRepository
   @override
-  Future<UserSettingsSnapshot?> loadSnapshot([String unused = ""]) async {
+  Future<SettingsSnapshot?> loadSnapshot([String unused = ""]) async {
     final result = await db.query(_table, where: 'id = ?', whereArgs: [1]);
 
     if (result.isNotEmpty) {
       final jsonStr = result.first['json'] as String;
       final map = jsonDecode(jsonStr) as Map<String, dynamic>;
-      return UserSettingsSnapshot.fromMap(map);
+      return SettingsSnapshot.fromMap(map);
     }
 
     // 查询失败返回默认值

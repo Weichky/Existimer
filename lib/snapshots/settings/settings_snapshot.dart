@@ -3,7 +3,7 @@ import 'package:existimer/snapshots/snapshot_base.dart';
 import 'package:existimer/core/constants/task_type.dart';
 import 'package:existimer/core/constants/timer_unit_type.dart';
 
-class UserSettingsSnapshot extends SnapshotBase {
+class SettingsSnapshot extends SnapshotBase {
   //外观与语言
   final String? language;
 
@@ -30,7 +30,7 @@ class UserSettingsSnapshot extends SnapshotBase {
 
   final Duration? countdownDuration;
 
-  UserSettingsSnapshot({
+  SettingsSnapshot({
     required this.language,
 
     required this.enableDarkMode,
@@ -82,8 +82,8 @@ class UserSettingsSnapshot extends SnapshotBase {
     };
   }
 
-  UserSettingsSnapshot mergeWith(UserSettingsSnapshot override) {
-    return UserSettingsSnapshot(
+  SettingsSnapshot mergeWith(SettingsSnapshot override) {
+    return SettingsSnapshot(
       language: override.language ?? language,
 
       enableDarkMode: override.enableDarkMode ?? enableDarkMode,
@@ -108,8 +108,8 @@ class UserSettingsSnapshot extends SnapshotBase {
     );
   }
 
-  static UserSettingsSnapshot fromMap(Map<String, dynamic> map) {
-    return UserSettingsSnapshot(
+  static SettingsSnapshot fromMap(Map<String, dynamic> map) {
+    return SettingsSnapshot(
       language: map['language'] as String?,
 
       enableDarkMode: _boolFromInt(map['enable_dark_mode']),

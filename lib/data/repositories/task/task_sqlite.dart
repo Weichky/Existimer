@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
 import 'package:existimer/data/repositories/snapshot_repository.dart';
-import 'package:existimer/snapshots/task_snapshot.dart';
+import 'package:existimer/snapshots/task/task_snapshot.dart';
 
 class TaskSqlite implements SnapshotRepository<TaskSnapshot> {
   final Database db;

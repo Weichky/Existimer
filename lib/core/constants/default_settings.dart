@@ -1,7 +1,7 @@
 import 'package:existimer/core/constants/task_type.dart';
 import 'package:existimer/core/constants/timer_unit_type.dart';
 
-import 'package:existimer/snapshots/user_settings_snapshot.dart';
+import 'package:existimer/snapshots/settings/settings_snapshot.dart';
 
 class DefaultSettings{
   //外观与语言
@@ -30,8 +30,8 @@ class DefaultSettings{
 
   static final Duration countdownDuration = Duration(minutes: 35);
 
-  static UserSettingsSnapshot toSnapshot() {
-    return UserSettingsSnapshot(
+  static SettingsSnapshot toSnapshot() {
+    return SettingsSnapshot(
       language: language,
       enableDarkMode: enableDarkMode,
       autoDarkMode: autoDarkMode,
