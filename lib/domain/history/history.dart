@@ -44,6 +44,7 @@ class History {
     _sessionDuration = duration;
   }
 
+  // 可选方法
   void addToCount({int addition = 1}) {
     if (_count != null) {
       _count = _count! + 1;

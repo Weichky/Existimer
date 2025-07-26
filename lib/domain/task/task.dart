@@ -22,7 +22,7 @@ class Task {
   Task({
     String? name,
     required TaskType type,
-    required DateTime createAt,
+    required DateTime createdAt,
     DateTime? lastUsedAt,
     bool? isArchived,
     bool? isHighlighted,
@@ -31,7 +31,7 @@ class Task {
   }) : _uuid = UuidHelper.getUuid(),
        _name = name,
        _type = type,
-       _createdAt = createAt,
+       _createdAt = createdAt,
        _lastUsedAt = lastUsedAt,
        _isArchived = isArchived ?? false,
        _isHighlighted = isHighlighted ?? false,
@@ -41,7 +41,7 @@ class Task {
   factory Task.fromSnapshot(TaskSnapshot snapshot) {
     Task task = Task(
       type: TaskType.timer,
-      createAt: Clock.instance.currentTime,
+      createdAt: Clock.instance.currentTime,
       opacity: 0.0,
     );
 

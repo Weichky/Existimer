@@ -3,7 +3,7 @@ import 'package:existimer/snapshots/snapshot_base.dart';
 class TaskMetaSnapshot extends SnapshotBase {
   final String taskUuid;
 
-  final DateTime createAt;
+  final DateTime createdAt;
   final DateTime? firstUsedAt;
   final DateTime? lastUsedAt;
 
@@ -18,7 +18,7 @@ class TaskMetaSnapshot extends SnapshotBase {
 
   TaskMetaSnapshot({
     required this.taskUuid,
-    required this.createAt,
+    required this.createdAt,
     this.firstUsedAt,
     this.lastUsedAt,
     required this.totalUsedCount,
@@ -27,11 +27,12 @@ class TaskMetaSnapshot extends SnapshotBase {
     this.icon,
     this.baseColor,
   });
+
   @override
   Map<String, dynamic> toMap() {
     return {
       'task_uuid': taskUuid,
-      'create_at': createAt.millisecondsSinceEpoch,
+      'create_at': createdAt.millisecondsSinceEpoch,
       'first_used_at': firstUsedAt?.millisecondsSinceEpoch,
       'last_used_at': lastUsedAt?.millisecondsSinceEpoch,
       'total_used_count': totalUsedCount,
@@ -45,7 +46,7 @@ class TaskMetaSnapshot extends SnapshotBase {
   static TaskMetaSnapshot fromMap(Map<String, dynamic> map) {
     return TaskMetaSnapshot(
       taskUuid: map['task_uuid'],
-      createAt: DateTime.fromMillisecondsSinceEpoch(map['create_at']),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['create_at']),
       firstUsedAt:
           map['first_used_at'] != null
               ? DateTime.fromMillisecondsSinceEpoch(map['first_used_at'])
