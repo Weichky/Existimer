@@ -123,4 +123,61 @@ class TimerController extends BaseController<TimerUnit> {
       handleError(e, st);
     }
   }
+  
+  /// 重置计时器到默认状态
+  Future<void> reset() async {
+    final unit = state.requireValue;
+    
+    try {
+      // 使用TimerUnit的reset方法重置计时器
+      if (unit.type.isCountup) {
+        unit.reset();
+      } else {
+        unit.reset(_settings.countdownDuration);
+      }
+      state = AsyncData(unit);
+    } catch (e, st) {
+      handleError(e, st);
+    }
+  }
+  
+  /// 更改计时器类型但保持当前状态（如果可能）
+  Future<void> switchType() async {
+    final unit = state.requireValue;
+    
+    try {
+      // 切换类型
+      if (unit.type.isCountup) {
+        // 切换到倒计时，使用默认时长
+        unit.toCountdown(_settings.countdownDuration!);
+      } else {
+        // 切换到正计时
+        unit.toCountup();
+      }
+      state = AsyncData(unit);
+    } catch (e, st) {
+      handleError(e, st);
+    }
+  }
+  
+  /// 设置倒计时持续时间但保持当前状态
+  Future<void> setCountdownDuration(Duration duration) async {
+    final unit = state.requireValue;
+    
+    try {
+      // 只有在计时器未激活时才能更改持续时间
+      if (unit.status.isInactive) {
+        if (unit.type.isCountdown) {
+          // 如果已经是倒计时器，只更改持续时间
+          unit.toCountdown(duration);
+        } else {
+          // 如果是正计时器，切换到倒计时器
+          unit.toCountdown(duration);
+        }
+        state = AsyncData(unit);
+      }
+    } catch (e, st) {
+      handleError(e, st);
+    }
+  }
 }

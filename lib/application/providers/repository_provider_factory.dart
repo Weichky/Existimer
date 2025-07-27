@@ -1,4 +1,5 @@
 import 'package:existimer/application/providers/app_startup_service_provider.dart';
+import 'package:existimer/application/services/app_startup_service.dart';
 import 'package:riverpod/riverpod.dart';
 
 /// Repository Provider工厂类
@@ -11,11 +12,15 @@ class RepositoryProviderFactory {
   /// [getter] 从AppStartupService获取Repository实例的方法
   /// 返回一个FutureProvider，提供指定类型的Repository实例
   static FutureProvider<T> createRepositoryProvider<T>(
-    T Function(dynamic appStartupService) getter
+    T Function(AppStartupService appStartupService) getter
   ) {
     return FutureProvider<T>((ref) {
-      final appStartupService = ref.watch(appStartupServiceReadyProvider);
-      return getter(appStartupService);
+      final appStartupServiceAsync = ref.watch(appStartupServiceProvider);
+      return appStartupServiceAsync.when(
+        data: (appStartupService) => getter(appStartupService),
+        loading: () => throw Exception('AppStartupService not ready'),
+        error: (error, stack) => throw error,
+      );
     });
   }
 }

@@ -85,6 +85,28 @@ class TimerUnit {
     _lastRemainTime = time;
   }
 
+  /// 重置计时器到初始状态
+  void reset([Duration? duration]) {
+    // 先停止计时器（如果正在运行）
+    if (!_status.isInactive) {
+      stop();
+    }
+    
+    // 重置为初始状态
+    if (_timerUnitType.isCountup) {
+      _reset();
+      _duration = Duration();
+    } else {
+      final resetDuration = duration ?? _lastRemainTime ?? Duration.zero;
+      _reset(resetDuration);
+      _duration = resetDuration;
+    }
+    
+    // 设置状态为未激活
+    _status = TimerUnitStatus.inactive;
+    _referenceTime = null;
+  }
+
   /// 启动计时器
   void start() {
     if (_status.isInactive) {
@@ -120,7 +142,7 @@ class TimerUnit {
     /// 恢复计时器
     if (_status.isPaused) {
       _currentTimer.start(Clock.instance.currentTime);
-
+      
       _status = TimerUnitStatus.active;
     } else {
       throw StateError("You must pause TimerUnit before calling resume().");
