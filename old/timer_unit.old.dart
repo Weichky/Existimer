@@ -23,6 +23,8 @@ class TimerUnit {
 
   Duration? _lastRemainTime;
 
+  Clock clock;
+
   /// 内部构造函数，用于创建倒计时或正计时器实例
   TimerUnit._internal(this._timerUnitType, this._duration)
     : _uuid = UuidHelper.getUuid(),
@@ -30,7 +32,8 @@ class TimerUnit {
       _currentTimer =
           _timerUnitType.isCountup ? CountupTimer() : CountdownTimer(_duration),
       _referenceTime = null,
-      _lastRemainTime = _timerUnitType.isCountdown ? _duration : null;
+      _lastRemainTime = _timerUnitType.isCountdown ? _duration : null,
+      clock = Clock();
 
   /// 工厂构造函数，用于创建正计时器实例
   factory TimerUnit.countup() {
@@ -43,7 +46,6 @@ class TimerUnit {
   }
 
   /// 根据快照数据恢复TimerUnit实例
-  /// 复用patch逻辑
   factory TimerUnit.fromSnapshot(TimerUnitSnapshot snapshot) {
     final unit =
         snapshot.type.isCountup
@@ -55,7 +57,7 @@ class TimerUnit {
     return unit;
   }
 
-  /// 定义get方法
+  //定义get方法
   String get uuid => _uuid;
   TimerUnitStatus get status => _status;
   TimerUnitType get type => _timerUnitType;
@@ -110,7 +112,7 @@ class TimerUnit {
   /// 启动计时器
   void start() {
     if (_status.isInactive) {
-      _currentTimer.start(Clock.instance.currentTime);
+      _currentTimer.start(clock.currentTime);
       _status = TimerUnitStatus.active;
       _referenceTime = _currentTimer.referenceTime();
     } else {
@@ -121,7 +123,7 @@ class TimerUnit {
   /// 暂停计时器
   void pause() {
     if (_status.isActive) {
-      _currentTimer.stop(Clock.instance.currentTime);
+      _currentTimer.stop(clock.currentTime);
       _update();
       _status = TimerUnitStatus.paused;
       _checkTimeout();
@@ -141,7 +143,8 @@ class TimerUnit {
   void resume() {
     /// 恢复计时器
     if (_status.isPaused) {
-      _currentTimer.start(Clock.instance.currentTime);
+      _currentTimer.start(clock.currentTime);
+
       _status = TimerUnitStatus.active;
     } else {
       throw StateError("You must pause TimerUnit before calling resume().");
@@ -153,7 +156,7 @@ class TimerUnit {
     if (_status.isInactive) {
       return;
     } else {
-      _currentTimer.stop(Clock.instance.currentTime);
+      _currentTimer.stop(clock.currentTime);
       _update();
 
       _status = TimerUnitStatus.inactive;
@@ -166,10 +169,10 @@ class TimerUnit {
     /// 更新计时器
     if (_timerUnitType.isCountup) {
       // 对于正计时是总时长
-      _duration += _currentTimer.duration(Clock.instance.currentTime);
+      _duration += _currentTimer.duration(clock.currentTime);
       _referenceTime = _currentTimer.referenceTime();
     } else {
-      _duration = _currentTimer.duration(Clock.instance.currentTime);
+      _duration = _currentTimer.duration(clock.currentTime);
       _referenceTime = _currentTimer.referenceTime();
     }
   }
@@ -178,7 +181,7 @@ class TimerUnit {
   void _checkTimeout() {
     /// 检查计时器是否超时
     if (_currentTimer.isCountdown) {
-      if (_currentTimer.duration(Clock.instance.currentTime) <= Duration()) {
+      if (_currentTimer.duration(clock.currentTime) <= Duration()) {
         _status = TimerUnitStatus.timeout;
       }
     }
@@ -226,8 +229,6 @@ class TimerUnit {
       if (!_status.isInactive) {
         // 此时已有referenceTime
         (_currentTimer as CountupTimer).startTime = _referenceTime!;
-        print(duration);
-        print(_duration);
       }
     } else {
       if (!_status.isInactive) {
@@ -236,7 +237,7 @@ class TimerUnit {
         (_currentTimer as CountdownTimer).endTime = _referenceTime!;
 
         if (!_status.isPaused) {
-          _currentTimer.stop(Clock.instance.currentTime);
+          _currentTimer.stop(clock.currentTime);
         }
 
         _checkTimeout();
@@ -251,13 +252,13 @@ class TimerUnit {
       } else if (_status.isActive) {
         // 此时还未更新
         return _duration +
-            Clock.instance.currentTime.difference(_currentTimer.referenceTime());
+            clock.currentTime.difference(_currentTimer.referenceTime());
       }
     } else {
       if (_status.isPaused || _status.isInactive) {
         return _duration;
       } else if (_status.isActive || _status.isTimeout) {
-        return _currentTimer.referenceTime().difference(Clock.instance.currentTime);
+        return _currentTimer.referenceTime().difference(clock.currentTime);
       }
     }
 
