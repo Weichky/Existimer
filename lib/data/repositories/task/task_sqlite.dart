@@ -64,4 +64,19 @@ extension TaskMetaSqliteQueries on TaskSqlite {
 
     return result.map((e) => TaskSnapshot.fromMap(e)).toList();
   }
+  
+  Future<void> deleteByField(
+    String field,
+    dynamic value
+  ) async {
+    if (!validFields.contains(field)) {
+      throw ArgumentError('Invalid field name: $field');
+    }
+
+    await db.delete(
+      TaskSqlite._table,
+      where: '$field = ?',
+      whereArgs: [value]
+    );
+  }
 }

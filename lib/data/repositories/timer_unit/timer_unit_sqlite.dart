@@ -62,4 +62,19 @@ extension TimerUnitSqliteQueries on TimerUnitSqlite {
 
     return result.map((e) => TimerUnitSnapshot.fromMap(e)).toList();
   }
+  
+  Future<void> deleteByField(
+    String field,
+    dynamic value
+  ) async {
+    if (!validFields.contains(field)) {
+      throw ArgumentError('Invalid field name: $field');
+    }
+
+    await db.delete(
+      TimerUnitSqlite._table,
+      where: '$field = ?',
+      whereArgs: [value]
+    );
+  }
 }

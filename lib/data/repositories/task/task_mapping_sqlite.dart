@@ -87,4 +87,19 @@ extension TaskMappingSqliteQueries on TaskMappingSqlite {
       whereArgs: [taskUuid, entityUuid],
     );
   }
+  
+  Future<void> deleteByField(
+    String field,
+    dynamic value,
+  ) async {
+    if (!validFields.contains(field)) {
+      throw ArgumentError('Invalid field name: $field');
+    }
+
+    await db.delete(
+      TaskMappingSqlite._table,
+      where: '$field = ?',
+      whereArgs: [value],
+    );
+  }
 }

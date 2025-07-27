@@ -37,8 +37,8 @@ class TaskSnapshot extends SnapshotBase {
       'type': type.name,
       'created_at': createdAt.millisecondsSinceEpoch,
       'last_used_at': lastUsedAt?.millisecondsSinceEpoch,
-      'is_archived': isArchived,
-      'is_highlighted': isHighlighted,
+      'is_archived': isArchived ? 1 : 0,  // 将布尔值转换为整数存储
+      'is_highlighted': isHighlighted ? 1 : 0,  // 将布尔值转换为整数存储
       'color': color,
       'opacity': opacity,
     };
