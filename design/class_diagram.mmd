@@ -292,21 +292,6 @@ AppDatabase : +upgradeSchema() dynamic
 AppDatabase : +setupSchema() dynamic
 AppDatabase : +checkInitialized() dynamic
 
-class MyApp
-MyApp : +build() Widget
-StatelessWidget <|-- MyApp
-
-class MyHomePage
-MyHomePage : +title String
-MyHomePage : +createState() State<MyHomePage>
-StatefulWidget <|-- MyHomePage
-
-class _MyHomePageState
-_MyHomePageState : -_counter int
-_MyHomePageState : -_incrementCounter() void
-_MyHomePageState : +build() Widget
-State <|-- _MyHomePageState
-
 class Settings
 Settings : -_language String?
 Settings : -_enableDarkMode bool?
