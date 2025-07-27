@@ -34,9 +34,8 @@ class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
 
     return null;
   }
-}
-
-extension TaskMappingSqliteQueries on TaskMappingSqlite {
+  
+  // 将扩展方法合并到主类内部
   static const validFields = [
     'task_uuid',
     'entity_uuid',
@@ -52,7 +51,7 @@ extension TaskMappingSqliteQueries on TaskMappingSqlite {
     }
 
     final result = await db.query(
-      TaskMappingSqlite._table,
+      _table,
       where: '$field = ?',
       whereArgs: [value],
     );
@@ -62,7 +61,7 @@ extension TaskMappingSqliteQueries on TaskMappingSqlite {
 
   Future<List<TaskMappingSnapshot>> loadMappingsForTask(String taskUuid) async {
     final result = await db.query(
-      TaskMappingSqlite._table,
+      _table,
       where: 'task_uuid = ?',
       whereArgs: [taskUuid],
     );
@@ -72,7 +71,7 @@ extension TaskMappingSqliteQueries on TaskMappingSqlite {
 
   Future<List<TaskMappingSnapshot>> loadMappingsForEntity(String entityUuid) async {
     final result = await db.query(
-      TaskMappingSqlite._table,
+      _table,
       where: 'entity_uuid = ?',
       whereArgs: [entityUuid],
     );
@@ -82,7 +81,7 @@ extension TaskMappingSqliteQueries on TaskMappingSqlite {
 
   Future<void> deleteMapping(String taskUuid, String entityUuid) async {
     await db.delete(
-      TaskMappingSqlite._table,
+      _table,
       where: 'task_uuid = ? AND entity_uuid = ?',
       whereArgs: [taskUuid, entityUuid],
     );
@@ -97,7 +96,7 @@ extension TaskMappingSqliteQueries on TaskMappingSqlite {
     }
 
     await db.delete(
-      TaskMappingSqlite._table,
+      _table,
       where: '$field = ?',
       whereArgs: [value],
     );

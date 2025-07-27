@@ -32,12 +32,12 @@ class TaskMetaSnapshot extends SnapshotBase {
   Map<String, dynamic> toMap() {
     return {
       'task_uuid': taskUuid,
-      'create_at': createdAt.millisecondsSinceEpoch,
+      'created_at': createdAt.millisecondsSinceEpoch,
       'first_used_at': firstUsedAt?.millisecondsSinceEpoch,
       'last_used_at': lastUsedAt?.millisecondsSinceEpoch,
       'total_used_count': totalUsedCount,
       'total_count': totalCount,
-      'avg_session_duration': avgSessionDuration?.inMilliseconds,
+      'avg_session_duration_ms': avgSessionDuration?.inMilliseconds,
       'icon': icon,
       'base_color': baseColor,
     };
@@ -46,7 +46,7 @@ class TaskMetaSnapshot extends SnapshotBase {
   static TaskMetaSnapshot fromMap(Map<String, dynamic> map) {
     return TaskMetaSnapshot(
       taskUuid: map['task_uuid'],
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['create_at']),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at']),
       firstUsedAt:
           map['first_used_at'] != null
               ? DateTime.fromMillisecondsSinceEpoch(map['first_used_at'])
@@ -58,8 +58,8 @@ class TaskMetaSnapshot extends SnapshotBase {
       totalUsedCount: map['total_used_count'],
       totalCount: map['total_count'],
       avgSessionDuration:
-          map['avg_session_duration'] != null
-              ? Duration(milliseconds: map['avg_session_duration'])
+          map['avg_session_duration_ms'] != null
+              ? Duration(milliseconds: map['avg_session_duration_ms'])
               : null,
       icon: map['icon'],
       baseColor: map['base_color'],

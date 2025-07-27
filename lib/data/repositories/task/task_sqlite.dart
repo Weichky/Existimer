@@ -33,9 +33,8 @@ class TaskSqlite implements SnapshotRepository<TaskSnapshot> {
 
     return null;
   }
-}
-
-extension TaskMetaSqliteQueries on TaskSqlite {
+  
+  // 将扩展方法合并到主类内部
   static const validFields = [
     'uuid',
     'name',
@@ -57,7 +56,7 @@ extension TaskMetaSqliteQueries on TaskSqlite {
     }
 
     final result = await db.query(
-      TaskSqlite._table,
+      _table,
       where: '$field = ?',
       whereArgs: [value]
     );
@@ -74,7 +73,7 @@ extension TaskMetaSqliteQueries on TaskSqlite {
     }
 
     await db.delete(
-      TaskSqlite._table,
+      _table,
       where: '$field = ?',
       whereArgs: [value]
     );

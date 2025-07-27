@@ -4,6 +4,9 @@ import 'package:existimer/data/repositories/settings/settings_sqlite.dart';
 import 'package:existimer/data/repositories/timer_unit/timer_unit_sqlite.dart';
 import 'package:existimer/data/repositories/task/task_sqlite.dart';
 import 'package:existimer/data/repositories/task/task_mapping_sqlite.dart';
+import 'package:existimer/data/repositories/task/task_meta_sqlite.dart';
+import 'package:existimer/data/repositories/task/task_relation_sqlite.dart';
+import 'package:existimer/data/repositories/history/history_sqlite.dart';
 import 'package:existimer/data/repositories/app_database.dart';
 
 /// 应用启动服务类
@@ -28,6 +31,15 @@ class AppStartupService {
   
   /// 任务映射数据访问对象
   late final TaskMappingSqlite _taskMappingRepo;
+  
+  /// 任务元数据访问对象
+  late final TaskMetaSqlite _taskMetaRepo;
+  
+  /// 任务关系数据访问对象
+  late final TaskRelationSqlite _taskRelationRepo;
+  
+  /// 历史记录数据访问对象
+  late final HistorySqlite _historyRepo;
 
   /// 构造函数
   /// 
@@ -50,6 +62,9 @@ class AppStartupService {
     _timerRepo = _repositoryFactory.createTimerUnitRepository();
     _settingsRepo = _repositoryFactory.createSettingsRepository();
     _taskMappingRepo = _repositoryFactory.createTaskMappingRepository();
+    _taskMetaRepo = _repositoryFactory.createTaskMetaRepository();
+    _taskRelationRepo = _repositoryFactory.createTaskRelationRepository();
+    _historyRepo = _repositoryFactory.createHistoryRepository();
 
     // 数据库初始化在databaseProvider中完成
     final isInitialized = await _database.checkInitialized();
@@ -79,4 +94,13 @@ class AppStartupService {
   
   /// 获取任务映射数据访问对象
   TaskMappingSqlite get taskMappingRepo => _taskMappingRepo;
+  
+  /// 获取任务元数据访问对象
+  TaskMetaSqlite get taskMetaRepo => _taskMetaRepo;
+  
+  /// 获取任务关系数据访问对象
+  TaskRelationSqlite get taskRelationRepo => _taskRelationRepo;
+  
+  /// 获取历史记录数据访问对象
+  HistorySqlite get historyRepo => _historyRepo;
 }

@@ -33,9 +33,8 @@ class HistorySqlite implements SnapshotRepository<HistorySnapshot> {
 
     return null;
   }
-}
-
-extension HistorySqliteQueries on HistorySqlite {
+  
+  // 将扩展方法合并到主类内部
   static const validFields = [
     'history_uuid',
     'task_uuid',
@@ -54,11 +53,26 @@ extension HistorySqliteQueries on HistorySqlite {
     }
 
     final result = await db.query(
-      HistorySqlite._table,
+      _table,
       where: '$field = ?',
       whereArgs: [value]
     );
 
     return result.map((e) => HistorySnapshot.fromMap(e)).toList();
+  }
+  
+  Future<void> deleteByField(
+    String field,
+    dynamic value
+  ) async {
+    if (!validFields.contains(field)) {
+      throw ArgumentError('Invalid field name: $field');
+    }
+
+    await db.delete(
+      _table,
+      where: '$field = ?',
+      whereArgs: [value]
+    );
   }
 }

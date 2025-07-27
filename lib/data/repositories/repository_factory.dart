@@ -3,6 +3,9 @@ import 'package:existimer/data/repositories/settings/settings_sqlite.dart';
 import 'package:existimer/data/repositories/timer_unit/timer_unit_sqlite.dart';
 import 'package:existimer/data/repositories/task/task_sqlite.dart';
 import 'package:existimer/data/repositories/task/task_mapping_sqlite.dart';
+import 'package:existimer/data/repositories/task/task_meta_sqlite.dart';
+import 'package:existimer/data/repositories/task/task_relation_sqlite.dart';
+import 'package:existimer/data/repositories/history/history_sqlite.dart';
 import 'package:sqflite/sqflite.dart';
 
 /// Repository工厂类
@@ -36,5 +39,20 @@ class RepositoryFactory {
   /// 创建任务映射数据访问对象
   TaskMappingSqlite createTaskMappingRepository() {
     return TaskMappingSqlite(_database);
+  }
+  
+  /// 创建任务元数据访问对象
+  TaskMetaSqlite createTaskMetaRepository() {
+    return TaskMetaSqlite(_database);
+  }
+  
+  /// 创建任务关系数据访问对象
+  TaskRelationSqlite createTaskRelationRepository() {
+    return TaskRelationSqlite(_database);
+  }
+  
+  /// 创建历史记录数据访问对象
+  HistorySqlite createHistoryRepository() {
+    return HistorySqlite(_database);
   }
 }

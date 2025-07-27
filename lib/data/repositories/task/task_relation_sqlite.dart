@@ -34,9 +34,8 @@ class TaskRelationSqlite implements SnapshotRepository<TaskRelationSnapshot> {
 
     return null;
   }
-}
-
-extension TaskRelationSqliteQueries on TaskRelationSqlite {
+  
+  // 将扩展方法合并到主类内部
   static const validFields = [
     'from_uuid',
     'to_uuid',
@@ -54,7 +53,7 @@ extension TaskRelationSqliteQueries on TaskRelationSqlite {
     }
 
     final result = await db.query(
-      TaskRelationSqlite._table,
+      _table,
       where: '$field = ?',
       whereArgs: [value]
     );
@@ -64,7 +63,7 @@ extension TaskRelationSqliteQueries on TaskRelationSqlite {
   
   Future<List<TaskRelationSnapshot>> loadRelationsForTask(String taskUuid) async {
     final result = await db.query(
-      TaskRelationSqlite._table,
+      _table,
       where: 'from_uuid = ? OR to_uuid = ?',
       whereArgs: [taskUuid, taskUuid]
     );
@@ -74,9 +73,24 @@ extension TaskRelationSqliteQueries on TaskRelationSqlite {
   
   Future<void> deleteRelation(String fromUuid, String toUuid) async {
     await db.delete(
-      TaskRelationSqlite._table,
+      _table,
       where: 'from_uuid = ? AND to_uuid = ?',
       whereArgs: [fromUuid, toUuid]
+    );
+  }
+  
+  Future<void> deleteByField(
+    String field,
+    dynamic value
+  ) async {
+    if (!validFields.contains(field)) {
+      throw ArgumentError('Invalid field name: $field');
+    }
+
+    await db.delete(
+      _table,
+      where: '$field = ?',
+      whereArgs: [value]
     );
   }
 }

@@ -33,9 +33,8 @@ class TaskMetaSqlite implements SnapshotRepository<TaskMetaSnapshot> {
 
     return null;
   }
-}
-
-extension TaskMetaSqliteQueries on TaskMetaSqlite {
+  
+  // 将扩展方法合并到主类内部
   static const validFields = [
     'task_uuid',
     'created_at',
@@ -43,7 +42,7 @@ extension TaskMetaSqliteQueries on TaskMetaSqlite {
     'last_used_at',
     'total_used_count',
     'total_count',
-    'avg_session_duration',
+    'avg_session_duration_ms',
     'icon',
     'base_color'
   ];
@@ -57,11 +56,26 @@ extension TaskMetaSqliteQueries on TaskMetaSqlite {
     }
 
     final result = await db.query(
-      TaskMetaSqlite._table,
+      _table,
       where: '$field = ?',
       whereArgs: [value]
     );
 
     return result.map((e) => TaskMetaSnapshot.fromMap(e)).toList();
+  }
+  
+  Future<void> deleteByField(
+    String field,
+    dynamic value
+  ) async {
+    if (!validFields.contains(field)) {
+      throw ArgumentError('Invalid field name: $field');
+    }
+
+    await db.delete(
+      _table,
+      where: '$field = ?',
+      whereArgs: [value]
+    );
   }
 }

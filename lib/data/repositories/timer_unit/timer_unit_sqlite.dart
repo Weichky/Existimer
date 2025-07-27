@@ -33,9 +33,8 @@ class TimerUnitSqlite implements SnapshotRepository<TimerUnitSnapshot> {
 
     return null;
   }
-}
-
-extension TimerUnitSqliteQueries on TimerUnitSqlite {
+  
+  // 将扩展方法合并到主类内部
   // 防止注入，虽然没啥用
   static const validFields = [
     'uuid',
@@ -55,7 +54,7 @@ extension TimerUnitSqliteQueries on TimerUnitSqlite {
     }
 
     final result = await db.query(
-      TimerUnitSqlite._table,
+      _table,
       where: '$field = ?',
       whereArgs: [value]
     );
@@ -72,7 +71,7 @@ extension TimerUnitSqliteQueries on TimerUnitSqlite {
     }
 
     await db.delete(
-      TimerUnitSqlite._table,
+      _table,
       where: '$field = ?',
       whereArgs: [value]
     );
