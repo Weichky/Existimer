@@ -1,18 +1,18 @@
 import 'dart:async';
 
 import 'package:existimer/application/settings/settings.dart';
-import 'package:existimer/application/providers/user_settings_repo_provider.dart';
+import 'package:existimer/application/providers/settings/settings_repo_provider.dart';
 import 'package:existimer/core/constants/default_settings.dart';
 import 'package:existimer/data/repositories/settings/settings_sqlite.dart';
 import 'package:existimer/snapshots/settings/settings_snapshot.dart';
 import 'package:riverpod/riverpod.dart';
 
-class ConfigController extends AsyncNotifier<Settings> {
+class SettingsController extends AsyncNotifier<Settings> {
   late SettingsSqlite _repo;
 
   @override
   Future<Settings> build() async {
-    _repo = await ref.read(userSettingsRepoProvider.future);
+    _repo = await ref.read(settingsRepoProvider.future);
 
     final loadedSnapshot = await _repo.loadSnapshot();
     final defaultSnapshot = DefaultSettings.toSnapshot();

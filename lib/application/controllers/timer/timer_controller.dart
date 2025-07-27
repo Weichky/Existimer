@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:existimer/application/controllers/base_controller.dart';
 import 'package:existimer/application/settings/settings.dart';
-import 'package:existimer/application/providers/config_provider.dart';
-import 'package:existimer/application/providers/timer_repo_provider.dart';
+import 'package:existimer/application/providers/settings/settings_provider.dart';
+import 'package:existimer/application/providers/timer/timer_repo_provider.dart';
 import 'package:existimer/data/repositories/timer_unit/timer_unit_sqlite.dart';
 import 'package:existimer/domain/timer/timer_unit.dart';
 import 'package:existimer/snapshots/timer/timer_unit_snapshot.dart';
@@ -25,7 +25,7 @@ class TimerController extends BaseController<TimerUnit> {
   Future<TimerUnit> build() async {
     // ref.read()不会触发build()，因此此处build相当于初始化方法，关于热重载的问题还需考察
     _repo = await ref.read(timerRepoProvider.future);
-    _settings = await ref.read(configProvider.future);
+    _settings = await ref.read(settingsProvider.future);
 
     return _settings.defaultTimerUnitType!.isCountup
         ? TimerUnit.countup()

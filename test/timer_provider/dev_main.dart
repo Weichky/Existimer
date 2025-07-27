@@ -3,7 +3,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'package:riverpod/riverpod.dart';
 
-import 'package:existimer/application/providers/timer_provider.dart';
+import 'package:existimer/application/providers/timer/timer_provider.dart';
 import 'package:existimer/application/providers/app_startup_service_provider.dart';
 import 'package:existimer/core/constants/timer_unit_status.dart';
 import 'package:existimer/core/constants/timer_unit_type.dart';

@@ -6,6 +6,6 @@ import 'package:existimer/data/repositories/settings/settings_sqlite.dart';
 ///
 /// 提供SettingsSqlite实例
 /// 使用RepositoryProviderFactory创建，减少重复代码
-final userSettingsRepoProvider = RepositoryProviderFactory.createRepositoryProvider<SettingsSqlite>(
+final settingsRepoProvider = RepositoryProviderFactory.createRepositoryProvider<SettingsSqlite>(
   (appStartupService) => appStartupService.settingsRepo
 );

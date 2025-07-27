@@ -1,4 +1,4 @@
-import 'package:existimer/application/controllers/timer_controller.dart';
+import 'package:existimer/application/controllers/timer/timer_controller.dart';
 import 'package:existimer/domain/timer/timer_unit.dart';
 import 'package:riverpod/riverpod.dart';
 

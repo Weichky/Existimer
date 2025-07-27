@@ -1,3 +1,6 @@
+| 4c596ad | Weichky Charl | Sun Jul 27 15:48:24 2025 +0800 | update: design/class_diagram.mmd |
+| 5bf5d3c | Weichky Charl | Sun Jul 27 15:40:16 2025 +0800 | update: design/class_diagram.mmd |
+| f6b95d2 | Weichky Charl | Sun Jul 27 11:13:48 2025 +0800 | update: commit_log.md |
 | 2dac73a | Weichky Charl | Sun Jul 27 10:42:52 2025 +0800 | feat(data): 新增任务元数据、关系和历史记录的数据库支持 |
 | e698ad1 | Weichky Charl | Sun Jul 27 10:23:15 2025 +0800 | feat(application): 实现任务映射功能并重构控制器和仓库模式 |
 | b474a05 | Weichky Charl | Sun Jul 27 08:59:22 2025 +0800 | feat: 实现了TaskMapping的数据结构,snapshot和sqlite接口 |

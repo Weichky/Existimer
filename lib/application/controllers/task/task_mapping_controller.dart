@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:existimer/application/controllers/collection_controller.dart';
-import 'package:existimer/application/providers/task_mapping_repo_provider.dart';
+import 'package:existimer/application/providers/task/task_mapping_repo_provider.dart';
 import 'package:existimer/data/repositories/task/task_mapping_sqlite.dart';
 import 'package:existimer/domain/task/task_mapping.dart';
 import 'package:existimer/snapshots/task/task_mapping_snapshot.dart';
