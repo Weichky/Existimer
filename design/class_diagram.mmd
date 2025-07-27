@@ -1,8 +1,83 @@
 classDiagram
+class SettingsSnapshot
+SettingsSnapshot : +language String?
+SettingsSnapshot : +enableDarkMode bool?
+SettingsSnapshot : +autoDarkMode bool?
+SettingsSnapshot : +darkModeFollowSystem bool?
+SettingsSnapshot : +themeColor String?
+SettingsSnapshot : +enableSound bool?
+SettingsSnapshot : +enableFinishedSound bool?
+SettingsSnapshot : +enableNotification bool?
+SettingsSnapshot : +enableDebug bool?
+SettingsSnapshot : +enableLog bool?
+SettingsSnapshot : +defaultTaskType TaskType?
+SettingsSnapshot o-- TaskType
+SettingsSnapshot : +defaultTimerUnitType TimerUnitType?
+SettingsSnapshot o-- TimerUnitType
+SettingsSnapshot : +countdownDuration Duration?
+SettingsSnapshot : +toMap() Map<String, dynamic>
+SettingsSnapshot : +mergeWith() SettingsSnapshot
+SettingsSnapshot : +fromMap()$ SettingsSnapshot
+SettingsSnapshot : -_boolFromInt()$ bool?
+SnapshotBase <|-- SettingsSnapshot
 
-class SnapshotBase
-<<abstract>> SnapshotBase
-SnapshotBase : +toMap()* Map<String, dynamic>
+class TaskRelationSnapshot
+TaskRelationSnapshot : +fromUuid String
+TaskRelationSnapshot : +toUuid String
+TaskRelationSnapshot : +weight double?
+TaskRelationSnapshot : +isManuallyLinked bool
+TaskRelationSnapshot : +description String?
+TaskRelationSnapshot : +toMap() Map<String, dynamic>
+TaskRelationSnapshot : +fromMap()$ TaskRelationSnapshot
+SnapshotBase <|-- TaskRelationSnapshot
+
+class TaskMetaSnapshot
+TaskMetaSnapshot : +taskUuid String
+TaskMetaSnapshot : +createdAt DateTime
+TaskMetaSnapshot : +firstUsedAt DateTime?
+TaskMetaSnapshot : +lastUsedAt DateTime?
+TaskMetaSnapshot : +totalUsedCount int
+TaskMetaSnapshot : +totalCount int?
+TaskMetaSnapshot : +avgSessionDuration Duration?
+TaskMetaSnapshot : +icon String?
+TaskMetaSnapshot : +baseColor String?
+TaskMetaSnapshot : +toMap() Map<String, dynamic>
+TaskMetaSnapshot : +fromMap()$ TaskMetaSnapshot
+SnapshotBase <|-- TaskMetaSnapshot
+
+class TaskMappingSnapshot
+TaskMappingSnapshot : +taskUuid String
+TaskMappingSnapshot : +entityUuid String
+TaskMappingSnapshot : +entityType String
+TaskMappingSnapshot : +toMap() Map<String, dynamic>
+TaskMappingSnapshot : +fromMap()$ TaskMappingSnapshot
+SnapshotBase <|-- TaskMappingSnapshot
+
+class TaskSnapshot
+TaskSnapshot : +uuid String
+TaskSnapshot : +name String?
+TaskSnapshot : +type TaskType
+TaskSnapshot o-- TaskType
+TaskSnapshot : +createdAt DateTime
+TaskSnapshot : +lastUsedAt DateTime?
+TaskSnapshot : +isArchived bool
+TaskSnapshot : +isHighlighted bool
+TaskSnapshot : +color String?
+TaskSnapshot : +opacity double
+TaskSnapshot : +toMap() Map<String, dynamic>
+TaskSnapshot : +fromMap()$ TaskSnapshot
+SnapshotBase <|-- TaskSnapshot
+
+class HistorySnapshot
+HistorySnapshot : +historyUuid String
+HistorySnapshot : +taskUuid String
+HistorySnapshot : +startedAt DateTime
+HistorySnapshot : +sessionDuration Duration?
+HistorySnapshot : +count int?
+HistorySnapshot : +isArchived bool
+HistorySnapshot : +toMap() Map<String, dynamic>
+HistorySnapshot : +fromMap()$ HistorySnapshot
+SnapshotBase <|-- HistorySnapshot
 
 class TimerUnitSnapshot
 TimerUnitSnapshot : +uuid String
@@ -17,38 +92,41 @@ TimerUnitSnapshot : +toMap() Map<String, dynamic>
 TimerUnitSnapshot : +fromMap()$ TimerUnitSnapshot
 SnapshotBase <|-- TimerUnitSnapshot
 
-class UserSettingsSnapshot
-UserSettingsSnapshot : +language String?
-UserSettingsSnapshot : +enableDarkMode bool?
-UserSettingsSnapshot : +autoDarkMode bool?
-UserSettingsSnapshot : +darkModeFollowSystem bool?
-UserSettingsSnapshot : +themeColor String?
-UserSettingsSnapshot : +enableSound bool?
-UserSettingsSnapshot : +enableFinishedSound bool?
-UserSettingsSnapshot : +enableNotification bool?
-UserSettingsSnapshot : +enableDebug bool?
-UserSettingsSnapshot : +enableLog bool?
-UserSettingsSnapshot : +defaultTaskType TaskType?
-UserSettingsSnapshot o-- TaskType
-UserSettingsSnapshot : +defaultTimerUnitType TimerUnitType?
-UserSettingsSnapshot o-- TimerUnitType
-UserSettingsSnapshot : +countdownDuration Duration?
-UserSettingsSnapshot : +toMap() Map<String, dynamic>
-UserSettingsSnapshot : +mergeWith() UserSettingsSnapshot
-UserSettingsSnapshot : +fromMap()$ UserSettingsSnapshot
-UserSettingsSnapshot : -_boolFromInt()$ bool?
-SnapshotBase <|-- UserSettingsSnapshot
+class SnapshotBase
+<<abstract>> SnapshotBase
+SnapshotBase : +toMap()* Map<String, dynamic>
 
-class TaskMetaSnapshot
-TaskMetaSnapshot : +uuid String
-TaskMetaSnapshot : +name String
-TaskMetaSnapshot : +type String
-TaskMetaSnapshot : +createAt DateTime
-TaskMetaSnapshot : +description String?
-TaskMetaSnapshot : +archived bool
-TaskMetaSnapshot : +toMap() Map<String, dynamic>
-TaskMetaSnapshot : +fromMap()$ TaskMetaSnapshot
-SnapshotBase <|-- TaskMetaSnapshot
+class TimerStatus
+<<enumeration>> TimerStatus
+TimerStatus : +index int
+TimerStatus : +values$ List~TimerStatus~
+TimerStatus : +inactive$ TimerStatus
+TimerStatus o-- TimerStatus
+TimerStatus : +active$ TimerStatus
+TimerStatus o-- TimerStatus
+TimerStatus : +paused$ TimerStatus
+TimerStatus o-- TimerStatus
+Enum <|.. TimerStatus
+
+class TimerType
+<<enumeration>> TimerType
+TimerType : +index int
+TimerType : +values$ List~TimerType~
+TimerType : +forward$ TimerType
+TimerType o-- TimerType
+TimerType : +countdown$ TimerType
+TimerType o-- TimerType
+Enum <|.. TimerType
+
+class TimerUnitType
+<<enumeration>> TimerUnitType
+TimerUnitType : +index int
+TimerUnitType : +values$ List~TimerUnitType~
+TimerUnitType : +countup$ TimerUnitType
+TimerUnitType o-- TimerUnitType
+TimerUnitType : +countdown$ TimerUnitType
+TimerUnitType o-- TimerUnitType
+Enum <|.. TimerUnitType
 
 class TaskType
 <<enumeration>> TaskType
@@ -60,15 +138,19 @@ TaskType : +note$ TaskType
 TaskType o-- TaskType
 Enum <|.. TaskType
 
-class TimerType
-<<enumeration>> TimerType
-TimerType : +index int
-TimerType : +values$ List~TimerType~
-TimerType : +forward$ TimerType
-TimerType o-- TimerType
-TimerType : +countdown$ TimerType
-TimerType o-- TimerType
-Enum <|.. TimerType
+class TimerUnitStatus
+<<enumeration>> TimerUnitStatus
+TimerUnitStatus : +index int
+TimerUnitStatus : +values$ List~TimerUnitStatus~
+TimerUnitStatus : +active$ TimerUnitStatus
+TimerUnitStatus o-- TimerUnitStatus
+TimerUnitStatus : +inactive$ TimerUnitStatus
+TimerUnitStatus o-- TimerUnitStatus
+TimerUnitStatus : +paused$ TimerUnitStatus
+TimerUnitStatus o-- TimerUnitStatus
+TimerUnitStatus : +timeout$ TimerUnitStatus
+TimerUnitStatus o-- TimerUnitStatus
+Enum <|.. TimerUnitStatus
 
 class DefaultSettings
 DefaultSettings : +language$ String
@@ -86,135 +168,117 @@ DefaultSettings o-- TaskType
 DefaultSettings : +defaultTimerUnitType$ TimerUnitType
 DefaultSettings o-- TimerUnitType
 DefaultSettings : +countdownDuration$ Duration
-DefaultSettings : +toSnapshot()$ UserSettingsSnapshot
-
-class TimerUnitStatus
-<<enumeration>> TimerUnitStatus
-TimerUnitStatus : +index int
-TimerUnitStatus : +values$ List~TimerUnitStatus~
-TimerUnitStatus : +active$ TimerUnitStatus
-TimerUnitStatus o-- TimerUnitStatus
-TimerUnitStatus : +inactive$ TimerUnitStatus
-TimerUnitStatus o-- TimerUnitStatus
-TimerUnitStatus : +paused$ TimerUnitStatus
-TimerUnitStatus o-- TimerUnitStatus
-TimerUnitStatus : +timeout$ TimerUnitStatus
-TimerUnitStatus o-- TimerUnitStatus
-Enum <|.. TimerUnitStatus
-
-class TimerStatus
-<<enumeration>> TimerStatus
-TimerStatus : +index int
-TimerStatus : +values$ List~TimerStatus~
-TimerStatus : +inactive$ TimerStatus
-TimerStatus o-- TimerStatus
-TimerStatus : +active$ TimerStatus
-TimerStatus o-- TimerStatus
-TimerStatus : +paused$ TimerStatus
-TimerStatus o-- TimerStatus
-Enum <|.. TimerStatus
-
-class TimerUnitType
-<<enumeration>> TimerUnitType
-TimerUnitType : +index int
-TimerUnitType : +values$ List~TimerUnitType~
-TimerUnitType : +countup$ TimerUnitType
-TimerUnitType o-- TimerUnitType
-TimerUnitType : +countdown$ TimerUnitType
-TimerUnitType o-- TimerUnitType
-Enum <|.. TimerUnitType
+DefaultSettings : +toSnapshot()$ SettingsSnapshot
+DefaultSettings : +toMap()$ Map<String, dynamic>
 
 class Clock
 Clock : -_instance$ Clock
 Clock o-- Clock
 Clock : -_timeDrift int
 Clock : -_timezoneOffset int
+Clock : +instance$ dynamic
 Clock : +currentTime DateTime
-Clock : +setTimeDrift() void
-Clock : +setTimezoneOffset() void
+Clock : +setTimeDrift int
+Clock : +setTimezoneOffset int
 Clock : +reset() void
 
 class UuidHelper
 UuidHelper : +getUuid()$ String
 
-class TimerController
-TimerController : -_repo TimerUnitSqlite
-TimerController o-- TimerUnitSqlite
-TimerController : -_settings UserSettings
-TimerController o-- UserSettings
-TimerController : +build() dynamic
-TimerController : +create() dynamic
-TimerController : +loadFromUuid() dynamic
-TimerController : +save() dynamic
-TimerController : +start() dynamic
-TimerController : +stop() dynamic
-TimerController : +pause() dynamic
-TimerController : +resume() dynamic
-AsyncNotifier <|-- TimerController
-
-class ConfigController
-ConfigController : -_repo UserSettingsSqlite
-ConfigController o-- UserSettingsSqlite
-ConfigController : +build() dynamic
-ConfigController : +load() dynamic
-ConfigController : +save() dynamic
-AsyncNotifier <|-- ConfigController
-
-class AppStartupService
-AppStartupService : -_database AppDatabase
-AppStartupService o-- AppDatabase
-AppStartupService : -_taskRepo TaskMetaSqlite
-AppStartupService o-- TaskMetaSqlite
-AppStartupService : -_timerRepo TimerUnitSqlite
-AppStartupService o-- TimerUnitSqlite
-AppStartupService : -_settingsRepo UserSettingsSqlite
-AppStartupService o-- UserSettingsSqlite
-AppStartupService : +timerRepo dynamic
-AppStartupService : +settingsRepo dynamic
-AppStartupService : +initializeApp() dynamic
-AppStartupService : -_recoverUnfinishedTimers() dynamic
-
-class UserSettings
-UserSettings : -_language String?
-UserSettings : -_enableDarkMode bool?
-UserSettings : -_autoDarkMode bool?
-UserSettings : -_darkModeFollowSystem bool?
-UserSettings : -_themeColor String?
-UserSettings : -_enableSound bool?
-UserSettings : -_enableFinishedSound bool?
-UserSettings : -_enableNotification bool?
-UserSettings : -_enableDebug bool?
-UserSettings : -_enableLog bool?
-UserSettings : -_defaultTaskType TaskType?
-UserSettings o-- TaskType
-UserSettings : -_defaultTimerUnitType TimerUnitType?
-UserSettings o-- TimerUnitType
-UserSettings : -_countdownDuration Duration?
-UserSettings : +language String?
-UserSettings : +enableDarkMode bool?
-UserSettings : +autoDarkMode bool?
-UserSettings : +darkModeFollowSystem bool?
-UserSettings : +themeColor String?
-UserSettings : +enableSound bool?
-UserSettings : +enableFinishedSound bool?
-UserSettings : +enableNotification bool?
-UserSettings : +enableDebug bool?
-UserSettings : +enableLog bool?
-UserSettings : +defaultTaskType TaskType?
-UserSettings o-- TaskType
-UserSettings : +defaultTimerUnitType TimerUnitType?
-UserSettings o-- TimerUnitType
-UserSettings : +countdownDuration Duration?
-UserSettings : +toSnapshot() UserSettingsSnapshot
-UserSettings : +fromSnapshot() void
-
 class TimerUnitSqlite
 TimerUnitSqlite : +db Database
 TimerUnitSqlite o-- Database
 TimerUnitSqlite : -_table$ String
+TimerUnitSqlite : +validFields$ List~String~
 TimerUnitSqlite : +saveSnapshot() dynamic
 TimerUnitSqlite : +loadSnapshot() dynamic
+TimerUnitSqlite : +queryByField() dynamic
+TimerUnitSqlite : +deleteByField() dynamic
 SnapshotRepository <|.. TimerUnitSqlite
+
+class SettingsSqlite
+SettingsSqlite : +db Database
+SettingsSqlite o-- Database
+SettingsSqlite : -_table$ String
+SettingsSqlite : +saveSnapshot() dynamic
+SettingsSqlite : +loadSnapshot() dynamic
+SnapshotRepository <|.. SettingsSqlite
+
+class SnapshotRepository
+<<abstract>> SnapshotRepository
+SnapshotRepository : +saveSnapshot()* dynamic
+SnapshotRepository : +loadSnapshot()* dynamic
+
+class TaskSqlite
+TaskSqlite : +db Database
+TaskSqlite o-- Database
+TaskSqlite : -_table$ String
+TaskSqlite : +validFields$ List~String~
+TaskSqlite : +saveSnapshot() dynamic
+TaskSqlite : +loadSnapshot() dynamic
+TaskSqlite : +queryByField() dynamic
+TaskSqlite : +deleteByField() dynamic
+SnapshotRepository <|.. TaskSqlite
+
+class TaskMetaSqlite
+TaskMetaSqlite : +db Database
+TaskMetaSqlite o-- Database
+TaskMetaSqlite : -_table$ String
+TaskMetaSqlite : +validFields$ List~String~
+TaskMetaSqlite : +saveSnapshot() dynamic
+TaskMetaSqlite : +loadSnapshot() dynamic
+TaskMetaSqlite : +queryByField() dynamic
+TaskMetaSqlite : +deleteByField() dynamic
+SnapshotRepository <|.. TaskMetaSqlite
+
+class TaskMappingSqlite
+TaskMappingSqlite : +db Database
+TaskMappingSqlite o-- Database
+TaskMappingSqlite : -_table$ String
+TaskMappingSqlite : +validFields$ List~String~
+TaskMappingSqlite : +saveSnapshot() dynamic
+TaskMappingSqlite : +loadSnapshot() dynamic
+TaskMappingSqlite : +queryByField() dynamic
+TaskMappingSqlite : +loadMappingsForTask() dynamic
+TaskMappingSqlite : +loadMappingsForEntity() dynamic
+TaskMappingSqlite : +deleteMapping() dynamic
+TaskMappingSqlite : +deleteByField() dynamic
+SnapshotRepository <|.. TaskMappingSqlite
+
+class TaskRelationSqlite
+TaskRelationSqlite : +db Database
+TaskRelationSqlite o-- Database
+TaskRelationSqlite : -_table$ String
+TaskRelationSqlite : +validFields$ List~String~
+TaskRelationSqlite : +saveSnapshot() dynamic
+TaskRelationSqlite : +loadSnapshot() dynamic
+TaskRelationSqlite : +queryByField() dynamic
+TaskRelationSqlite : +loadRelationsForTask() dynamic
+TaskRelationSqlite : +deleteRelation() dynamic
+TaskRelationSqlite : +deleteByField() dynamic
+SnapshotRepository <|.. TaskRelationSqlite
+
+class RepositoryFactory
+RepositoryFactory : -_database Database
+RepositoryFactory o-- Database
+RepositoryFactory : +createTaskRepository() TaskSqlite
+RepositoryFactory : +createTimerUnitRepository() TimerUnitSqlite
+RepositoryFactory : +createSettingsRepository() SettingsSqlite
+RepositoryFactory : +createTaskMappingRepository() TaskMappingSqlite
+RepositoryFactory : +createTaskMetaRepository() TaskMetaSqlite
+RepositoryFactory : +createTaskRelationRepository() TaskRelationSqlite
+RepositoryFactory : +createHistoryRepository() HistorySqlite
+
+class HistorySqlite
+HistorySqlite : +db Database
+HistorySqlite o-- Database
+HistorySqlite : -_table$ String
+HistorySqlite : +validFields$ List~String~
+HistorySqlite : +saveSnapshot() dynamic
+HistorySqlite : +loadSnapshot() dynamic
+HistorySqlite : +queryByField() dynamic
+HistorySqlite : +deleteByField() dynamic
+SnapshotRepository <|.. HistorySqlite
 
 class AppDatabase
 AppDatabase : +defaultDbName$ String
@@ -224,30 +288,267 @@ AppDatabase : -_initialized bool
 AppDatabase : +db Database
 AppDatabase o-- Database
 AppDatabase : +init() dynamic
+AppDatabase : +upgradeSchema() dynamic
 AppDatabase : +setupSchema() dynamic
 AppDatabase : +checkInitialized() dynamic
-AppDatabase : +setInitializedFlag() dynamic
 
-class TaskMetaSqlite
-TaskMetaSqlite : +db Database
-TaskMetaSqlite o-- Database
-TaskMetaSqlite : -_table$ String
-TaskMetaSqlite : +saveSnapshot() dynamic
-TaskMetaSqlite : +loadSnapshot() dynamic
-SnapshotRepository <|.. TaskMetaSqlite
+class MyApp
+MyApp : +build() Widget
+StatelessWidget <|-- MyApp
 
-class UserSettingsSqlite
-UserSettingsSqlite : +db Database
-UserSettingsSqlite o-- Database
-UserSettingsSqlite : -_table$ String
-UserSettingsSqlite : +saveSnapshot() dynamic
-UserSettingsSqlite : +loadSnapshot() dynamic
-SnapshotRepository <|.. UserSettingsSqlite
+class MyHomePage
+MyHomePage : +title String
+MyHomePage : +createState() State<MyHomePage>
+StatefulWidget <|-- MyHomePage
 
-class SnapshotRepository
-<<abstract>> SnapshotRepository
-SnapshotRepository : +saveSnapshot()* dynamic
-SnapshotRepository : +loadSnapshot()* dynamic
+class _MyHomePageState
+_MyHomePageState : -_counter int
+_MyHomePageState : -_incrementCounter() void
+_MyHomePageState : +build() Widget
+State <|-- _MyHomePageState
+
+class Settings
+Settings : -_language String?
+Settings : -_enableDarkMode bool?
+Settings : -_autoDarkMode bool?
+Settings : -_darkModeFollowSystem bool?
+Settings : -_themeColor String?
+Settings : -_enableSound bool?
+Settings : -_enableFinishedSound bool?
+Settings : -_enableNotification bool?
+Settings : -_enableDebug bool?
+Settings : -_enableLog bool?
+Settings : -_defaultTaskType TaskType?
+Settings o-- TaskType
+Settings : -_defaultTimerUnitType TimerUnitType?
+Settings o-- TimerUnitType
+Settings : -_countdownDuration Duration?
+Settings : +language String?
+Settings : +enableDarkMode bool?
+Settings : +autoDarkMode bool?
+Settings : +darkModeFollowSystem bool?
+Settings : +themeColor String?
+Settings : +enableSound bool?
+Settings : +enableFinishedSound bool?
+Settings : +enableNotification bool?
+Settings : +enableDebug bool?
+Settings : +enableLog bool?
+Settings : +defaultTaskType TaskType?
+Settings o-- TaskType
+Settings : +defaultTimerUnitType TimerUnitType?
+Settings o-- TimerUnitType
+Settings : +countdownDuration Duration?
+Settings : +toSnapshot() SettingsSnapshot
+Settings : +fromSnapshot() void
+
+class AppStartupService
+AppStartupService : -_database AppDatabase
+AppStartupService o-- AppDatabase
+AppStartupService : -_repositoryFactory RepositoryFactory
+AppStartupService o-- RepositoryFactory
+AppStartupService : -_taskRepo TaskSqlite
+AppStartupService o-- TaskSqlite
+AppStartupService : -_timerRepo TimerUnitSqlite
+AppStartupService o-- TimerUnitSqlite
+AppStartupService : -_settingsRepo SettingsSqlite
+AppStartupService o-- SettingsSqlite
+AppStartupService : -_taskMappingRepo TaskMappingSqlite
+AppStartupService o-- TaskMappingSqlite
+AppStartupService : -_taskMetaRepo TaskMetaSqlite
+AppStartupService o-- TaskMetaSqlite
+AppStartupService : -_taskRelationRepo TaskRelationSqlite
+AppStartupService o-- TaskRelationSqlite
+AppStartupService : -_historyRepo HistorySqlite
+AppStartupService o-- HistorySqlite
+AppStartupService : +timerRepo TimerUnitSqlite
+AppStartupService o-- TimerUnitSqlite
+AppStartupService : +settingsRepo SettingsSqlite
+AppStartupService o-- SettingsSqlite
+AppStartupService : +taskRepo TaskSqlite
+AppStartupService o-- TaskSqlite
+AppStartupService : +taskMappingRepo TaskMappingSqlite
+AppStartupService o-- TaskMappingSqlite
+AppStartupService : +taskMetaRepo TaskMetaSqlite
+AppStartupService o-- TaskMetaSqlite
+AppStartupService : +taskRelationRepo TaskRelationSqlite
+AppStartupService o-- TaskRelationSqlite
+AppStartupService : +historyRepo HistorySqlite
+AppStartupService o-- HistorySqlite
+AppStartupService : +initializeApp() dynamic
+AppStartupService : -_recoverUnfinishedTimers() dynamic
+
+class CollectionController
+<<abstract>> CollectionController
+CollectionController : +addItem()* dynamic
+CollectionController : +removeWhere()* dynamic
+CollectionController : +updateWhere()* dynamic
+BaseController <|-- CollectionController
+
+class TaskMappingController
+TaskMappingController : -_repo TaskMappingSqlite
+TaskMappingController o-- TaskMappingSqlite
+TaskMappingController : +build() dynamic
+TaskMappingController : +load() dynamic
+TaskMappingController : +save() dynamic
+TaskMappingController : +addItem() dynamic
+TaskMappingController : +removeWhere() dynamic
+TaskMappingController : +updateWhere() dynamic
+TaskMappingController : +loadMappingsForTask() dynamic
+TaskMappingController : +loadMappingsForEntity() dynamic
+TaskMappingController : +addMapping() dynamic
+TaskMappingController : +deleteMapping() dynamic
+CollectionController <|-- TaskMappingController
+
+class BaseController
+<<abstract>> BaseController
+BaseController : +load()* dynamic
+BaseController : +save()* dynamic
+BaseController : +handleError() void
+AsyncNotifier <|-- BaseController
+
+class ConfigController
+ConfigController : -_repo SettingsSqlite
+ConfigController o-- SettingsSqlite
+ConfigController : +build() dynamic
+ConfigController : +load() dynamic
+ConfigController : +save() dynamic
+AsyncNotifier <|-- ConfigController
+
+class TimerController
+TimerController : -_repo TimerUnitSqlite
+TimerController o-- TimerUnitSqlite
+TimerController : -_settings Settings
+TimerController o-- Settings
+TimerController : +build() dynamic
+TimerController : +load() dynamic
+TimerController : +save() dynamic
+TimerController : +loadFromUuid() dynamic
+TimerController : +create() dynamic
+TimerController : +start() dynamic
+TimerController : +stop() dynamic
+TimerController : +pause() dynamic
+TimerController : +resume() dynamic
+BaseController <|-- TimerController
+
+class RepositoryProviderFactory
+RepositoryProviderFactory : +createRepositoryProvider()$ FutureProvider<T>
+
+class Task
+Task : -_uuid String
+Task : -_name String?
+Task : -_type TaskType
+Task o-- TaskType
+Task : -_createdAt DateTime
+Task : -_lastUsedAt DateTime?
+Task : -_isArchived bool
+Task : -_isHighlighted bool
+Task : -_color String?
+Task : -_opacity double
+Task : +setName String
+Task : +setType TaskType
+Task o-- TaskType
+Task : +setIsArchived bool
+Task : +setIsHighlighted bool
+Task : +setColor String?
+Task : +setOpacity double
+Task : +uuid String
+Task : +name String?
+Task : +type TaskType
+Task o-- TaskType
+Task : +createdAt DateTime
+Task : +lastUsedAt DateTime?
+Task : +isArchived bool
+Task : +isHighlighted bool
+Task : +color String?
+Task : +opacity double
+Task : +toSnapshot() TaskSnapshot
+Task : +fromSnapshot() void
+
+class TaskMapping
+TaskMapping : -_taskUuid String
+TaskMapping : -_entityUuid String
+TaskMapping : -_entityType String
+TaskMapping : +taskUuid String
+TaskMapping : +entityUuid String
+TaskMapping : +entityType String
+TaskMapping : +toSnapshot() TaskMappingSnapshot
+
+class TaskMeta
+TaskMeta : -_taskUuid String
+TaskMeta : -_createdAt DateTime
+TaskMeta : -_firstUsedAt DateTime?
+TaskMeta : -_lastUsedAt DateTime?
+TaskMeta : -_totalUsedCount int
+TaskMeta : -_totalCount int?
+TaskMeta : -_avgSessionDuration Duration?
+TaskMeta : -_icon String?
+TaskMeta : -_baseColor String?
+TaskMeta : +setFirstUsedAt DateTime
+TaskMeta : +setLastUsedAt DateTime
+TaskMeta : +setIcon String
+TaskMeta : +setBaseColor String
+TaskMeta : +toSnapshot() TaskMetaSnapshot
+TaskMeta : +fromSnapshot() void
+
+class TaskRelation
+TaskRelation : -_fromUuid String
+TaskRelation : -_toUuid String
+TaskRelation : -_weight double?
+TaskRelation : -_isManuallyLinked bool
+TaskRelation : -_description String?
+TaskRelation : +fromUuid String
+TaskRelation : +toUuid String
+TaskRelation : +weight double?
+TaskRelation : +isManuallyLinked bool
+TaskRelation : +description String?
+TaskRelation : +toSnapshot() TaskRelationSnapshot
+
+class History
+History : -_historyUuid String
+History : -_taskUuid String
+History : -_startedAt DateTime
+History : -_sessionDuration Duration?
+History : -_count int?
+History : -_isArchived bool
+History : +setSessionDuration Duration
+History : +historyUuid String
+History : +taskUuid String
+History : +startedAt DateTime
+History : +sessionDuration Duration?
+History : +count int?
+History : +isArchived bool
+History : +addToCount() void
+History : +toSnapshot() HistorySnapshot
+History : +fromSnapshot() void
+
+class TimerUnit
+TimerUnit : -_uuid String
+TimerUnit : -_status TimerUnitStatus
+TimerUnit o-- TimerUnitStatus
+TimerUnit : -_timerUnitType TimerUnitType
+TimerUnit o-- TimerUnitType
+TimerUnit : -_currentTimer TimerBase
+TimerUnit o-- TimerBase
+TimerUnit : -_duration Duration
+TimerUnit : -_referenceTime DateTime?
+TimerUnit : -_lastRemainTime Duration?
+TimerUnit : +uuid String
+TimerUnit : +status TimerUnitStatus
+TimerUnit o-- TimerUnitStatus
+TimerUnit : +type TimerUnitType
+TimerUnit o-- TimerUnitType
+TimerUnit : +duration Duration
+TimerUnit : +toCountup() void
+TimerUnit : +toCountdown() void
+TimerUnit : +start() void
+TimerUnit : +pause() void
+TimerUnit : +resume() void
+TimerUnit : +stop() void
+TimerUnit : -_update() void
+TimerUnit : -_checkTimeout() void
+TimerUnit : -_reset() void
+TimerUnit : +toSnapshot() TimerUnitSnapshot
+TimerUnit : +fromSnapshot() void
 
 class TimerBase
 <<abstract>> TimerBase
@@ -286,47 +587,3 @@ CountdownTimer : +stop() void
 CountdownTimer : +reset() void
 TimerBase <|-- CountdownTimer
 
-class TimerUnit
-TimerUnit : -_uuid String
-TimerUnit : -_status TimerUnitStatus
-TimerUnit o-- TimerUnitStatus
-TimerUnit : -_timerUnitType TimerUnitType
-TimerUnit o-- TimerUnitType
-TimerUnit : -_currentTimer TimerBase
-TimerUnit o-- TimerBase
-TimerUnit : -_duration Duration
-TimerUnit : -_referenceTime DateTime?
-TimerUnit : -_lastRemainTime Duration?
-TimerUnit : +clock Clock
-TimerUnit o-- Clock
-TimerUnit : +uuid String
-TimerUnit : +status TimerUnitStatus
-TimerUnit o-- TimerUnitStatus
-TimerUnit : +type TimerUnitType
-TimerUnit o-- TimerUnitType
-TimerUnit : +duration Duration
-TimerUnit : +toCountup() void
-TimerUnit : +toCountdown() void
-TimerUnit : +start() void
-TimerUnit : +pause() void
-TimerUnit : +resume() void
-TimerUnit : +stop() void
-TimerUnit : -_update() void
-TimerUnit : -_checkTimeout() void
-TimerUnit : -_reset() void
-TimerUnit : +toSnapshot() TimerUnitSnapshot
-TimerUnit : +fromSnapshot() void
-
-class TaskMeta
-TaskMeta : -_uuid String
-TaskMeta : -_name String
-TaskMeta : -_type String
-TaskMeta : -_createAt DateTime
-TaskMeta : -_description String?
-TaskMeta : -_archived bool
-TaskMeta : +name String
-TaskMeta : +type String
-TaskMeta : +description String?
-TaskMeta : +archived bool
-TaskMeta : +toSnapshot() TaskMetaSnapshot
-TaskMeta : +fromSnapshot() void
