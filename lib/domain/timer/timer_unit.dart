@@ -91,7 +91,7 @@ class TimerUnit {
     if (!_status.isInactive) {
       stop();
     }
-    
+
     // 重置为初始状态
     if (_timerUnitType.isCountup) {
       _reset();
@@ -101,7 +101,7 @@ class TimerUnit {
       _reset(resetDuration);
       _duration = resetDuration;
     }
-    
+
     // 设置状态为未激活
     _status = TimerUnitStatus.inactive;
     _referenceTime = null;
@@ -141,6 +141,10 @@ class TimerUnit {
   void resume() {
     /// 恢复计时器
     if (_status.isPaused) {
+      if (_timerUnitType.isCountup) {
+        (_currentTimer as CountupTimer).reset();
+        _referenceTime = Clock.instance.currentTime;
+      }
       _currentTimer.start(Clock.instance.currentTime);
       _status = TimerUnitStatus.active;
     } else {
@@ -251,13 +255,17 @@ class TimerUnit {
       } else if (_status.isActive) {
         // 此时还未更新
         return _duration +
-            Clock.instance.currentTime.difference(_currentTimer.referenceTime());
+            Clock.instance.currentTime.difference(
+              _currentTimer.referenceTime(),
+            );
       }
     } else {
       if (_status.isPaused || _status.isInactive) {
         return _duration;
       } else if (_status.isActive || _status.isTimeout) {
-        return _currentTimer.referenceTime().difference(Clock.instance.currentTime);
+        return _currentTimer.referenceTime().difference(
+          Clock.instance.currentTime,
+        );
       }
     }
 
