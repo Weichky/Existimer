@@ -51,27 +51,27 @@ class Task {
   }
 
   // setter
-  set setName(String name) {
+  set name(String? name) {
     _name = name;
   }
 
-  set setType(TaskType type) {
+  set type(TaskType type) {
     _type = type;
   }
 
-  set setIsArchived(bool isArchived) {
+  set isArchived(bool isArchived) {
     _isArchived = isArchived;
   }
 
-  set setIsHighlighted(bool isHighlighted) {
+  set isHighlighted(bool isHighlighted) {
     _isHighlighted = isHighlighted;
   }
 
-  set setColor(String? color) {
+  set color(String? color) {
     _color = color;
   }
 
-  set setOpacity(double opacity) {
+  set opacity(double opacity) {
     _opacity = opacity;
   }
 

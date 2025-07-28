@@ -180,4 +180,19 @@ class TimerController extends BaseController<TimerUnit> {
       handleError(e, st);
     }
   }
+  
+  /// 应用最新的设置，更新计时器配置
+  Future<void> applySettings() async {
+    final unit = state.requireValue;
+    
+    try {
+      // 如果是倒计时器且未激活，则更新其持续时间
+      if (unit.type.isCountdown && unit.status.isInactive) {
+        unit.toCountdown(_settings.countdownDuration!);
+        state = AsyncData(unit);
+      }
+    } catch (e, st) {
+      handleError(e, st);
+    }
+  }
 }

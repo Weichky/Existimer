@@ -352,8 +352,8 @@ Future<void> testTaskCRUD(AppStartupService appStartupService) async {
   }
   
   // 更新Task
-  task.setName = '更新后的任务';
-  task.setIsHighlighted = true;
+  task.name = '更新后的任务';
+  task.isHighlighted = true;
   await taskRepo.saveSnapshot(task.toSnapshot());
   print('3. 更新Task:');
   print('   Name更新为: ${task.name}');

@@ -112,4 +112,57 @@ class Settings {
   TaskType? get defaultTaskType => _defaultTaskType;
   TimerUnitType? get defaultTimerUnitType => _defaultTimerUnitType;
   Duration? get countdownDuration => _countdownDuration;
+  
+  // 正确的Dart setter语法
+  set language(String? language) {
+    _language = language;
+  }
+  
+  set enableDarkMode(bool? enableDarkMode) {
+    _enableDarkMode = enableDarkMode;
+  }
+  
+  set autoDarkMode(bool? autoDarkMode) {
+    _autoDarkMode = autoDarkMode;
+  }
+  
+  set darkModeFollowSystem(bool? darkModeFollowSystem) {
+    _darkModeFollowSystem = darkModeFollowSystem;
+  }
+  
+  set themeColor(String? themeColor) {
+    _themeColor = themeColor;
+  }
+  
+  set enableSound(bool? enableSound) {
+    _enableSound = enableSound;
+  }
+  
+  set enableFinishedSound(bool? enableFinishedSound) {
+    _enableFinishedSound = enableFinishedSound;
+  }
+  
+  set enableNotification(bool? enableNotification) {
+    _enableNotification = enableNotification;
+  }
+  
+  set enableDebug(bool? enableDebug) {
+    _enableDebug = enableDebug;
+  }
+  
+  set enableLog(bool? enableLog) {
+    _enableLog = enableLog;
+  }
+  
+  set defaultTaskType(TaskType? defaultTaskType) {
+    _defaultTaskType = defaultTaskType;
+  }
+  
+  set defaultTimerUnitType(TimerUnitType? defaultTimerUnitType) {
+    _defaultTimerUnitType = defaultTimerUnitType;
+  }
+  
+  set countdownDuration(Duration? countdownDuration) {
+    _countdownDuration = countdownDuration;
+  }
 }
