@@ -8,6 +8,8 @@ import 'package:existimer/data/repositories/task/task_meta_sqlite.dart';
 import 'package:existimer/data/repositories/task/task_relation_sqlite.dart';
 import 'package:existimer/data/repositories/history/history_sqlite.dart';
 import 'package:existimer/data/repositories/app_database.dart';
+import 'package:existimer/snapshots/timer/timer_unit_snapshot.dart';
+import 'package:existimer/core/constants/timer_unit_status.dart';
 
 /// 应用启动服务类
 /// 
@@ -80,7 +82,84 @@ class AppStartupService {
   /// 
   /// 用于在应用启动时恢复之前未完成的计时任务
   Future<void> _recoverUnfinishedTimers() async {
-    // TODO: 实现未完成计时器的恢复逻辑
+    // 查找所有处于active状态的计时器
+    final activeTimers = await _timerRepo.queryByField(
+      'status', 
+      TimerUnitStatus.active.name
+    );
+    
+    // 如果有处于active状态的计时器
+    if (activeTimers.isNotEmpty) {
+      // 选择第一个active状态的计时器
+      final firstActiveTimer = activeTimers.first;
+      // TODO: 在UI层实现询问用户是否恢复计时器的逻辑
+      // 这里我们只是查找并准备好数据
+      print('发现处于active状态的计时器: ${firstActiveTimer.uuid}');
+    } else {
+      // 如果没有active状态的计时器，查找paused状态的计时器
+      final pausedTimers = await _timerRepo.queryByField(
+        'status', 
+        TimerUnitStatus.paused.name
+      );
+      
+      if (pausedTimers.isNotEmpty) {
+        // 选择第一个paused状态的计时器
+        final firstPausedTimer = pausedTimers.first;
+        // TODO: 在UI层实现询问用户是否恢复计时器的逻辑
+        // 这里我们只是查找并准备好数据
+        print('发现处于paused状态的计时器: ${firstPausedTimer.uuid}');
+      }
+    }
+    
+    // 查找并清理多余的active/paused状态的计时器
+    // 确保不会同时有多个处于active/paused状态的计时器
+    await _cleanupExtraTimers();
+  }
+  
+  /// 清理多余的计时器状态
+  /// 
+  /// 确保不会同时有多个处于active/paused状态的计时器
+  Future<void> _cleanupExtraTimers() async {
+    // 查找所有处于active状态的计时器
+    final activeTimers = await _timerRepo.queryByField(
+      'status', 
+      TimerUnitStatus.active.name
+    );
+    
+    // 如果有超过一个active状态的计时器，将多余的标记为paused
+    if (activeTimers.length > 1) {
+      // 保留第一个，将其他的标记为paused
+      for (int i = 1; i < activeTimers.length; i++) {
+        final timerToPause = activeTimers[i];
+        // 创建一个新的paused状态的计时器快照
+        final pausedTimer = TimerUnitSnapshot(
+          uuid: timerToPause.uuid,
+          status: TimerUnitStatus.paused,
+          type: timerToPause.type,
+          duration: timerToPause.duration,
+          referenceTime: timerToPause.referenceTime,
+          lastRemainTime: timerToPause.lastRemainTime,
+        );
+        await _timerRepo.saveSnapshot(pausedTimer);
+      }
+    }
+    
+    // 查找所有处于paused状态的计时器
+    final pausedTimers = await _timerRepo.queryByField(
+      'status', 
+      TimerUnitStatus.paused.name
+    );
+    
+    // 如果有超过一个paused状态的计时器，将多余的删除
+    if (pausedTimers.length > 1) {
+      // 保留第一个，将其他的删除
+      for (int i = 1; i < pausedTimers.length; i++) {
+        await _timerRepo.deleteByField(
+          'uuid', 
+          pausedTimers[i].uuid
+        );
+      }
+    }
   }
 
   /// 获取计时器数据访问对象

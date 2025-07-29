@@ -78,7 +78,7 @@ class SettingsSnapshot extends SnapshotBase {
       'default_task_type': defaultTaskType?.name,
       'default_timer_unit_type': defaultTimerUnitType?.name,
 
-      'countdown_duration': countdownDuration?.inMilliseconds,
+      'countdown_duration_ms': countdownDuration?.inMilliseconds,
     };
   }
 

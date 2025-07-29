@@ -24,6 +24,8 @@ class SettingsController extends AsyncNotifier<Settings> {
             ? defaultSnapshot
             : defaultSnapshot.mergeWith(loadedSnapshot);
 
+  print(mergedSnapshot.toMap());
+
     return Settings.fromSnapshot(mergedSnapshot);
   }
 
