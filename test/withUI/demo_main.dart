@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:existimer/application/services/database_init_service.dart';
 import 'package:existimer/application/providers/app_startup_service_provider.dart';
-import 'package:existimer/presentation/screens/demo_screen/timer_demo_screen.dart';
+import 'demo_screen/timer_demo_screen.dart';
 
 void main() async {
   // 初始化数据库环境

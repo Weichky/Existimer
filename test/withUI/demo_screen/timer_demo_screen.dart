@@ -8,10 +8,10 @@ import 'package:existimer/application/services/app_startup_service.dart';
 import 'package:existimer/domain/timer/timer_unit.dart';
 import 'package:existimer/data/snapshots/timer/timer_unit_snapshot.dart';
 import 'package:existimer/core/constants/timer_unit_status.dart';
-import 'package:existimer/presentation/widgets/demo_widgets/timer_display_widget.dart';
-import 'package:existimer/presentation/widgets/demo_widgets/timer_controls_widget.dart';
-import 'package:existimer/presentation/widgets/demo_widgets/timer_type_selector_widget.dart';
-import 'package:existimer/presentation/widgets/demo_widgets/countdown_settings_widget.dart';
+import '../demo_widgets/timer_display_widget.dart';
+import '../demo_widgets/timer_controls_widget.dart';
+import '../demo_widgets/timer_type_selector_widget.dart';
+import '../demo_widgets/countdown_settings_widget.dart';
 
 class TimerDemoScreen extends ConsumerStatefulWidget {
   const TimerDemoScreen({Key? key}) : super(key: key);

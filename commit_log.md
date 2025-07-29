@@ -1,3 +1,10 @@
+| 42c12b8 | Weichky Charl | Tue Jul 29 13:12:50 2025 +0800 | refactor(database): 重构数据库相关代码 |
+| a5bcaa1 | Weichky Charl | Tue Jul 29 12:28:16 2025 +0800 | feat(demo): 实现计时器恢复功能并优化应用启动流程 |
+| 7a1f38e | Weichky Charl | Mon Jul 28 18:14:36 2025 +0800 | refactor(settings): 重构设置相关代码并优化倒计时功能 |
+| f8ee197 | Weichky Charl | Mon Jul 28 17:35:12 2025 +0800 | fix: 修复跳秒bug |
+| c2abcb4 | Weichky Charl | Mon Jul 28 00:58:27 2025 +0800 | test(timer): 暂且提交，正向计时跳变问题仍未解决 |
+| d3c7988 | Weichky Charl | Sun Jul 27 19:35:56 2025 +0800 | feat(timer): 编写了demo bug:发现计时器暂时出现正向计时错误 |
+| 24efd4d | Weichky Charl | Sun Jul 27 16:31:01 2025 +0800 | refactor: 移动和整理了的contoller和provider |
 | 4c596ad | Weichky Charl | Sun Jul 27 15:48:24 2025 +0800 | update: design/class_diagram.mmd |
 | 5bf5d3c | Weichky Charl | Sun Jul 27 15:40:16 2025 +0800 | update: design/class_diagram.mmd |
 | f6b95d2 | Weichky Charl | Sun Jul 27 11:13:48 2025 +0800 | update: commit_log.md |
