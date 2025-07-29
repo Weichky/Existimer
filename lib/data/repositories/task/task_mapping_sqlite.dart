@@ -1,11 +1,12 @@
 import 'package:sqflite/sqflite.dart';
 
 import 'package:existimer/data/repositories/snapshot_repository.dart';
-import 'package:existimer/snapshots/task/task_mapping_snapshot.dart';
+import 'package:existimer/data/snapshots/task/task_mapping_snapshot.dart';
+import 'package:existimer/core/constants/database_const.dart';
 
 class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
   final Database db;
-  static const String _table = 'task_mapping';
+  static final String _table = DatabaseTables.taskMapping.name;
 
   TaskMappingSqlite(this.db);
 
@@ -23,7 +24,7 @@ class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
     // TaskMapping使用taskUuid作为标识符进行查询
     final result = await db.query(
       _table,
-      where: 'task_uuid = ?',
+      where: '${DatabaseTables.taskMapping.taskUuid.name} = ?',
       whereArgs: [uuid],
       limit: 1,
     );
@@ -36,10 +37,10 @@ class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
   }
   
   // 将扩展方法合并到主类内部
-  static const validFields = [
-    'task_uuid',
-    'entity_uuid',
-    'entity_type',
+  static final validFields = [
+    DatabaseTables.taskMapping.taskUuid.name,
+    DatabaseTables.taskMapping.entityUuid.name,
+    DatabaseTables.taskMapping.entityType.name,
   ];
 
   Future<List<TaskMappingSnapshot>> queryByField(
@@ -62,7 +63,7 @@ class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
   Future<List<TaskMappingSnapshot>> loadMappingsForTask(String taskUuid) async {
     final result = await db.query(
       _table,
-      where: 'task_uuid = ?',
+      where: '${DatabaseTables.taskMapping.taskUuid.name} = ?',
       whereArgs: [taskUuid],
     );
 
@@ -72,7 +73,7 @@ class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
   Future<List<TaskMappingSnapshot>> loadMappingsForEntity(String entityUuid) async {
     final result = await db.query(
       _table,
-      where: 'entity_uuid = ?',
+      where: '${DatabaseTables.taskMapping.entityUuid.name} = ?',
       whereArgs: [entityUuid],
     );
 
@@ -82,7 +83,7 @@ class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
   Future<void> deleteMapping(String taskUuid, String entityUuid) async {
     await db.delete(
       _table,
-      where: 'task_uuid = ? AND entity_uuid = ?',
+      where: '${DatabaseTables.taskMapping.taskUuid.name} = ? AND ${DatabaseTables.taskMapping.entityUuid.name} = ?',
       whereArgs: [taskUuid, entityUuid],
     );
   }

@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'dart:convert';
 
-import 'package:existimer/core/constants/database_version.dart';
+import 'package:existimer/core/constants/database_const.dart';
 
 class AppDatabase {
   static const String defaultDbName = 'app.db';
@@ -28,9 +28,9 @@ class AppDatabase {
       version: databaseVersion,
       onCreate: (db, version) async {
         await setupSchema(db);
-        await db.insert('settings', {
-          'id': 1,
-          'json': jsonEncode(DefaultSettings.toMap()),
+        await db.insert(DatabaseTables.settings.name, {
+          DatabaseTables.settings.id.name: 1,
+          DatabaseTables.settings.json.name: jsonEncode(DefaultSettings.toMap()),
         });
       },
       onUpgrade: (db, oldVersion, newVersion) async {
@@ -51,13 +51,13 @@ class AppDatabase {
     // 例
     // if (fromVersion < 101 && toVersion >= 101) {
     //   await db.execute('''
-    //     CREATE TABLE IF NOT EXISTS task_relation (
-    //       from_uuid TEXT NOT NULL,
-    //       to_uuid TEXT NOT NULL,
-    //       weight REAL,
-    //       is_manually_linked BOOLEAN NOT NULL DEFAULT 0,
-    //       description TEXT,
-    //       PRIMARY KEY (from_uuid, to_uuid)
+    //     CREATE TABLE IF NOT EXISTS ${DatabaseTables.taskRelation.name} (
+    //       ${DatabaseTables.taskRelation.fromUuid.name} TEXT NOT NULL,
+    //       ${DatabaseTables.taskRelation.toUuid.name} TEXT NOT NULL,
+    //       ${DatabaseTables.taskRelation.weight.name} REAL,
+    //       ${DatabaseTables.taskRelation.isManuallyLinked.name} BOOLEAN NOT NULL DEFAULT 0,
+    //       ${DatabaseTables.taskRelation.description.name} TEXT,
+    //       PRIMARY KEY (${DatabaseTables.taskRelation.fromUuid.name}, ${DatabaseTables.taskRelation.toUuid.name})
     //     );
     //   ''');
     // }
@@ -67,86 +67,86 @@ class AppDatabase {
     final db = dbOverride ?? _db;
     // 存储状态
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS timer_units (
-        uuid TEXT PRIMARY KEY,
-        status TEXT NOT NULL,
-        type TEXT NOT NULL,
-        duration_ms INTEGER NOT NULL,
-        reference_time INTEGER, -- 原先是TEXT
-        last_remain_ms INTEGER  
+      CREATE TABLE IF NOT EXISTS ${DatabaseTables.timerUnits.name} (
+        ${DatabaseTables.timerUnits.uuid.name} TEXT PRIMARY KEY,
+        ${DatabaseTables.timerUnits.status.name} TEXT NOT NULL,
+        ${DatabaseTables.timerUnits.type.name} TEXT NOT NULL,
+        ${DatabaseTables.timerUnits.durationMs.name} INTEGER NOT NULL,
+        ${DatabaseTables.timerUnits.referenceTime.name} INTEGER,
+        ${DatabaseTables.timerUnits.lastRemainMs.name} INTEGER  
       );
     ''');
 
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS history (
-        history_uuid TEXT PRIMARY KEY,
-        task_uuid TEXT NOT NULL,
-        started_at INTEGER NOT NULL,  -- 原先是TEXT
-        session_duration_ms INTEGER,
-        count INTEGER,
-        is_archived BOOLEAN DEFAULT 0
+      CREATE TABLE IF NOT EXISTS ${DatabaseTables.history.name} (
+        ${DatabaseTables.history.historyUuid.name} TEXT PRIMARY KEY,
+        ${DatabaseTables.history.taskUuid.name} TEXT NOT NULL,
+        ${DatabaseTables.history.startedAt.name} INTEGER NOT NULL,
+        ${DatabaseTables.history.sessionDurationMs.name} INTEGER,
+        ${DatabaseTables.history.count.name} INTEGER,
+        ${DatabaseTables.history.isArchived.name} BOOLEAN DEFAULT 0
       );
     ''');
 
     // Task和TaskMeta分离
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS tasks (
-        uuid TEXT PRIMARY KEY,
-        name TEXT,
-        type TEXT NOT NULL,
-        created_at INTEGER, -- 原先是TEXT
-        last_used_at INTEGER, -- 原先是TEXT
-        is_archived BOOLEAN DEFAULT 0,
-        is_highlighted BOOLEAN DEFAULT 0,
-        color TEXT,
-        opacity REAL
+      CREATE TABLE IF NOT EXISTS ${DatabaseTables.tasks.name} (
+        ${DatabaseTables.tasks.uuid.name} TEXT PRIMARY KEY,
+        ${DatabaseTables.tasks.nameField.name} TEXT,
+        ${DatabaseTables.tasks.type.name} TEXT NOT NULL,
+        ${DatabaseTables.tasks.createdAt.name} INTEGER,
+        ${DatabaseTables.tasks.lastUsedAt.name} INTEGER,
+        ${DatabaseTables.tasks.isArchived.name} BOOLEAN DEFAULT 0,
+        ${DatabaseTables.tasks.isHighlighted.name} BOOLEAN DEFAULT 0,
+        ${DatabaseTables.tasks.color.name} TEXT,
+        ${DatabaseTables.tasks.opacity.name} REAL
       );
     ''');
 
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS task_meta (
-        task_uuid TEXT PRIMARY KEY,
-        created_at INTEGER NOT NULL,
-        first_used_at INTEGER,
-        last_used_at INTEGER,
-        total_used_count INTEGER NOT NULL,
-        total_count INTEGER,
-        avg_session_duration_ms INTEGER,
-        icon TEXT,
-        base_color TEXT
+      CREATE TABLE IF NOT EXISTS ${DatabaseTables.taskMeta.name} (
+        ${DatabaseTables.taskMeta.taskUuid.name} TEXT PRIMARY KEY,
+        ${DatabaseTables.taskMeta.createdAt.name} INTEGER NOT NULL,
+        ${DatabaseTables.taskMeta.firstUsedAt.name} INTEGER,
+        ${DatabaseTables.taskMeta.lastUsedAt.name} INTEGER,
+        ${DatabaseTables.taskMeta.totalUsedCount.name} INTEGER NOT NULL,
+        ${DatabaseTables.taskMeta.totalCount.name} INTEGER,
+        ${DatabaseTables.taskMeta.avgSessionDurationMs.name} INTEGER,
+        ${DatabaseTables.taskMeta.icon.name} TEXT,
+        ${DatabaseTables.taskMeta.baseColor.name} TEXT
       );
     ''');
 
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS task_mapping (
-        task_uuid TEXT NOT NULL,
-        entity_uuid TEXT NOT NULL,
-        entity_type TEXT NOT NULL,
-        PRIMARY KEY (task_uuid, entity_uuid)
-      );
-    '''); // PRIMARY KEY (task_id, entity_id) 组合主键
-
-    await db.execute('''
-      CREATE TABLE IF NOT EXISTS task_relation (
-        from_uuid TEXT NOT NULL,
-        to_uuid TEXT NOT NULL,
-        weight REAL,
-        is_manually_linked BOOLEAN NOT NULL DEFAULT 0,
-        description TEXT,
-        PRIMARY KEY (from_uuid, to_uuid)
+      CREATE TABLE IF NOT EXISTS ${DatabaseTables.taskMapping.name} (
+        ${DatabaseTables.taskMapping.taskUuid.name} TEXT NOT NULL,
+        ${DatabaseTables.taskMapping.entityUuid.name} TEXT NOT NULL,
+        ${DatabaseTables.taskMapping.entityType.name} TEXT NOT NULL,
+        PRIMARY KEY (${DatabaseTables.taskMapping.taskUuid.name}, ${DatabaseTables.taskMapping.entityUuid.name})
       );
     ''');
 
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS settings (
-        id INTEGER PRIMARY KEY CHECK (id = 1),
-        json TEXT NOT NULL
+      CREATE TABLE IF NOT EXISTS ${DatabaseTables.taskRelation.name} (
+        ${DatabaseTables.taskRelation.fromUuid.name} TEXT NOT NULL,
+        ${DatabaseTables.taskRelation.toUuid.name} TEXT NOT NULL,
+        ${DatabaseTables.taskRelation.weight.name} REAL,
+        ${DatabaseTables.taskRelation.isManuallyLinked.name} BOOLEAN NOT NULL DEFAULT 0,
+        ${DatabaseTables.taskRelation.description.name} TEXT,
+        PRIMARY KEY (${DatabaseTables.taskRelation.fromUuid.name}, ${DatabaseTables.taskRelation.toUuid.name})
+      );
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS ${DatabaseTables.settings.name} (
+        ${DatabaseTables.settings.id.name} INTEGER PRIMARY KEY CHECK (${DatabaseTables.settings.id.name} = 1),
+        ${DatabaseTables.settings.json.name} TEXT NOT NULL
       );
     ''');
   }
 
   Future<bool> checkInitialized() async {
-    final result = await _db.query('settings', columns: ['json'], limit: 1);
+    final result = await _db.query(DatabaseTables.settings.name, columns: [DatabaseTables.settings.json.name], limit: 1);
 
     return result.isNotEmpty;
   }

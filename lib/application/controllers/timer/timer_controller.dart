@@ -6,7 +6,7 @@ import 'package:existimer/application/providers/settings/settings_provider.dart'
 import 'package:existimer/application/providers/timer/timer_repo_provider.dart';
 import 'package:existimer/data/repositories/timer_unit/timer_unit_sqlite.dart';
 import 'package:existimer/domain/timer/timer_unit.dart';
-import 'package:existimer/snapshots/timer/timer_unit_snapshot.dart';
+import 'package:existimer/data/snapshots/timer/timer_unit_snapshot.dart';
 import 'package:riverpod/riverpod.dart';
 
 /// 计时器控制器

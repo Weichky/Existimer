@@ -6,7 +6,7 @@ import 'package:existimer/domain/timer/timer_unit.dart';
 import 'package:existimer/core/utils/clock.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:existimer/data/repositories/timer_unit/timer_unit_sqlite.dart';
-import 'package:existimer/snapshots/timer/timer_unit_snapshot.dart';
+import 'package:existimer/data/snapshots/timer/timer_unit_snapshot.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

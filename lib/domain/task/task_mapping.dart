@@ -1,4 +1,4 @@
-import 'package:existimer/snapshots/task/task_mapping_snapshot.dart';
+import 'package:existimer/data/snapshots/task/task_mapping_snapshot.dart';
 
 class TaskMapping {
   String _taskUuid;

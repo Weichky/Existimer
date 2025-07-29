@@ -1,11 +1,12 @@
 import 'package:sqflite/sqflite.dart';
 
 import 'package:existimer/data/repositories/snapshot_repository.dart';
-import 'package:existimer/snapshots/task/task_snapshot.dart';
+import 'package:existimer/data/snapshots/task/task_snapshot.dart';
+import 'package:existimer/core/constants/database_const.dart';
 
 class TaskSqlite implements SnapshotRepository<TaskSnapshot> {
   final Database db;
-  static const String _table = 'tasks';
+  static final String _table = DatabaseTables.tasks.name;
 
   TaskSqlite(this.db);
 
@@ -22,7 +23,7 @@ class TaskSqlite implements SnapshotRepository<TaskSnapshot> {
   Future<TaskSnapshot?> loadSnapshot(String uuid) async {
     final result = await db.query(
       _table,
-      where: 'uuid = ?',
+      where: '${DatabaseTables.tasks.uuid.name} = ?',
       whereArgs: [uuid],
       limit: 1
     );
@@ -35,16 +36,16 @@ class TaskSqlite implements SnapshotRepository<TaskSnapshot> {
   }
   
   // 将扩展方法合并到主类内部
-  static const validFields = [
-    'uuid',
-    'name',
-    'type',
-    'created_at',
-    'last_used_at',
-    'is_archived',
-    'is_highlighted',
-    'color',
-    'opacity'
+  static final validFields = [
+    DatabaseTables.tasks.uuid.name,
+    DatabaseTables.tasks.nameField.name,
+    DatabaseTables.tasks.type.name,
+    DatabaseTables.tasks.createdAt.name,
+    DatabaseTables.tasks.lastUsedAt.name,
+    DatabaseTables.tasks.isArchived.name,
+    DatabaseTables.tasks.isHighlighted.name,
+    DatabaseTables.tasks.color.name,
+    DatabaseTables.tasks.opacity.name
   ];
 
   Future<List<TaskSnapshot>> queryByField(

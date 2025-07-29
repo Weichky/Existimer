@@ -1,11 +1,12 @@
 import 'package:sqflite/sqflite.dart';
 
 import 'package:existimer/data/repositories/snapshot_repository.dart';
-import 'package:existimer/snapshots/task/task_meta_snapshot.dart';
+import 'package:existimer/data/snapshots/task/task_meta_snapshot.dart';
+import 'package:existimer/core/constants/database_const.dart';
 
 class TaskMetaSqlite implements SnapshotRepository<TaskMetaSnapshot> {
   final Database db;
-  static const String _table = 'task_meta';
+  static final String _table = DatabaseTables.taskMeta.name;
 
   TaskMetaSqlite(this.db);
 
@@ -22,7 +23,7 @@ class TaskMetaSqlite implements SnapshotRepository<TaskMetaSnapshot> {
   Future<TaskMetaSnapshot?> loadSnapshot(String taskUuid) async {
     final result = await db.query(
       _table,
-      where: 'task_uuid = ?',
+      where: '${DatabaseTables.taskMeta.taskUuid.name} = ?',
       whereArgs: [taskUuid],
       limit: 1
     );
@@ -35,16 +36,16 @@ class TaskMetaSqlite implements SnapshotRepository<TaskMetaSnapshot> {
   }
   
   // 将扩展方法合并到主类内部
-  static const validFields = [
-    'task_uuid',
-    'created_at',
-    'first_used_at',
-    'last_used_at',
-    'total_used_count',
-    'total_count',
-    'avg_session_duration_ms',
-    'icon',
-    'base_color'
+  static final validFields = [
+    DatabaseTables.taskMeta.taskUuid.name,
+    DatabaseTables.taskMeta.createdAt.name,
+    DatabaseTables.taskMeta.firstUsedAt.name,
+    DatabaseTables.taskMeta.lastUsedAt.name,
+    DatabaseTables.taskMeta.totalUsedCount.name,
+    DatabaseTables.taskMeta.totalCount.name,
+    DatabaseTables.taskMeta.avgSessionDurationMs.name,
+    DatabaseTables.taskMeta.icon.name,
+    DatabaseTables.taskMeta.baseColor.name
   ];
 
   Future<List<TaskMetaSnapshot>> queryByField(

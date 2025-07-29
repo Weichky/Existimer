@@ -1,11 +1,12 @@
 import 'package:sqflite/sqflite.dart';
 
 import 'package:existimer/data/repositories/snapshot_repository.dart';
-import 'package:existimer/snapshots/timer/timer_unit_snapshot.dart';
+import 'package:existimer/data/snapshots/timer/timer_unit_snapshot.dart';
+import 'package:existimer/core/constants/database_const.dart';
 
 class TimerUnitSqlite implements SnapshotRepository<TimerUnitSnapshot> {
   final Database db;
-  static const _table = 'timer_units';
+  static final _table = DatabaseTables.timerUnits.name;
 
   TimerUnitSqlite(this.db);
 
@@ -22,7 +23,7 @@ class TimerUnitSqlite implements SnapshotRepository<TimerUnitSnapshot> {
   Future<TimerUnitSnapshot?> loadSnapshot(String uuid) async {
     final result = await db.query(
       _table,
-      where: 'uuid = ?',
+      where: '${DatabaseTables.timerUnits.uuid.name} = ?',
       whereArgs: [uuid],
       limit: 1
     );
@@ -36,13 +37,13 @@ class TimerUnitSqlite implements SnapshotRepository<TimerUnitSnapshot> {
   
   // 将扩展方法合并到主类内部
   // 防止注入，虽然没啥用
-  static const validFields = [
-    'uuid',
-    'status',
-    'type',
-    'duration_ms',
-    'reference_time',
-    'last_remain_ms'
+  static final validFields = [
+    DatabaseTables.timerUnits.uuid.name,
+    DatabaseTables.timerUnits.status.name,
+    DatabaseTables.timerUnits.type.name,
+    DatabaseTables.timerUnits.durationMs.name,
+    DatabaseTables.timerUnits.referenceTime.name,
+    DatabaseTables.timerUnits.lastRemainMs.name
   ];
 
   Future<List<TimerUnitSnapshot>> queryByField(

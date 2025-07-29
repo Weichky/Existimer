@@ -8,7 +8,7 @@ import 'package:existimer/data/repositories/task/task_meta_sqlite.dart';
 import 'package:existimer/data/repositories/task/task_relation_sqlite.dart';
 import 'package:existimer/data/repositories/history/history_sqlite.dart';
 import 'package:existimer/data/repositories/app_database.dart';
-import 'package:existimer/snapshots/timer/timer_unit_snapshot.dart';
+import 'package:existimer/data/snapshots/timer/timer_unit_snapshot.dart';
 import 'package:existimer/core/constants/timer_unit_status.dart';
 
 /// 应用启动服务类

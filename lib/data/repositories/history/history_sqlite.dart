@@ -1,11 +1,12 @@
 import 'package:sqflite/sqflite.dart';
 
 import 'package:existimer/data/repositories/snapshot_repository.dart';
-import 'package:existimer/snapshots/history/history_snapshot.dart';
+import 'package:existimer/data/snapshots/history/history_snapshot.dart';
+import 'package:existimer/core/constants/database_const.dart';
 
 class HistorySqlite implements SnapshotRepository<HistorySnapshot> {
   final Database db;
-  static const String _table = 'history';
+  static final String _table = DatabaseTables.history.name;
 
   HistorySqlite(this.db);
 
@@ -22,7 +23,7 @@ class HistorySqlite implements SnapshotRepository<HistorySnapshot> {
   Future<HistorySnapshot?> loadSnapshot(String historyUuid) async {
     final result = await db.query(
       _table,
-      where: 'history_uuid = ?',
+      where: '${DatabaseTables.history.historyUuid.name} = ?',
       whereArgs: [historyUuid],
       limit: 1
     );
@@ -35,13 +36,13 @@ class HistorySqlite implements SnapshotRepository<HistorySnapshot> {
   }
   
   // 将扩展方法合并到主类内部
-  static const validFields = [
-    'history_uuid',
-    'task_uuid',
-    'started_at',
-    'session_duration_ms',
-    'count',
-    'is_archived',
+  static final validFields = [
+    DatabaseTables.history.historyUuid.name,
+    DatabaseTables.history.taskUuid.name,
+    DatabaseTables.history.startedAt.name,
+    DatabaseTables.history.sessionDurationMs.name,
+    DatabaseTables.history.count.name,
+    DatabaseTables.history.isArchived.name,
   ];
 
   Future<List<HistorySnapshot>> queryByField(

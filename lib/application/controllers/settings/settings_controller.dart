@@ -6,7 +6,7 @@ import 'package:existimer/core/constants/default_settings.dart';
 import 'package:existimer/core/constants/task_type.dart';
 import 'package:existimer/core/constants/timer_unit_type.dart';
 import 'package:existimer/data/repositories/settings/settings_sqlite.dart';
-import 'package:existimer/snapshots/settings/settings_snapshot.dart';
+import 'package:existimer/data/snapshots/settings/settings_snapshot.dart';
 import 'package:riverpod/riverpod.dart';
 
 class SettingsController extends AsyncNotifier<Settings> {

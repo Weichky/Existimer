@@ -1,4 +1,4 @@
-import 'package:existimer/snapshots/task/task_meta_snapshot.dart';
+import 'package:existimer/data/snapshots/task/task_meta_snapshot.dart';
 
 class TaskMeta {
   String _taskUuid;
