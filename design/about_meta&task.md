@@ -30,21 +30,22 @@ Meta的目的是什么？为了以后的笔记、计次任务等，以及历史�
 
 其中1如何优雅的同时记录a1.uuid和a2.uuid是个问题.  天然的，我们想到在Task中添加JSON字段. 不过建立一个映射表可能是更好的选择.
 
-```sqlite
-Task {
-  uuid TEXT PRIMARY KEY,
-  ... // 其他字段
+
+```sql
+CREATE TABLE Task {
+  uuid TEXT PRIMARY KEY
+  --- ... 其他字段
 }
 
-TimerUnit {
-  uuid TEXT PRIMARY KEY,
-  ... // 其他字段
+CREATE TABLE TimerUnit {
+  uuid TEXT PRIMARY KEY
+  --- ... 其他字段
 }
 
-TaskMapping {
+CREATE TABLE TaskMapping {
   taskUuid TEXT,
   entityUuid TEXT,
-  PRIMARY KEY (taskUuid, timerUuid) // 组合主键（composite primary key）
+  PRIMARY KEY (taskUuid, timerUuid) --- 组合主键（composite primary key）
 }
 ```
 
