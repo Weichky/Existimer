@@ -109,3 +109,32 @@
 - 探讨设计理念
 - [ ] 考虑color和opacity在Task中处于什么地位，怎么设计数据库
 - [ ] 考虑出两期专题文章？
+
+**25日**
+- 为Task添加opacity属性
+- 编写了部分task_meta.dart、task_relation.dart和history.dart
+- 删除了对应数据结构和数据库中的description字段，后续单独建立description类
+- 修改时间存储方式，统一使用Unix时间戳(毫秒级)
+
+**26日**
+- 编写完成history.dart，为Clock.dart添加getter instance
+- 重命名default_config.dart为default_settings.dart，并为其添加toMap()方法
+- 将settings的存储方式从分字段转为json
+- 统一更改user_settings为settings
+
+**27日**
+- 实现了TaskMeta、TaskRelation和History的数据结构、snapshot和sqlite接口
+- 重构了任务映射功能和控制器
+- 新增通用的Repository Provider工厂类
+- 修改了TaskSqlite和TimerUnitSqlite的实现
+
+**28日**
+- 修复了计时器跳秒bug
+- 重构设置相关代码并优化倒计时功能
+- 实现计时器恢复功能并优化应用启动流程
+- 重构数据库相关代码，使用DatabaseTables类统一管理表名和字段名
+
+**29日**
+- 移动和整理了controller和provider
+- 将现阶段测试文件归档phase_0，创建phase_1目录
+- 移动demo相关代码

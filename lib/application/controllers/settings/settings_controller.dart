@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:existimer/application/settings/settings.dart';
 import 'package:existimer/application/providers/settings/settings_repo_provider.dart';
-import 'package:existimer/core/constants/default_settings.dart';
-import 'package:existimer/core/constants/task_type.dart';
-import 'package:existimer/core/constants/timer_unit_type.dart';
+import 'package:existimer/common/constants/default_settings.dart';
+import 'package:existimer/common/constants/task_type.dart';
+import 'package:existimer/common/constants/timer_unit_type.dart';
 import 'package:existimer/data/repositories/settings/settings_sqlite.dart';
 import 'package:existimer/data/snapshots/settings/settings_snapshot.dart';
 import 'package:riverpod/riverpod.dart';

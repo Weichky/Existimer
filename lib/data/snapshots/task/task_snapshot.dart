@@ -1,8 +1,8 @@
 // task_snapshot.dart
 
-import 'package:existimer/core/constants/task_type.dart';
+import 'package:existimer/common/constants/task_type.dart';
 import 'package:existimer/data/snapshots/snapshot_base.dart';
-import 'package:existimer/core/constants/database_const.dart';
+import 'package:existimer/common/constants/database_const.dart';
 
 class TaskSnapshot extends SnapshotBase {
   final String uuid;

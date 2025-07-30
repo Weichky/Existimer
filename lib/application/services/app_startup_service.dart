@@ -1,4 +1,4 @@
-import 'package:existimer/core/constants/default_settings.dart';
+import 'package:existimer/common/constants/default_settings.dart';
 import 'package:existimer/data/repositories/repository_factory.dart';
 import 'package:existimer/data/repositories/settings/settings_sqlite.dart';
 import 'package:existimer/data/repositories/timer_unit/timer_unit_sqlite.dart';
@@ -9,7 +9,7 @@ import 'package:existimer/data/repositories/task/task_relation_sqlite.dart';
 import 'package:existimer/data/repositories/history/history_sqlite.dart';
 import 'package:existimer/data/repositories/app_database.dart';
 import 'package:existimer/data/snapshots/timer/timer_unit_snapshot.dart';
-import 'package:existimer/core/constants/timer_unit_status.dart';
+import 'package:existimer/common/constants/timer_unit_status.dart';
 
 /// 应用启动服务类
 /// 

@@ -1,8 +1,8 @@
-import 'package:existimer/core/constants/timer_unit_status.dart';
-import 'package:existimer/core/constants/timer_unit_type.dart';
+import 'package:existimer/common/constants/timer_unit_status.dart';
+import 'package:existimer/common/constants/timer_unit_type.dart';
 
 import 'package:existimer/data/snapshots/snapshot_base.dart';
-import 'package:existimer/core/constants/database_const.dart';
+import 'package:existimer/common/constants/database_const.dart';
 
 class TimerUnitSnapshot extends SnapshotBase {
   final String uuid;

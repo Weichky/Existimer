@@ -1,7 +1,7 @@
 import 'package:existimer/data/snapshots/snapshot_base.dart';
 
-import 'package:existimer/core/constants/task_type.dart';
-import 'package:existimer/core/constants/timer_unit_type.dart';
+import 'package:existimer/common/constants/task_type.dart';
+import 'package:existimer/common/constants/timer_unit_type.dart';
 
 class SettingsSnapshot extends SnapshotBase {
   //外观与语言

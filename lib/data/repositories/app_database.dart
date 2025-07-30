@@ -1,9 +1,9 @@
-import 'package:existimer/core/constants/default_settings.dart';
+import 'package:existimer/common/constants/default_settings.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'dart:convert';
 
-import 'package:existimer/core/constants/database_const.dart';
+import 'package:existimer/common/constants/database_const.dart';
 
 class AppDatabase {
   static const String defaultDbName = 'app.db';

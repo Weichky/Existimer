@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'dart:async';
 import 'package:existimer/domain/timer/timer_unit.dart';
-import 'package:existimer/core/utils/clock.dart';
+import 'package:existimer/common/utils/clock.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

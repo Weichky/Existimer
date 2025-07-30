@@ -1,5 +1,5 @@
 import 'package:existimer/data/snapshots/snapshot_base.dart';
-import 'package:existimer/core/constants/database_const.dart';
+import 'package:existimer/common/constants/database_const.dart';
 
 class TaskRelationSnapshot extends SnapshotBase {
   final String fromUuid;

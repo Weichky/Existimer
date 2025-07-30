@@ -1,9 +1,9 @@
 // task.dart
 
-import 'package:existimer/core/utils/clock.dart';
+import 'package:existimer/common/utils/clock.dart';
 import 'package:existimer/data/snapshots/task/task_snapshot.dart';
-import 'package:existimer/core/utils/helper.dart';
-import 'package:existimer/core/constants/task_type.dart';
+import 'package:existimer/common/utils/helper.dart';
+import 'package:existimer/common/constants/task_type.dart';
 
 class Task {
   String _uuid;

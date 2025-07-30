@@ -9,8 +9,8 @@ import 'package:existimer/domain/task/task_meta.dart';
 import 'package:existimer/domain/task/task_relation.dart';
 import 'package:existimer/domain/history/history.dart';
 import 'package:existimer/domain/timer/timer_unit.dart';
-import 'package:existimer/core/constants/task_type.dart';
-import 'package:existimer/core/utils/clock.dart';
+import 'package:existimer/common/constants/task_type.dart';
+import 'package:existimer/common/utils/clock.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() async {

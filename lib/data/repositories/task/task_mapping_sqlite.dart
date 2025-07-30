@@ -2,7 +2,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'package:existimer/data/repositories/snapshot_repository.dart';
 import 'package:existimer/data/snapshots/task/task_mapping_snapshot.dart';
-import 'package:existimer/core/constants/database_const.dart';
+import 'package:existimer/common/constants/database_const.dart';
 
 class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
   final Database db;

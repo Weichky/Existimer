@@ -7,7 +7,7 @@ import 'package:existimer/application/providers/app_startup_service_provider.dar
 import 'package:existimer/application/services/app_startup_service.dart';
 import 'package:existimer/domain/timer/timer_unit.dart';
 import 'package:existimer/data/snapshots/timer/timer_unit_snapshot.dart';
-import 'package:existimer/core/constants/timer_unit_status.dart';
+import 'package:existimer/common/constants/timer_unit_status.dart';
 import '../demo_widgets/timer_display_widget.dart';
 import '../demo_widgets/timer_controls_widget.dart';
 import '../demo_widgets/timer_type_selector_widget.dart';

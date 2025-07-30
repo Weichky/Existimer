@@ -5,8 +5,8 @@ import 'package:riverpod/riverpod.dart';
 
 import 'package:existimer/application/providers/timer/timer_provider.dart';
 import 'package:existimer/application/providers/app_startup_service_provider.dart';
-import 'package:existimer/core/constants/timer_unit_status.dart';
-import 'package:existimer/core/constants/timer_unit_type.dart';
+import 'package:existimer/common/constants/timer_unit_status.dart';
+import 'package:existimer/common/constants/timer_unit_type.dart';
 
 void main() {
   late ProviderContainer container;

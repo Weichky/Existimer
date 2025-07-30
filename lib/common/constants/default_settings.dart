@@ -1,5 +1,5 @@
-import 'package:existimer/core/constants/task_type.dart';
-import 'package:existimer/core/constants/timer_unit_type.dart';
+import 'package:existimer/common/constants/task_type.dart';
+import 'package:existimer/common/constants/timer_unit_type.dart';
 
 import 'package:existimer/data/snapshots/settings/settings_snapshot.dart';
 

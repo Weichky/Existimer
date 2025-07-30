@@ -1,190 +1,4 @@
 classDiagram
-class SettingsSnapshot
-SettingsSnapshot : +language String?
-SettingsSnapshot : +enableDarkMode bool?
-SettingsSnapshot : +autoDarkMode bool?
-SettingsSnapshot : +darkModeFollowSystem bool?
-SettingsSnapshot : +themeColor String?
-SettingsSnapshot : +enableSound bool?
-SettingsSnapshot : +enableFinishedSound bool?
-SettingsSnapshot : +enableNotification bool?
-SettingsSnapshot : +enableDebug bool?
-SettingsSnapshot : +enableLog bool?
-SettingsSnapshot : +defaultTaskType TaskType?
-SettingsSnapshot o-- TaskType
-SettingsSnapshot : +defaultTimerUnitType TimerUnitType?
-SettingsSnapshot o-- TimerUnitType
-SettingsSnapshot : +countdownDuration Duration?
-SettingsSnapshot : +toMap() Map<String, dynamic>
-SettingsSnapshot : +mergeWith() SettingsSnapshot
-SettingsSnapshot : +fromMap()$ SettingsSnapshot
-SettingsSnapshot : -_boolFromInt()$ bool?
-SnapshotBase <|-- SettingsSnapshot
-
-class TaskRelationSnapshot
-TaskRelationSnapshot : +fromUuid String
-TaskRelationSnapshot : +toUuid String
-TaskRelationSnapshot : +weight double?
-TaskRelationSnapshot : +isManuallyLinked bool
-TaskRelationSnapshot : +description String?
-TaskRelationSnapshot : +toMap() Map<String, dynamic>
-TaskRelationSnapshot : +fromMap()$ TaskRelationSnapshot
-SnapshotBase <|-- TaskRelationSnapshot
-
-class TaskMetaSnapshot
-TaskMetaSnapshot : +taskUuid String
-TaskMetaSnapshot : +createdAt DateTime
-TaskMetaSnapshot : +firstUsedAt DateTime?
-TaskMetaSnapshot : +lastUsedAt DateTime?
-TaskMetaSnapshot : +totalUsedCount int
-TaskMetaSnapshot : +totalCount int?
-TaskMetaSnapshot : +avgSessionDuration Duration?
-TaskMetaSnapshot : +icon String?
-TaskMetaSnapshot : +baseColor String?
-TaskMetaSnapshot : +toMap() Map<String, dynamic>
-TaskMetaSnapshot : +fromMap()$ TaskMetaSnapshot
-SnapshotBase <|-- TaskMetaSnapshot
-
-class TaskMappingSnapshot
-TaskMappingSnapshot : +taskUuid String
-TaskMappingSnapshot : +entityUuid String
-TaskMappingSnapshot : +entityType String
-TaskMappingSnapshot : +toMap() Map<String, dynamic>
-TaskMappingSnapshot : +fromMap()$ TaskMappingSnapshot
-SnapshotBase <|-- TaskMappingSnapshot
-
-class TaskSnapshot
-TaskSnapshot : +uuid String
-TaskSnapshot : +name String?
-TaskSnapshot : +type TaskType
-TaskSnapshot o-- TaskType
-TaskSnapshot : +createdAt DateTime
-TaskSnapshot : +lastUsedAt DateTime?
-TaskSnapshot : +isArchived bool
-TaskSnapshot : +isHighlighted bool
-TaskSnapshot : +color String?
-TaskSnapshot : +opacity double
-TaskSnapshot : +toMap() Map<String, dynamic>
-TaskSnapshot : +fromMap()$ TaskSnapshot
-SnapshotBase <|-- TaskSnapshot
-
-class HistorySnapshot
-HistorySnapshot : +historyUuid String
-HistorySnapshot : +taskUuid String
-HistorySnapshot : +startedAt DateTime
-HistorySnapshot : +sessionDuration Duration?
-HistorySnapshot : +count int?
-HistorySnapshot : +isArchived bool
-HistorySnapshot : +toMap() Map<String, dynamic>
-HistorySnapshot : +fromMap()$ HistorySnapshot
-SnapshotBase <|-- HistorySnapshot
-
-class TimerUnitSnapshot
-TimerUnitSnapshot : +uuid String
-TimerUnitSnapshot : +status TimerUnitStatus
-TimerUnitSnapshot o-- TimerUnitStatus
-TimerUnitSnapshot : +type TimerUnitType
-TimerUnitSnapshot o-- TimerUnitType
-TimerUnitSnapshot : +duration Duration
-TimerUnitSnapshot : +referenceTime DateTime?
-TimerUnitSnapshot : +lastRemainTime Duration?
-TimerUnitSnapshot : +toMap() Map<String, dynamic>
-TimerUnitSnapshot : +fromMap()$ TimerUnitSnapshot
-SnapshotBase <|-- TimerUnitSnapshot
-
-class SnapshotBase
-<<abstract>> SnapshotBase
-SnapshotBase : +toMap()* Map<String, dynamic>
-
-class TimerStatus
-<<enumeration>> TimerStatus
-TimerStatus : +index int
-TimerStatus : +values$ List~TimerStatus~
-TimerStatus : +inactive$ TimerStatus
-TimerStatus o-- TimerStatus
-TimerStatus : +active$ TimerStatus
-TimerStatus o-- TimerStatus
-TimerStatus : +paused$ TimerStatus
-TimerStatus o-- TimerStatus
-Enum <|.. TimerStatus
-
-class TimerType
-<<enumeration>> TimerType
-TimerType : +index int
-TimerType : +values$ List~TimerType~
-TimerType : +forward$ TimerType
-TimerType o-- TimerType
-TimerType : +countdown$ TimerType
-TimerType o-- TimerType
-Enum <|.. TimerType
-
-class TimerUnitType
-<<enumeration>> TimerUnitType
-TimerUnitType : +index int
-TimerUnitType : +values$ List~TimerUnitType~
-TimerUnitType : +countup$ TimerUnitType
-TimerUnitType o-- TimerUnitType
-TimerUnitType : +countdown$ TimerUnitType
-TimerUnitType o-- TimerUnitType
-Enum <|.. TimerUnitType
-
-class TaskType
-<<enumeration>> TaskType
-TaskType : +index int
-TaskType : +values$ List~TaskType~
-TaskType : +timer$ TaskType
-TaskType o-- TaskType
-TaskType : +note$ TaskType
-TaskType o-- TaskType
-Enum <|.. TaskType
-
-class TimerUnitStatus
-<<enumeration>> TimerUnitStatus
-TimerUnitStatus : +index int
-TimerUnitStatus : +values$ List~TimerUnitStatus~
-TimerUnitStatus : +active$ TimerUnitStatus
-TimerUnitStatus o-- TimerUnitStatus
-TimerUnitStatus : +inactive$ TimerUnitStatus
-TimerUnitStatus o-- TimerUnitStatus
-TimerUnitStatus : +paused$ TimerUnitStatus
-TimerUnitStatus o-- TimerUnitStatus
-TimerUnitStatus : +timeout$ TimerUnitStatus
-TimerUnitStatus o-- TimerUnitStatus
-Enum <|.. TimerUnitStatus
-
-class DefaultSettings
-DefaultSettings : +language$ String
-DefaultSettings : +enableDarkMode$ bool
-DefaultSettings : +autoDarkMode$ bool
-DefaultSettings : +darkModeFollowSystem$ bool
-DefaultSettings : +themeColor$ String
-DefaultSettings : +enableSound$ bool
-DefaultSettings : +enableFinishedSound$ bool
-DefaultSettings : +enableNotification$ bool
-DefaultSettings : +enableDebug$ bool
-DefaultSettings : +enableLog$ bool
-DefaultSettings : +defaultTaskType$ TaskType
-DefaultSettings o-- TaskType
-DefaultSettings : +defaultTimerUnitType$ TimerUnitType
-DefaultSettings o-- TimerUnitType
-DefaultSettings : +countdownDuration$ Duration
-DefaultSettings : +toSnapshot()$ SettingsSnapshot
-DefaultSettings : +toMap()$ Map<String, dynamic>
-
-class Clock
-Clock : -_instance$ Clock
-Clock o-- Clock
-Clock : -_timeDrift int
-Clock : -_timezoneOffset int
-Clock : +instance$ dynamic
-Clock : +currentTime DateTime
-Clock : +setTimeDrift int
-Clock : +setTimezoneOffset int
-Clock : +reset() void
-
-class UuidHelper
-UuidHelper : +getUuid()$ String
-
 class TimerUnitSqlite
 TimerUnitSqlite : +db Database
 TimerUnitSqlite o-- Database
@@ -292,6 +106,103 @@ AppDatabase : +upgradeSchema() dynamic
 AppDatabase : +setupSchema() dynamic
 AppDatabase : +checkInitialized() dynamic
 
+class SettingsSnapshot
+SettingsSnapshot : +language String?
+SettingsSnapshot : +enableDarkMode bool?
+SettingsSnapshot : +autoDarkMode bool?
+SettingsSnapshot : +darkModeFollowSystem bool?
+SettingsSnapshot : +themeColor String?
+SettingsSnapshot : +enableSound bool?
+SettingsSnapshot : +enableFinishedSound bool?
+SettingsSnapshot : +enableNotification bool?
+SettingsSnapshot : +enableDebug bool?
+SettingsSnapshot : +enableLog bool?
+SettingsSnapshot : +defaultTaskType TaskType?
+SettingsSnapshot o-- TaskType
+SettingsSnapshot : +defaultTimerUnitType TimerUnitType?
+SettingsSnapshot o-- TimerUnitType
+SettingsSnapshot : +countdownDuration Duration?
+SettingsSnapshot : +toMap() Map<String, dynamic>
+SettingsSnapshot : +mergeWith() SettingsSnapshot
+SettingsSnapshot : +fromMap()$ SettingsSnapshot
+SettingsSnapshot : -_boolFromInt()$ bool?
+SnapshotBase <|-- SettingsSnapshot
+
+class TaskRelationSnapshot
+TaskRelationSnapshot : +fromUuid String
+TaskRelationSnapshot : +toUuid String
+TaskRelationSnapshot : +weight double?
+TaskRelationSnapshot : +isManuallyLinked bool
+TaskRelationSnapshot : +description String?
+TaskRelationSnapshot : +toMap() Map<String, dynamic>
+TaskRelationSnapshot : +fromMap()$ TaskRelationSnapshot
+SnapshotBase <|-- TaskRelationSnapshot
+
+class TaskMetaSnapshot
+TaskMetaSnapshot : +taskUuid String
+TaskMetaSnapshot : +createdAt DateTime
+TaskMetaSnapshot : +firstUsedAt DateTime?
+TaskMetaSnapshot : +lastUsedAt DateTime?
+TaskMetaSnapshot : +totalUsedCount int
+TaskMetaSnapshot : +totalCount int?
+TaskMetaSnapshot : +avgSessionDuration Duration?
+TaskMetaSnapshot : +icon String?
+TaskMetaSnapshot : +baseColor String?
+TaskMetaSnapshot : +toMap() Map<String, dynamic>
+TaskMetaSnapshot : +fromMap()$ TaskMetaSnapshot
+SnapshotBase <|-- TaskMetaSnapshot
+
+class TaskMappingSnapshot
+TaskMappingSnapshot : +taskUuid String
+TaskMappingSnapshot : +entityUuid String
+TaskMappingSnapshot : +entityType String
+TaskMappingSnapshot : +toMap() Map<String, dynamic>
+TaskMappingSnapshot : +fromMap()$ TaskMappingSnapshot
+SnapshotBase <|-- TaskMappingSnapshot
+
+class TaskSnapshot
+TaskSnapshot : +uuid String
+TaskSnapshot : +name String?
+TaskSnapshot : +type TaskType
+TaskSnapshot o-- TaskType
+TaskSnapshot : +createdAt DateTime
+TaskSnapshot : +lastUsedAt DateTime?
+TaskSnapshot : +isArchived bool
+TaskSnapshot : +isHighlighted bool
+TaskSnapshot : +color String?
+TaskSnapshot : +opacity double
+TaskSnapshot : +toMap() Map<String, dynamic>
+TaskSnapshot : +fromMap()$ TaskSnapshot
+SnapshotBase <|-- TaskSnapshot
+
+class HistorySnapshot
+HistorySnapshot : +historyUuid String
+HistorySnapshot : +taskUuid String
+HistorySnapshot : +startedAt DateTime
+HistorySnapshot : +sessionDuration Duration?
+HistorySnapshot : +count int?
+HistorySnapshot : +isArchived bool
+HistorySnapshot : +toMap() Map<String, dynamic>
+HistorySnapshot : +fromMap()$ HistorySnapshot
+SnapshotBase <|-- HistorySnapshot
+
+class TimerUnitSnapshot
+TimerUnitSnapshot : +uuid String
+TimerUnitSnapshot : +status TimerUnitStatus
+TimerUnitSnapshot o-- TimerUnitStatus
+TimerUnitSnapshot : +type TimerUnitType
+TimerUnitSnapshot o-- TimerUnitType
+TimerUnitSnapshot : +duration Duration
+TimerUnitSnapshot : +referenceTime DateTime?
+TimerUnitSnapshot : +lastRemainTime Duration?
+TimerUnitSnapshot : +toMap() Map<String, dynamic>
+TimerUnitSnapshot : +fromMap()$ TimerUnitSnapshot
+SnapshotBase <|-- TimerUnitSnapshot
+
+class SnapshotBase
+<<abstract>> SnapshotBase
+SnapshotBase : +toMap()* Map<String, dynamic>
+
 class MyApp
 MyApp : +build() Widget
 StatelessWidget <|-- MyApp
@@ -306,6 +217,335 @@ _MyHomePageState : -_counter int
 _MyHomePageState : -_incrementCounter() void
 _MyHomePageState : +build() Widget
 State <|-- _MyHomePageState
+
+class TimerStatus
+<<enumeration>> TimerStatus
+TimerStatus : +index int
+TimerStatus : +values$ List~TimerStatus~
+TimerStatus : +inactive$ TimerStatus
+TimerStatus o-- TimerStatus
+TimerStatus : +active$ TimerStatus
+TimerStatus o-- TimerStatus
+TimerStatus : +paused$ TimerStatus
+TimerStatus o-- TimerStatus
+Enum <|.. TimerStatus
+
+class TimerType
+<<enumeration>> TimerType
+TimerType : +index int
+TimerType : +values$ List~TimerType~
+TimerType : +forward$ TimerType
+TimerType o-- TimerType
+TimerType : +countdown$ TimerType
+TimerType o-- TimerType
+Enum <|.. TimerType
+
+class DatabaseTables
+<<abstract>> DatabaseTables
+DatabaseTables : +timerUnits$ TimerUnitsTable
+DatabaseTables o-- TimerUnitsTable
+DatabaseTables : +history$ HistoryTable
+DatabaseTables o-- HistoryTable
+DatabaseTables : +tasks$ TasksTable
+DatabaseTables o-- TasksTable
+DatabaseTables : +taskMeta$ TaskMetaTable
+DatabaseTables o-- TaskMetaTable
+DatabaseTables : +taskMapping$ TaskMappingTable
+DatabaseTables o-- TaskMappingTable
+DatabaseTables : +taskRelation$ TaskRelationTable
+DatabaseTables o-- TaskRelationTable
+DatabaseTables : +settings$ SettingsTable
+DatabaseTables o-- SettingsTable
+
+class TimerUnitsTable
+TimerUnitsTable : +name String
+TimerUnitsTable : +uuid TimerUnitsFields
+TimerUnitsTable o-- TimerUnitsFields
+TimerUnitsTable : +status TimerUnitsFields
+TimerUnitsTable o-- TimerUnitsFields
+TimerUnitsTable : +type TimerUnitsFields
+TimerUnitsTable o-- TimerUnitsFields
+TimerUnitsTable : +durationMs TimerUnitsFields
+TimerUnitsTable o-- TimerUnitsFields
+TimerUnitsTable : +referenceTime TimerUnitsFields
+TimerUnitsTable o-- TimerUnitsFields
+TimerUnitsTable : +lastRemainMs TimerUnitsFields
+TimerUnitsTable o-- TimerUnitsFields
+
+class HistoryTable
+HistoryTable : +name String
+HistoryTable : +historyUuid HistoryFields
+HistoryTable o-- HistoryFields
+HistoryTable : +taskUuid HistoryFields
+HistoryTable o-- HistoryFields
+HistoryTable : +startedAt HistoryFields
+HistoryTable o-- HistoryFields
+HistoryTable : +sessionDurationMs HistoryFields
+HistoryTable o-- HistoryFields
+HistoryTable : +count HistoryFields
+HistoryTable o-- HistoryFields
+HistoryTable : +isArchived HistoryFields
+HistoryTable o-- HistoryFields
+
+class TasksTable
+TasksTable : +name String
+TasksTable : +uuid TasksFields
+TasksTable o-- TasksFields
+TasksTable : +nameField TasksFields
+TasksTable o-- TasksFields
+TasksTable : +type TasksFields
+TasksTable o-- TasksFields
+TasksTable : +createdAt TasksFields
+TasksTable o-- TasksFields
+TasksTable : +lastUsedAt TasksFields
+TasksTable o-- TasksFields
+TasksTable : +isArchived TasksFields
+TasksTable o-- TasksFields
+TasksTable : +isHighlighted TasksFields
+TasksTable o-- TasksFields
+TasksTable : +color TasksFields
+TasksTable o-- TasksFields
+TasksTable : +opacity TasksFields
+TasksTable o-- TasksFields
+
+class TaskMetaTable
+TaskMetaTable : +name String
+TaskMetaTable : +taskUuid TaskMetaFields
+TaskMetaTable o-- TaskMetaFields
+TaskMetaTable : +createdAt TaskMetaFields
+TaskMetaTable o-- TaskMetaFields
+TaskMetaTable : +firstUsedAt TaskMetaFields
+TaskMetaTable o-- TaskMetaFields
+TaskMetaTable : +lastUsedAt TaskMetaFields
+TaskMetaTable o-- TaskMetaFields
+TaskMetaTable : +totalUsedCount TaskMetaFields
+TaskMetaTable o-- TaskMetaFields
+TaskMetaTable : +totalCount TaskMetaFields
+TaskMetaTable o-- TaskMetaFields
+TaskMetaTable : +avgSessionDurationMs TaskMetaFields
+TaskMetaTable o-- TaskMetaFields
+TaskMetaTable : +icon TaskMetaFields
+TaskMetaTable o-- TaskMetaFields
+TaskMetaTable : +baseColor TaskMetaFields
+TaskMetaTable o-- TaskMetaFields
+
+class TaskMappingTable
+TaskMappingTable : +name String
+TaskMappingTable : +taskUuid TaskMappingFields
+TaskMappingTable o-- TaskMappingFields
+TaskMappingTable : +entityUuid TaskMappingFields
+TaskMappingTable o-- TaskMappingFields
+TaskMappingTable : +entityType TaskMappingFields
+TaskMappingTable o-- TaskMappingFields
+
+class TaskRelationTable
+TaskRelationTable : +name String
+TaskRelationTable : +fromUuid TaskRelationFields
+TaskRelationTable o-- TaskRelationFields
+TaskRelationTable : +toUuid TaskRelationFields
+TaskRelationTable o-- TaskRelationFields
+TaskRelationTable : +weight TaskRelationFields
+TaskRelationTable o-- TaskRelationFields
+TaskRelationTable : +isManuallyLinked TaskRelationFields
+TaskRelationTable o-- TaskRelationFields
+TaskRelationTable : +description TaskRelationFields
+TaskRelationTable o-- TaskRelationFields
+
+class SettingsTable
+SettingsTable : +name String
+SettingsTable : +id SettingsFields
+SettingsTable o-- SettingsFields
+SettingsTable : +json SettingsFields
+SettingsTable o-- SettingsFields
+
+class TimerUnitsFields
+<<enumeration>> TimerUnitsFields
+TimerUnitsFields : +index int
+TimerUnitsFields : +values$ List~TimerUnitsFields~
+TimerUnitsFields : +uuid$ TimerUnitsFields
+TimerUnitsFields o-- TimerUnitsFields
+TimerUnitsFields : +status$ TimerUnitsFields
+TimerUnitsFields o-- TimerUnitsFields
+TimerUnitsFields : +type$ TimerUnitsFields
+TimerUnitsFields o-- TimerUnitsFields
+TimerUnitsFields : +durationMs$ TimerUnitsFields
+TimerUnitsFields o-- TimerUnitsFields
+TimerUnitsFields : +referenceTime$ TimerUnitsFields
+TimerUnitsFields o-- TimerUnitsFields
+TimerUnitsFields : +lastRemainMs$ TimerUnitsFields
+TimerUnitsFields o-- TimerUnitsFields
+Enum <|.. TimerUnitsFields
+
+class HistoryFields
+<<enumeration>> HistoryFields
+HistoryFields : +index int
+HistoryFields : +values$ List~HistoryFields~
+HistoryFields : +historyUuid$ HistoryFields
+HistoryFields o-- HistoryFields
+HistoryFields : +taskUuid$ HistoryFields
+HistoryFields o-- HistoryFields
+HistoryFields : +startedAt$ HistoryFields
+HistoryFields o-- HistoryFields
+HistoryFields : +sessionDurationMs$ HistoryFields
+HistoryFields o-- HistoryFields
+HistoryFields : +count$ HistoryFields
+HistoryFields o-- HistoryFields
+HistoryFields : +isArchived$ HistoryFields
+HistoryFields o-- HistoryFields
+Enum <|.. HistoryFields
+
+class TasksFields
+<<enumeration>> TasksFields
+TasksFields : +index int
+TasksFields : +values$ List~TasksFields~
+TasksFields : +uuid$ TasksFields
+TasksFields o-- TasksFields
+TasksFields : +nameField$ TasksFields
+TasksFields o-- TasksFields
+TasksFields : +type$ TasksFields
+TasksFields o-- TasksFields
+TasksFields : +createdAt$ TasksFields
+TasksFields o-- TasksFields
+TasksFields : +lastUsedAt$ TasksFields
+TasksFields o-- TasksFields
+TasksFields : +isArchived$ TasksFields
+TasksFields o-- TasksFields
+TasksFields : +isHighlighted$ TasksFields
+TasksFields o-- TasksFields
+TasksFields : +color$ TasksFields
+TasksFields o-- TasksFields
+TasksFields : +opacity$ TasksFields
+TasksFields o-- TasksFields
+Enum <|.. TasksFields
+
+class TaskMetaFields
+<<enumeration>> TaskMetaFields
+TaskMetaFields : +index int
+TaskMetaFields : +values$ List~TaskMetaFields~
+TaskMetaFields : +taskUuid$ TaskMetaFields
+TaskMetaFields o-- TaskMetaFields
+TaskMetaFields : +createdAt$ TaskMetaFields
+TaskMetaFields o-- TaskMetaFields
+TaskMetaFields : +firstUsedAt$ TaskMetaFields
+TaskMetaFields o-- TaskMetaFields
+TaskMetaFields : +lastUsedAt$ TaskMetaFields
+TaskMetaFields o-- TaskMetaFields
+TaskMetaFields : +totalUsedCount$ TaskMetaFields
+TaskMetaFields o-- TaskMetaFields
+TaskMetaFields : +totalCount$ TaskMetaFields
+TaskMetaFields o-- TaskMetaFields
+TaskMetaFields : +avgSessionDurationMs$ TaskMetaFields
+TaskMetaFields o-- TaskMetaFields
+TaskMetaFields : +icon$ TaskMetaFields
+TaskMetaFields o-- TaskMetaFields
+TaskMetaFields : +baseColor$ TaskMetaFields
+TaskMetaFields o-- TaskMetaFields
+Enum <|.. TaskMetaFields
+
+class TaskMappingFields
+<<enumeration>> TaskMappingFields
+TaskMappingFields : +index int
+TaskMappingFields : +values$ List~TaskMappingFields~
+TaskMappingFields : +taskUuid$ TaskMappingFields
+TaskMappingFields o-- TaskMappingFields
+TaskMappingFields : +entityUuid$ TaskMappingFields
+TaskMappingFields o-- TaskMappingFields
+TaskMappingFields : +entityType$ TaskMappingFields
+TaskMappingFields o-- TaskMappingFields
+Enum <|.. TaskMappingFields
+
+class TaskRelationFields
+<<enumeration>> TaskRelationFields
+TaskRelationFields : +index int
+TaskRelationFields : +values$ List~TaskRelationFields~
+TaskRelationFields : +fromUuid$ TaskRelationFields
+TaskRelationFields o-- TaskRelationFields
+TaskRelationFields : +toUuid$ TaskRelationFields
+TaskRelationFields o-- TaskRelationFields
+TaskRelationFields : +weight$ TaskRelationFields
+TaskRelationFields o-- TaskRelationFields
+TaskRelationFields : +isManuallyLinked$ TaskRelationFields
+TaskRelationFields o-- TaskRelationFields
+TaskRelationFields : +description$ TaskRelationFields
+TaskRelationFields o-- TaskRelationFields
+Enum <|.. TaskRelationFields
+
+class SettingsFields
+<<enumeration>> SettingsFields
+SettingsFields : +index int
+SettingsFields : +values$ List~SettingsFields~
+SettingsFields : +id$ SettingsFields
+SettingsFields o-- SettingsFields
+SettingsFields : +json$ SettingsFields
+SettingsFields o-- SettingsFields
+Enum <|.. SettingsFields
+
+class TimerUnitType
+<<enumeration>> TimerUnitType
+TimerUnitType : +index int
+TimerUnitType : +values$ List~TimerUnitType~
+TimerUnitType : +countup$ TimerUnitType
+TimerUnitType o-- TimerUnitType
+TimerUnitType : +countdown$ TimerUnitType
+TimerUnitType o-- TimerUnitType
+Enum <|.. TimerUnitType
+
+class TaskType
+<<enumeration>> TaskType
+TaskType : +index int
+TaskType : +values$ List~TaskType~
+TaskType : +timer$ TaskType
+TaskType o-- TaskType
+TaskType : +note$ TaskType
+TaskType o-- TaskType
+Enum <|.. TaskType
+
+class TimerUnitStatus
+<<enumeration>> TimerUnitStatus
+TimerUnitStatus : +index int
+TimerUnitStatus : +values$ List~TimerUnitStatus~
+TimerUnitStatus : +active$ TimerUnitStatus
+TimerUnitStatus o-- TimerUnitStatus
+TimerUnitStatus : +inactive$ TimerUnitStatus
+TimerUnitStatus o-- TimerUnitStatus
+TimerUnitStatus : +paused$ TimerUnitStatus
+TimerUnitStatus o-- TimerUnitStatus
+TimerUnitStatus : +timeout$ TimerUnitStatus
+TimerUnitStatus o-- TimerUnitStatus
+Enum <|.. TimerUnitStatus
+
+class DefaultSettings
+DefaultSettings : +language$ String
+DefaultSettings : +enableDarkMode$ bool
+DefaultSettings : +autoDarkMode$ bool
+DefaultSettings : +darkModeFollowSystem$ bool
+DefaultSettings : +themeColor$ String
+DefaultSettings : +enableSound$ bool
+DefaultSettings : +enableFinishedSound$ bool
+DefaultSettings : +enableNotification$ bool
+DefaultSettings : +enableDebug$ bool
+DefaultSettings : +enableLog$ bool
+DefaultSettings : +defaultTaskType$ TaskType
+DefaultSettings o-- TaskType
+DefaultSettings : +defaultTimerUnitType$ TimerUnitType
+DefaultSettings o-- TimerUnitType
+DefaultSettings : +countdownDuration$ Duration
+DefaultSettings : +toSnapshot()$ SettingsSnapshot
+DefaultSettings : +toMap()$ Map<String, dynamic>
+
+class Clock
+Clock : -_instance$ Clock
+Clock o-- Clock
+Clock : -_timeDrift int
+Clock : -_timezoneOffset int
+Clock : +instance$ dynamic
+Clock : +currentTime DateTime
+Clock : +setTimeDrift int
+Clock : +setTimezoneOffset int
+Clock : +reset() void
+
+class UuidHelper
+UuidHelper : +getUuid()$ String
 
 class Settings
 Settings : -_language String?
@@ -340,6 +580,10 @@ Settings o-- TimerUnitType
 Settings : +countdownDuration Duration?
 Settings : +toSnapshot() SettingsSnapshot
 Settings : +fromSnapshot() void
+
+class DatabaseInitService
+DatabaseInitService : +initDatabaseEnvironment()$ void
+DatabaseInitService : +initializeAppDatabase()$ dynamic
 
 class AppStartupService
 AppStartupService : -_database AppDatabase
@@ -376,6 +620,9 @@ AppStartupService : +historyRepo HistorySqlite
 AppStartupService o-- HistorySqlite
 AppStartupService : +initializeApp() dynamic
 AppStartupService : -_recoverUnfinishedTimers() dynamic
+AppStartupService : -_cleanupExtraTimers() dynamic
+
+class TaskService
 
 class SettingsController
 SettingsController : -_repo SettingsSqlite
@@ -383,14 +630,20 @@ SettingsController o-- SettingsSqlite
 SettingsController : +build() dynamic
 SettingsController : +load() dynamic
 SettingsController : +save() dynamic
+SettingsController : +setLanguage() dynamic
+SettingsController : +setEnableDarkMode() dynamic
+SettingsController : +setAutoDarkMode() dynamic
+SettingsController : +setDarkModeFollowSystem() dynamic
+SettingsController : +setThemeColor() dynamic
+SettingsController : +setEnableSound() dynamic
+SettingsController : +setEnableFinishedSound() dynamic
+SettingsController : +setEnableNotification() dynamic
+SettingsController : +setEnableDebug() dynamic
+SettingsController : +setEnableLog() dynamic
+SettingsController : +setDefaultTaskType() dynamic
+SettingsController : +setDefaultTimerUnitType() dynamic
+SettingsController : +setCountdownDuration() dynamic
 AsyncNotifier <|-- SettingsController
-
-class CollectionController
-<<abstract>> CollectionController
-CollectionController : +addItem()* dynamic
-CollectionController : +removeWhere()* dynamic
-CollectionController : +updateWhere()* dynamic
-BaseController <|-- CollectionController
 
 class TaskMappingController
 TaskMappingController : -_repo TaskMappingSqlite
@@ -406,6 +659,13 @@ TaskMappingController : +loadMappingsForEntity() dynamic
 TaskMappingController : +addMapping() dynamic
 TaskMappingController : +deleteMapping() dynamic
 CollectionController <|-- TaskMappingController
+
+class CollectionController
+<<abstract>> CollectionController
+CollectionController : +addItem()* dynamic
+CollectionController : +removeWhere()* dynamic
+CollectionController : +updateWhere()* dynamic
+BaseController <|-- CollectionController
 
 class BaseController
 <<abstract>> BaseController
@@ -428,6 +688,10 @@ TimerController : +start() dynamic
 TimerController : +stop() dynamic
 TimerController : +pause() dynamic
 TimerController : +resume() dynamic
+TimerController : +reset() dynamic
+TimerController : +switchType() dynamic
+TimerController : +setCountdownDuration() dynamic
+TimerController : +applySettings() dynamic
 BaseController <|-- TimerController
 
 class RepositoryProviderFactory
@@ -444,23 +708,16 @@ Task : -_isArchived bool
 Task : -_isHighlighted bool
 Task : -_color String?
 Task : -_opacity double
-Task : +setName String
-Task : +setType TaskType
-Task o-- TaskType
-Task : +setIsArchived bool
-Task : +setIsHighlighted bool
-Task : +setColor String?
-Task : +setOpacity double
-Task : +uuid String
 Task : +name String?
 Task : +type TaskType
 Task o-- TaskType
-Task : +createdAt DateTime
-Task : +lastUsedAt DateTime?
 Task : +isArchived bool
 Task : +isHighlighted bool
 Task : +color String?
 Task : +opacity double
+Task : +uuid String
+Task : +createdAt DateTime
+Task : +lastUsedAt DateTime?
 Task : +toSnapshot() TaskSnapshot
 Task : +fromSnapshot() void
 
@@ -540,6 +797,7 @@ TimerUnit o-- TimerUnitType
 TimerUnit : +duration Duration
 TimerUnit : +toCountup() void
 TimerUnit : +toCountdown() void
+TimerUnit : +reset() void
 TimerUnit : +start() void
 TimerUnit : +pause() void
 TimerUnit : +resume() void
