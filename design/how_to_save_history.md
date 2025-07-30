@@ -220,9 +220,91 @@ classDiagram
     TaskMappingSqlite ..|> SnapshotRepository
     TaskRelationSqlite ..|> SnapshotRepository
     
-    TimerUnit --> History : 保存到历史记录
     Task --> TaskMeta : 相关元数据
     Task --> TaskMapping : 映射关系
     Task --> TaskRelation : 任务关系
 ```
 
+目前TimerUnit保存的逻辑：
+
+```mermaid
+flowchart TD
+    %% === Timer 系列 ===
+    TimerProvider[TimerProvider] --> TimerUnit[TimerUnit]
+    TimerProvider --> TimerController[TimerController]
+    TimerController -->|delegates| TimerUnitSqlite[TimerUnitSqlite]
+    TimerUnit -.->|toSnapshot| TimerUnitSnapshot((TimerUnitSnapshot))
+    TimerUnitSnapshot -.->|saveSnapshot| TimerController
+    TimerUnitSqlite -->|write| DATABASE[/DATABASE/]
+```
+
+大部分逻辑都相互孤立，需要各自保存：
+
+```mermaid
+flowchart TD
+    %% === Timer 系列 ===
+    TimerProvider[TimerProvider] --> TimerUnit[TimerUnit]
+    TimerProvider --> TimerController[TimerController]
+    TimerController -->|delegates| TimerUnitSqlite[TimerUnitSqlite]
+    TimerUnit -.->|toSnapshot| TimerUnitSnapshot((TimerUnitSnapshot))
+    TimerUnitSnapshot -.->|saveSnapshot| TimerController
+    TimerUnitSqlite -->|write| DATABASE[/DATABASE/]
+
+    %% === Task 系列 ===
+    TaskProvider[TaskProvider] --> Task[Task]
+    TaskProvider --> TaskController[TaskController]
+    TaskController -->|delegates| TaskSqlite[TaskSqlite]
+    Task -.->|toSnapshot| TaskSnapshot((TaskSnapshot))
+    TaskSnapshot -.->|saveSnapshot| TaskController
+    TaskSqlite -->|write| DATABASE
+
+    %% === TaskMeta 系列 ===
+    TaskMetaProvider[TaskMetaProvider] --> TaskMeta[TaskMeta]
+    TaskMetaProvider --> TaskMetaController[TaskMetaController]
+    TaskMetaController -->|delegates| TaskMetaSqlite[TaskMetaSqlite]
+    TaskMeta -.->|toSnapshot| TaskMetaSnapshot((TaskMetaSnapshot))
+    TaskMetaSnapshot -.->|saveSnapshot| TaskMetaController
+    TaskMetaSqlite -->|write| DATABASE
+
+```
+
+
+
+
+
+我们希望的逻辑：
+
+```mermaid
+flowchart TD
+    %% === Timer 系列 ===
+    TimerProvider[TimerProvider] ==> TimerUnit[TimerUnit]
+    TimerProvider ==> TimerController[TimerController]
+    TimerUnit -.->|toSnapshot| TimerUnitSnapshot((TimerUnitSnapshot))
+    TimerUnitSnapshot -.->|saveSnapshot| TimerController
+    TimerController -->|delegates| TimerUnitSqlite
+    TimerUnitSqlite -->|write| DATABASE[/DATABASE/]
+
+    %% === Task 系列 ===
+    TaskProvider[TaskProvider] ==> Task[Task]
+    TaskProvider ==> TaskController[TaskController]
+    TaskController -->|delegates| TaskSqlite[TaskSqlite]
+    Task -.->|toSnapshot| TaskSnapshot((TaskSnapshot))
+    TaskSnapshot -.->|saveSnapshot| TaskController
+    TaskSqlite -->|write| DATABASE
+
+    %% === TaskMeta 系列 ===
+    TaskMetaProvider[TaskMetaProvider] ==> TaskMeta[TaskMeta]
+    TaskMetaProvider ==> TaskMetaController[TaskMetaController]
+    TaskMetaController -->|delegates| TaskMetaSqlite[TaskMetaSqlite]
+    TaskMeta -.->|toSnapshot| TaskMetaSnapshot((TaskMetaSnapshot))
+    TaskMetaSnapshot -.->|saveSnapshot| TaskMetaController
+    TaskMetaSqlite -->|write| DATABASE
+
+    %% === Service 层 ===
+    TaskService[TaskService]
+    TaskService -->|import| TimerProvider
+    TaskService -->|import| TaskProvider
+    TaskService -->|import| TaskMetaProvider
+    TaskService -.->|via sqlite from providers| DATABASE
+
+```

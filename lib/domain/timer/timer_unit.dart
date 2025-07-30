@@ -230,8 +230,6 @@ class TimerUnit {
       if (!_status.isInactive) {
         // 此时已有referenceTime
         (_currentTimer as CountupTimer).startTime = _referenceTime!;
-        print(duration);
-        print(_duration);
       }
     } else {
       if (!_status.isInactive) {
