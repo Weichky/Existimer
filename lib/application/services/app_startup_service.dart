@@ -91,10 +91,8 @@ class AppStartupService {
     // 如果有处于active状态的计时器
     if (activeTimers.isNotEmpty) {
       // 选择第一个active状态的计时器
-      final firstActiveTimer = activeTimers.first;
       // TODO: 在UI层实现询问用户是否恢复计时器的逻辑
       // 这里我们只是查找并准备好数据
-      print('发现处于active状态的计时器: ${firstActiveTimer.uuid}');
     } else {
       // 如果没有active状态的计时器，查找paused状态的计时器
       final pausedTimers = await _timerRepo.queryByField(
@@ -104,10 +102,8 @@ class AppStartupService {
       
       if (pausedTimers.isNotEmpty) {
         // 选择第一个paused状态的计时器
-        final firstPausedTimer = pausedTimers.first;
         // TODO: 在UI层实现询问用户是否恢复计时器的逻辑
         // 这里我们只是查找并准备好数据
-        print('发现处于paused状态的计时器: ${firstPausedTimer.uuid}');
       }
     }
     
