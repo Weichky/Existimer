@@ -17,12 +17,12 @@ class CountdownSettingsWidget extends ConsumerWidget {
 
     return timerAsync.when(
       data: (timer) {
-        // 只有在倒计时模式下才显示设置控件
+        /// 只有在倒计时模式下才显示设置控件
         if (!timer.type.isCountdown) {
           return const SizedBox.shrink();
         }
 
-        // 只有在倒计时且未激活时才能设置时间
+        /// 只有在倒计时且未激活时才能设置时间
         final canSetTime = timer.type.isCountdown && timer.status.isInactive;
 
         return settingsAsync.when(
@@ -47,7 +47,7 @@ class CountdownSettingsWidget extends ConsumerWidget {
                               final newDuration = settings.countdownDuration! + const Duration(minutes: 1);
                               await settingsController.setCountdownDuration(newDuration);
                               await settingsController.save();
-                              // 应用新设置到当前计时器
+                              /// 应用新设置到当前计时器
                               await timerController.applySettings();
                             }
                           : null,
@@ -64,7 +64,7 @@ class CountdownSettingsWidget extends ConsumerWidget {
                               final newDuration = settings.countdownDuration! - const Duration(minutes: 1);
                               await settingsController.setCountdownDuration(newDuration);
                               await settingsController.save();
-                              // 应用新设置到当前计时器
+                              /// 应用新设置到当前计时器
                               await timerController.applySettings();
                             }
                           : null,

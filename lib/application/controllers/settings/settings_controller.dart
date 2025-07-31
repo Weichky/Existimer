@@ -27,7 +27,7 @@ class SettingsController extends AsyncNotifier<Settings> {
     return Settings.fromSnapshot(mergedSnapshot);
   }
 
-  // 读取，设置唯一
+  /// 读取，设置唯一
   Future<void> load() async {
     final SettingsSnapshot? snapshot = await _repo.loadSnapshot();
     if (snapshot != null) {
@@ -37,7 +37,7 @@ class SettingsController extends AsyncNotifier<Settings> {
     }
   }
 
-  // 保存
+  /// 保存
   Future<void> save() async {
     final Settings settings = await future;
 
@@ -49,11 +49,11 @@ class SettingsController extends AsyncNotifier<Settings> {
     }
   }
   
-  // Setters
+  /// Setters
   Future<void> setLanguage(String? language) async {
     final settings = state.requireValue;
     try {
-      settings.language = language; // 使用属性赋值语法而不是方法调用
+      settings.language = language; /// 使用属性赋值语法而不是方法调用
       state = AsyncData(settings);
     } catch (e, st) {
       state = AsyncError(e, st);

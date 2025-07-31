@@ -1,7 +1,7 @@
 abstract class TimerBase {
-  //对于Countup返回totalDuration,对于countdown返回remainDuration
+  ///对于Countup返回totalDuration,对于countdown返回remainDuration
   Duration duration(DateTime now);
-  //用于数据库保存状态，对于Countup返回startTime，对于countdown返回endTime
+  ///用于数据库保存状态，对于Countup返回startTime，对于countdown返回endTime
   DateTime referenceTime();
 
   bool get isCountup;
@@ -24,7 +24,7 @@ class CountupTimer extends TimerBase {
     "You must start CountupTimer before calling Duration()."
     );
     return _totalDuration;
-  } //上层需保证非空调用
+  } ///上层需保证非空调用
 
   @override
   DateTime referenceTime() {
@@ -33,7 +33,7 @@ class CountupTimer extends TimerBase {
     "You must start CountupTimer before calling referenceTime()."
     );
     return _startTime!;
-  } //上层需保证非空调用
+  } ///上层需保证非空调用
 
   @override
   void start(DateTime now) {
@@ -48,7 +48,7 @@ class CountupTimer extends TimerBase {
     );
 
     _totalDuration += now.difference(_startTime!);
-  } //上层需保证非空调用
+  } ///上层需保证非空调用
 
   void reset() {
     _totalDuration = Duration();
@@ -82,7 +82,7 @@ class CountdownTimer extends TimerBase {
     "You must start CountdownTimer before calling Duration()."
     );
     return _remainDuration;
-  } //上层需保证非空调用
+  } ///上层需保证非空调用
 
   @override
   DateTime referenceTime() {
@@ -91,7 +91,7 @@ class CountdownTimer extends TimerBase {
     "You must start CountdownTimer before calling showTime()."
     );
     return _endTime!;
-  } //上层需保证非空调用
+  } ///上层需保证非空调用
 
   @override
   void start(DateTime now) {
@@ -105,7 +105,7 @@ class CountdownTimer extends TimerBase {
     "You must start CountdownTimer before calling stop()."
     );
     _remainDuration = _endTime!.difference(now);
-  } //上层需保证非空调用
+  } ///上层需保证非空调用
 
   void reset(Duration time) {
     _remainDuration = time;

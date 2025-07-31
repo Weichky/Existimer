@@ -4,31 +4,34 @@ import 'package:existimer/common/constants/timer_unit_type.dart';
 import 'package:existimer/data/snapshots/settings/settings_snapshot.dart';
 
 class DefaultSettings{
-  //外观与语言
+  ///外观与语言
   static final String language = "zh-CN";
 
   static final bool enableDarkMode = true;
   static final bool autoDarkMode = true;
-  static final bool darkModeFollowSystem = true; // 未来再加入自订时间
+  static final bool darkModeFollowSystem = true; /// 未来再加入自订时间
 
-  static final String themeColor = ""; // 暂未填入
+  static final String themeColor = ""; /// 暂未填入
 
-  // 声音与通知
+  /// 声音与通知
   static final bool enableSound = true;
   static final bool enableFinishedSound = true;
   static final bool enableNotification = true;
 
-  // 调试默认配置
+  /// 调试默认配置
   static final bool enableDebug = false;
   static final bool enableLog = false;
 
-  // 任务默认配置
+  /// 任务默认配置
   static final TaskType defaultTaskType = TaskType.timer;
 
-  // 计时默认配置
+  /// 计时默认配置
   static final TimerUnitType defaultTimerUnitType = TimerUnitType.countdown;
 
   static final Duration countdownDuration = Duration(minutes: 35);
+  
+  static final int taskBatchSize = 20;
+  static final int historyBatchSize = 50;
 
   static SettingsSnapshot toSnapshot() {
     return SettingsSnapshot(
@@ -45,6 +48,8 @@ class DefaultSettings{
       defaultTaskType: defaultTaskType,
       defaultTimerUnitType: defaultTimerUnitType,
       countdownDuration: countdownDuration,
+      taskBatchSize: taskBatchSize,
+      historyBatchSize: historyBatchSize,
     );
   }
 
@@ -63,6 +68,8 @@ static Map<String, dynamic> toMap() {
     'default_task_type': defaultTaskType.name,
     'default_timer_unit_type': defaultTimerUnitType.name,
     'countdown_duration_ms': countdownDuration.inMilliseconds,
+    'task_batch_size': taskBatchSize,
+    'history_batch_size': historyBatchSize,
   };
 }
 }

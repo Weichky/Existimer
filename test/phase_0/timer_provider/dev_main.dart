@@ -12,7 +12,7 @@ void main() {
   late ProviderContainer container;
 
   setUpAll(() async {
-    // 初始化 sqflite ffi，针对桌面环境
+    /// 初始化 sqflite ffi，针对桌面环境
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   });
@@ -20,7 +20,7 @@ void main() {
   setUp(() async {
     container = ProviderContainer();
 
-    // 等待 AppStartupService 完成初始化（隐式触发数据库初始化和AppStartupService初始化）
+    /// 等待 AppStartupService 完成初始化（隐式触发数据库初始化和AppStartupService初始化）
     await container.read(appStartupServiceProvider.future);
   });
 
@@ -44,15 +44,15 @@ void main() {
     final controller = container.read(timerProvider.notifier);
     final timer = await container.read(timerProvider.future);
 
-    // 启动计时器
+    /// 启动计时器
     await controller.start();
 
-    // 保存计时器状态到数据库
+    /// 保存计时器状态到数据库
     await controller.save();
 
     final uuid = timer.uuid;
 
-    // 加载刚保存的计时器
+    /// 加载刚保存的计时器
     await controller.loadFromUuid(uuid);
 
     final loadedTimer = container.read(timerProvider).value!;
@@ -70,7 +70,7 @@ void main() {
     final uuid = timer.uuid;
 
     await controller.start();
-    // await controller.start();
+    /// await controller.start();
 
     print(timer.duration);
 

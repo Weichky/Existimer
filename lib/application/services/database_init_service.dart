@@ -13,7 +13,7 @@ class DatabaseInitService {
   static void initDatabaseEnvironment() {
     WidgetsFlutterBinding.ensureInitialized();
     
-    // 初始化 sqflite ffi，针对桌面环境
+    /// 初始化 sqflite ffi，针对桌面环境
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
@@ -24,10 +24,10 @@ class DatabaseInitService {
   /// [reset] 是否重置数据库（仅用于测试）
   /// 返回初始化完成的 [AppDatabase] 实例
   static Future<AppDatabase> initializeAppDatabase({String dbName = 'app.db', bool reset = false}) async {
-    // 初始化数据库环境
+    /// 初始化数据库环境
     initDatabaseEnvironment();
     
-    // 创建并初始化应用数据库
+    /// 创建并初始化应用数据库
     final appDatabase = AppDatabase();
     await appDatabase.init(dbName, reset);
 

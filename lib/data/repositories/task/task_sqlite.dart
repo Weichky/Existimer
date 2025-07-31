@@ -35,7 +35,7 @@ class TaskSqlite implements SnapshotRepository<TaskSnapshot> {
     return null;
   }
   
-  // 将扩展方法合并到主类内部
+  /// 将扩展方法合并到主类内部
   static final validFields = [
     DatabaseTables.tasks.uuid.name,
     DatabaseTables.tasks.nameField.name,

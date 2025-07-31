@@ -15,7 +15,7 @@ class TimerControlsWidget extends ConsumerWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // 开始/恢复按钮
+            /// 开始/恢复按钮
             if (timer.status.isInactive || timer.status.isPaused)
               FloatingActionButton(
                 heroTag: "start",
@@ -25,7 +25,7 @@ class TimerControlsWidget extends ConsumerWidget {
                   } else if (timer.status.isPaused) {
                     await controller.resume();
                   }
-                  // 保存状态到数据库
+                  /// 保存状态到数据库
                   await controller.save();
                 },
                 backgroundColor: Colors.green,
@@ -37,13 +37,13 @@ class TimerControlsWidget extends ConsumerWidget {
 
             const SizedBox(width: 16),
 
-            // 暂停按钮
+            /// 暂停按钮
             if (timer.status.isActive)
               FloatingActionButton(
                 heroTag: "pause",
                 onPressed: () async {
                   await controller.pause();
-                  // 保存状态到数据库
+                  /// 保存状态到数据库
                   await controller.save();
                 },
                 backgroundColor: Colors.orange,
@@ -55,14 +55,14 @@ class TimerControlsWidget extends ConsumerWidget {
 
             const SizedBox(width: 16),
 
-            // 停止按钮
+            /// 停止按钮
             if (!timer.status.isInactive)
               FloatingActionButton(
                 heroTag: "stop",
                 onPressed: () async {
                   await controller.stop();
-                  await controller.reset(); // 停止后自动重置
-                  // 保存状态到数据库
+                  await controller.reset(); /// 停止后自动重置
+                  /// 保存状态到数据库
                   await controller.save();
                 },
                 backgroundColor: Colors.red,
@@ -74,12 +74,12 @@ class TimerControlsWidget extends ConsumerWidget {
 
             const SizedBox(width: 16),
 
-            // 重置按钮
+            /// 重置按钮
             FloatingActionButton(
               heroTag: "reset",
               onPressed: () async {
                 await controller.reset();
-                // 保存状态到数据库
+                /// 保存状态到数据库
                 await controller.save();
               },
               backgroundColor: Colors.blue,

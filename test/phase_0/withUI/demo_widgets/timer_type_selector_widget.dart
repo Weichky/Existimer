@@ -31,7 +31,7 @@ class TimerTypeSelectorWidget extends ConsumerWidget {
                   onSelected: timer.status.isInactive
                       ? (selected) async {
                           if (selected && timer.type.isCountdown) {
-                            // 切换到正计时
+                            /// 切换到正计时
                             await controller.switchType();
                             await controller.save();
                           }
@@ -45,7 +45,7 @@ class TimerTypeSelectorWidget extends ConsumerWidget {
                   onSelected: timer.status.isInactive
                       ? (selected) async {
                           if (selected && timer.type.isCountup) {
-                            // 切换到倒计时
+                            /// 切换到倒计时
                             await controller.switchType();
                             await controller.save();
                           }

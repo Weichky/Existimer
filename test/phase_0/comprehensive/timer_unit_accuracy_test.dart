@@ -24,7 +24,7 @@ void main() async {
 
   final TimerUnitSqlite timerRepo = appStartupService.timerRepo;
 
-  // 创建正向计时器
+  /// 创建正向计时器
   final timerUnit = TimerUnit.countup();
   print('创建计时器: ${timerUnit.uuid}');
   print(
@@ -32,7 +32,7 @@ void main() async {
   );
   print('初始快照: ${timerUnit.toSnapshot().toMap()}');
 
-  // 前端显示相关变量
+  /// 前端显示相关变量
   Duration displayDuration = Duration.zero;
   DateTime lastSyncTime = Clock.instance.currentTime;
   Duration? lastKnownDuration;
@@ -41,13 +41,13 @@ void main() async {
   int round = 1;
   bool isRunning = false;
 
-  // 模拟前端定时器（每10ms更新显示）
+  /// 模拟前端定时器（每10ms更新显示）
   Timer frontendTimer = Timer.periodic(const Duration(milliseconds: 10), (
     timer,
   ) {
     if (!isRunning) return;
 
-    // 检查计时器是否已更改
+    /// 检查计时器是否已更改
     if (timerUnit.uuid != lastTimerUuid) {
       lastTimerUuid = timerUnit.uuid;
       lastSyncTime = Clock.instance.currentTime;
@@ -57,34 +57,34 @@ void main() async {
       return;
     }
 
-    // 只有在计时器正在运行时才进行前端计算
+    /// 只有在计时器正在运行时才进行前端计算
     if (timerUnit.status.isActive) {
-      // 获取当前时间
+      /// 获取当前时间
       final now = Clock.instance.currentTime;
 
-      // 计算从上次同步以来经过的时间
+      /// 计算从上次同步以来经过的时间
       final elapsed = now.difference(lastSyncTime);
 
-      // 根据计时器类型和上次同步的时间计算显示时间
+      /// 根据计时器类型和上次同步的时间计算显示时间
       if (timerUnit.type.isCountup) {
-        // 正计时：上次同步的时间 + 经过的时间
+        /// 正计时：上次同步的时间 + 经过的时间
         if (lastKnownDuration != null) {
           displayDuration = lastKnownDuration! + elapsed;
         }
       }
     } else {
-      // 如果计时器未运行，直接显示同步的时间
+      /// 如果计时器未运行，直接显示同步的时间
       displayDuration = timerUnit.duration;
     }
   });
 
-  // 模拟后端同步定时器（每1秒同步一次）
+  /// 模拟后端同步定时器（每1秒同步一次）
   Timer backendSyncTimer = Timer.periodic(const Duration(seconds: 1), (
     timer,
   ) async {
     if (!isRunning) return;
 
-    // 检查计时器是否已更改
+    /// 检查计时器是否已更改
     if (timerUnit.uuid != lastTimerUuid) {
       lastTimerUuid = timerUnit.uuid;
     }
@@ -92,10 +92,10 @@ void main() async {
     lastSyncTime = Clock.instance.currentTime;
     lastKnownDuration = timerUnit.duration;
 
-    // // 保存到数据库
-    // await timerRepo.saveSnapshot(timerUnit.toSnapshot());
-    // print('后端同步 - 计时器状态已保存到数据库');
-    // print('保存的快照: ${timerUnit.toSnapshot().toMap()}');
+    /// // 保存到数据库
+    /// await timerRepo.saveSnapshot(timerUnit.toSnapshot());
+    /// print('后端同步 - 计时器状态已保存到数据库');
+    /// print('保存的快照: ${timerUnit.toSnapshot().toMap()}');
   });
 
   timerUnit.start();
@@ -103,11 +103,11 @@ void main() async {
 
   bool isFirstRun = true;
 
-  // 运行6轮测试
+  /// 运行6轮测试
   for (int i = 0; i < 6; i++) {
     print('\n========== 第 ${i + 1} 轮测试 ==========');
 
-    // 开始计时
+    /// 开始计时
     print('开始计时...');
     if (isFirstRun) {
       isFirstRun = false;
@@ -121,13 +121,13 @@ void main() async {
     );
     print('开始后快照: ${timerUnit.toSnapshot().toMap()}');
 
-    // 运行5秒
+    /// 运行5秒
     await Future.delayed(const Duration(seconds: 5));
     print(
       '5秒后 - 前端显示时间: ${displayDuration.inMilliseconds}ms, 后端实际时间: ${timerUnit.duration.inMilliseconds}ms, 误差: ${(displayDuration.inMilliseconds - timerUnit.duration.inMilliseconds).abs()}ms',
     );
 
-    // 暂停
+    /// 暂停
     print('暂停计时...');
     timerUnit.pause();
     await timerRepo.saveSnapshot(timerUnit.toSnapshot());
@@ -138,13 +138,13 @@ void main() async {
     );
     print('暂停时快照: ${timerUnit.toSnapshot().toMap()}');
 
-    // 等待5秒
+    /// 等待5秒
     await Future.delayed(const Duration(seconds: 5));
     print(
       '暂停5秒后 - 前端显示时间: ${displayDuration.inMilliseconds}ms, 后端实际时间: ${timerUnit.duration.inMilliseconds}ms, 误差: ${(displayDuration.inMilliseconds - timerUnit.duration.inMilliseconds).abs()}ms',
     );
 
-    // 从数据库加载状态进行校验
+    /// 从数据库加载状态进行校验
     final snapshots = await timerRepo.queryByField('uuid', timerUnit.uuid);
     if (snapshots.isNotEmpty) {
       final loadedTimer = TimerUnit.fromSnapshot(snapshots.first);
@@ -154,7 +154,7 @@ void main() async {
       print('数据库快照: ${snapshots.first.toMap()}');
     }
 
-    // 恢复计时
+    /// 恢复计时
     print('恢复计时...');
     timerUnit.resume();
     await timerRepo.saveSnapshot(timerUnit.toSnapshot());
@@ -165,13 +165,13 @@ void main() async {
     );
     print('恢复后快照: ${timerUnit.toSnapshot().toMap()}');
 
-    // 等待5秒
+    /// 等待5秒
     await Future.delayed(const Duration(seconds: 5));
     print(
       '恢复后5秒 - 前端显示时间: ${displayDuration.inMilliseconds}ms, 后端实际时间: ${timerUnit.duration.inMilliseconds}ms, 误差: ${(displayDuration.inMilliseconds - timerUnit.duration.inMilliseconds).abs()}ms',
     );
 
-    // 再次从数据库加载状态进行校验
+    /// 再次从数据库加载状态进行校验
     final snapshots2 = await timerRepo.queryByField('uuid', timerUnit.uuid);
     if (snapshots2.isNotEmpty) {
       final loadedTimer = TimerUnit.fromSnapshot(snapshots2.first);
@@ -185,7 +185,7 @@ void main() async {
     await timerRepo.saveSnapshot(timerUnit.toSnapshot());
   }
 
-  // 停止计时器
+  /// 停止计时器
   print('\n========== 停止计时器 ==========');
   timerUnit.stop();
   await timerRepo.saveSnapshot(timerUnit.toSnapshot());
@@ -196,7 +196,7 @@ void main() async {
   );
   print('停止后快照: ${timerUnit.toSnapshot().toMap()}');
 
-  // 从数据库加载最终状态进行校验
+  /// 从数据库加载最终状态进行校验
   final finalSnapshots = await timerRepo.queryByField('uuid', timerUnit.uuid);
   if (finalSnapshots.isNotEmpty) {
     final loadedTimer = TimerUnit.fromSnapshot(finalSnapshots.first);
@@ -206,7 +206,7 @@ void main() async {
     print('最终数据库快照: ${finalSnapshots.first.toMap()}');
   }
 
-  // 取消定时器
+  /// 取消定时器
   frontendTimer.cancel();
   backendSyncTimer.cancel();
 

@@ -11,12 +11,12 @@ abstract class BaseController<T> extends AsyncNotifier<T> {
   /// 加载数据
   /// 
   /// 子类需要实现具体的加载逻辑
-  Future<void> load();
+  Future<void> load(dynamic);
 
   /// 保存数据
   /// 
   /// 子类需要实现具体的保存逻辑
-  Future<void> save();
+  Future<void> save(dynamic);
 
   /// 处理错误
   /// 

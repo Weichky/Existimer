@@ -35,7 +35,7 @@ class HistorySqlite implements SnapshotRepository<HistorySnapshot> {
     return null;
   }
   
-  // 将扩展方法合并到主类内部
+  /// 将扩展方法合并到主类内部
   static final validFields = [
     DatabaseTables.history.historyUuid.name,
     DatabaseTables.history.taskUuid.name,

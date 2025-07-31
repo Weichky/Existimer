@@ -7,12 +7,12 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 // 数据库 Provider
 final databaseProvider = FutureProvider<AppDatabase>((ref) async {
-  // 初始化数据库环境
+  /// 初始化数据库环境
   WidgetsFlutterBinding.ensureInitialized();
   sqfliteFfiInit();
   databaseFactory = databaseFactoryFfi;
   
   final db = AppDatabase();
-  await db.init(); // 初始化数据库
+  await db.init(); /// 初始化数据库
   return db;
 });

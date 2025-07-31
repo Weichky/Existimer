@@ -18,17 +18,17 @@ class TaskRelation {
     String? description,
   }) : _fromUuid = fromUuid,
        _toUuid = toUuid,
-       // 此处不约束 isManuallyLinked 和 weight 的值
+       /// 此处不约束 isManuallyLinked 和 weight 的值
        _weight = weight,
        _isManuallyLinked = isManuallyLinked,
        _description = description {
-    // 此处断言
+    /// 此处断言
     assert(
       !_isManuallyLinked || _weight == null || _weight == 1.0,
       'Manually linked relation should have weight == 1.0 if set');
   }
   
-  // getter
+  /// getter
   String get fromUuid => _fromUuid;
   String get toUuid => _toUuid;
   double? get weight => _weight;

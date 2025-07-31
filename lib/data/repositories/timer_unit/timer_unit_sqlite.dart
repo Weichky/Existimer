@@ -35,8 +35,8 @@ class TimerUnitSqlite implements SnapshotRepository<TimerUnitSnapshot> {
     return null;
   }
   
-  // 将扩展方法合并到主类内部
-  // 防止注入，虽然没啥用
+  /// 将扩展方法合并到主类内部
+  /// 防止注入，虽然没啥用
   static final validFields = [
     DatabaseTables.timerUnits.uuid.name,
     DatabaseTables.timerUnits.status.name,

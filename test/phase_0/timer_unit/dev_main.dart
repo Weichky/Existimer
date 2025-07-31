@@ -24,7 +24,7 @@ void main() async {
 
   await appStartupService.initializeApp();
 
-  // final TimerUnit timerUnit = TimerUnit.countdown(Duration(seconds: 20));
+  /// final TimerUnit timerUnit = TimerUnit.countdown(Duration(seconds: 20));
   final TimerUnit timerUnit = TimerUnit.countup();
   int counter = 0;
 

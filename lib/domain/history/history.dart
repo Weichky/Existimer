@@ -39,12 +39,12 @@ class History {
     return history;
   }
 
-  // setter
+  /// setter
   set setSessionDuration(Duration duration) {
     _sessionDuration = duration;
   }
 
-  // 可选方法
+  /// 可选方法
   void addToCount({int addition = 1}) {
     if (_count != null) {
       _count = _count! + 1;
@@ -53,7 +53,7 @@ class History {
     }
   }
 
-  // getter
+  /// getter
   String get historyUuid => _historyUuid;
   String get taskUuid => _taskUuid;
   DateTime get startedAt => _startedAt;

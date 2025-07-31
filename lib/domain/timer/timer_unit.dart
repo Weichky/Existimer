@@ -11,13 +11,13 @@ import 'package:existimer/data/snapshots/timer/timer_unit_snapshot.dart';
 // 注意_currentTimer.start()和_currentTimer.stop()分别更新了什么
 // 需要对外提供时长接口
 class TimerUnit {
-  //TimerUnit状态
+  ///TimerUnit状态
   String _uuid;
   TimerUnitStatus _status;
   late TimerUnitType _timerUnitType;
   late TimerBase _currentTimer;
 
-  //TimerUnit计时数据
+  ///TimerUnit计时数据
   Duration _duration;
   DateTime? _referenceTime;
 
@@ -87,12 +87,12 @@ class TimerUnit {
 
   /// 重置计时器到初始状态
   void reset([Duration? duration]) {
-    // 先停止计时器（如果正在运行）
+    /// 先停止计时器（如果正在运行）
     if (!_status.isInactive) {
       stop();
     }
 
-    // 重置为初始状态
+    /// 重置为初始状态
     if (_timerUnitType.isCountup) {
       _reset();
       _duration = Duration();
@@ -102,7 +102,7 @@ class TimerUnit {
       _duration = resetDuration;
     }
 
-    // 设置状态为未激活
+    /// 设置状态为未激活
     _status = TimerUnitStatus.inactive;
     _referenceTime = null;
   }
@@ -128,7 +128,7 @@ class TimerUnit {
     }
 
     if (_status.isPaused) {
-      // 空语句是应对上面的判断，有可能仍为paused，防止状态为paused时落入异常处理
+      /// 空语句是应对上面的判断，有可能仍为paused，防止状态为paused时落入异常处理
     } else if (_status.isActive) {
       _reset(_duration);
     } else if (_status.isTimeout) {
@@ -164,12 +164,12 @@ class TimerUnit {
     }
   }
 
-  // 注意：务必在同时使用_update()和_currentTimer.stop()时
-  // 先使用_currentTimer.stop()
+  /// 注意：务必在同时使用_update()和_currentTimer.stop()时
+  /// 先使用_currentTimer.stop()
   void _update() {
     /// 更新计时器
     if (_timerUnitType.isCountup) {
-      // 对于正计时是总时长
+      /// 对于正计时是总时长
       _duration += _currentTimer.duration(Clock.instance.currentTime);
       _referenceTime = _currentTimer.referenceTime();
     } else {
@@ -178,7 +178,7 @@ class TimerUnit {
     }
   }
 
-  // 一定要看上面的_update()提示！
+  /// 一定要看上面的_update()提示！
   void _checkTimeout() {
     /// 检查计时器是否超时
     if (_currentTimer.isCountdown) {
@@ -188,7 +188,7 @@ class TimerUnit {
     }
   }
 
-  //注意不要填入负值
+  ///注意不要填入负值
   void _reset([Duration? remainTime]) {
     /// 重置计时器，如果计时器为倒计时，则需要传入剩余时间
     assert(
@@ -221,20 +221,20 @@ class TimerUnit {
     _referenceTime = timerUnitSnapshot.referenceTime;
     _lastRemainTime = timerUnitSnapshot.lastRemainTime;
 
-    //需要检测恢复时的状态
+    ///需要检测恢复时的状态
     _currentTimer =
         _timerUnitType.isCountup ? CountupTimer() : CountdownTimer(_duration);
 
-    // 恢复计时器
+    /// 恢复计时器
     if (_timerUnitType.isCountup) {
       if (!_status.isInactive) {
-        // 此时已有referenceTime
+        /// 此时已有referenceTime
         (_currentTimer as CountupTimer).startTime = _referenceTime!;
       }
     } else {
       if (!_status.isInactive) {
         (_currentTimer as CountdownTimer).remainDuration = _duration;
-        // 此时已有referenceTime
+        /// 此时已有referenceTime
         (_currentTimer as CountdownTimer).endTime = _referenceTime!;
 
         if (!_status.isPaused) {
@@ -251,7 +251,7 @@ class TimerUnit {
       if (_status.isPaused || _status.isInactive) {
         return _duration;
       } else if (_status.isActive) {
-        // 此时还未更新
+        /// 此时还未更新
         return _duration +
             Clock.instance.currentTime.difference(
               _currentTimer.referenceTime(),

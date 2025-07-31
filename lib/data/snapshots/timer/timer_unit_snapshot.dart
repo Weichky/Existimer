@@ -39,8 +39,8 @@ class TimerUnitSnapshot extends SnapshotBase {
       status: TimerUnitStatus.fromString(map[DatabaseTables.timerUnits.status.name]),
       type: TimerUnitType.fromString(map[DatabaseTables.timerUnits.type.name]),
       duration: Duration(milliseconds: map[DatabaseTables.timerUnits.durationMs.name]),
-      //注意不能写成??形式
-      //因为在判断非空时必然调用Duration构造函数，而此函数只接受非空参数
+      ///注意不能写成??形式
+      ///因为在判断非空时必然调用Duration构造函数，而此函数只接受非空参数
       referenceTime:
         map[DatabaseTables.timerUnits.referenceTime.name] != null
           ? DateTime.fromMillisecondsSinceEpoch(map[DatabaseTables.timerUnits.referenceTime.name])

@@ -21,7 +21,7 @@ class TaskRelationSqlite implements SnapshotRepository<TaskRelationSnapshot> {
 
   @override
   Future<TaskRelationSnapshot?> loadSnapshot(String uuid) async {
-    // TaskRelation使用fromUuid作为标识符进行查询
+    /// TaskRelation使用fromUuid作为标识符进行查询
     final result = await db.query(
       _table,
       where: '${DatabaseTables.taskRelation.fromUuid.name} = ?',
@@ -36,7 +36,7 @@ class TaskRelationSqlite implements SnapshotRepository<TaskRelationSnapshot> {
     return null;
   }
   
-  // 将扩展方法合并到主类内部
+  /// 将扩展方法合并到主类内部
   static final validFields = [
     DatabaseTables.taskRelation.fromUuid.name,
     DatabaseTables.taskRelation.toUuid.name,

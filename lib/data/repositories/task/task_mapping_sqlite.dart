@@ -21,7 +21,7 @@ class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
 
   @override
   Future<TaskMappingSnapshot?> loadSnapshot(String uuid) async {
-    // TaskMapping使用taskUuid作为标识符进行查询
+    /// TaskMapping使用taskUuid作为标识符进行查询
     final result = await db.query(
       _table,
       where: '${DatabaseTables.taskMapping.taskUuid.name} = ?',
@@ -36,7 +36,7 @@ class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
     return null;
   }
   
-  // 将扩展方法合并到主类内部
+  /// 将扩展方法合并到主类内部
   static final validFields = [
     DatabaseTables.taskMapping.taskUuid.name,
     DatabaseTables.taskMapping.entityUuid.name,

@@ -38,8 +38,8 @@ class TaskSnapshot extends SnapshotBase {
       DatabaseTables.tasks.type.name: type.name,
       DatabaseTables.tasks.createdAt.name: createdAt.millisecondsSinceEpoch,
       DatabaseTables.tasks.lastUsedAt.name: lastUsedAt?.millisecondsSinceEpoch,
-      DatabaseTables.tasks.isArchived.name: isArchived ? 1 : 0,  // 将布尔值转换为整数存储
-      DatabaseTables.tasks.isHighlighted.name: isHighlighted ? 1 : 0,  // 将布尔值转换为整数存储
+      DatabaseTables.tasks.isArchived.name: isArchived ? 1 : 0,  /// 将布尔值转换为整数存储
+      DatabaseTables.tasks.isHighlighted.name: isHighlighted ? 1 : 0,  /// 将布尔值转换为整数存储
       DatabaseTables.tasks.color.name: color,
       DatabaseTables.tasks.opacity.name: opacity,
     };
@@ -55,7 +55,7 @@ class TaskSnapshot extends SnapshotBase {
           map[DatabaseTables.tasks.lastUsedAt.name] != null
               ? DateTime.fromMillisecondsSinceEpoch(map[DatabaseTables.tasks.lastUsedAt.name])
               : null,
-      isArchived: map[DatabaseTables.tasks.isArchived.name] == 1, // 若是 SQLite 中的整数值
+      isArchived: map[DatabaseTables.tasks.isArchived.name] == 1, /// 若是 SQLite 中的整数值
       isHighlighted: map[DatabaseTables.tasks.isHighlighted.name] == 1,
       color: map[DatabaseTables.tasks.color.name],
       opacity: (map[DatabaseTables.tasks.opacity.name] as num).toDouble(),

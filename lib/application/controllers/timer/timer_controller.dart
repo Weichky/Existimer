@@ -23,7 +23,7 @@ class TimerController extends BaseController<TimerUnit> {
   /// 根据默认设置创建计时器
   @override
   Future<TimerUnit> build() async {
-    // ref.read()不会触发build()，因此此处build相当于初始化方法，关于热重载的问题还需考察
+    /// ref.read()不会触发build()，因此此处build相当于初始化方法，关于热重载的问题还需考察
     _repo = await ref.read(timerRepoProvider.future);
     _settings = await ref.read(settingsProvider.future);
 
@@ -36,8 +36,8 @@ class TimerController extends BaseController<TimerUnit> {
   /// 
   /// BaseController要求实现的方法
   @override
-  Future<void> load() async {
-    // 对于TimerController，加载操作通过loadFromUuid方法实现
+  Future<void> load(_) async {
+    /// 对于TimerController，加载操作通过loadFromUuid方法实现
     throw UnimplementedError('Use loadFromUuid instead');
   }
 
@@ -45,7 +45,7 @@ class TimerController extends BaseController<TimerUnit> {
   /// 
   /// 将当前计时器状态保存到数据库
   @override
-  Future<void> save() async {
+  Future<void> save(_) async {
     final TimerUnit unit = await future;
 
     try {
@@ -76,14 +76,14 @@ class TimerController extends BaseController<TimerUnit> {
 
   /// 启动计时器
   Future<void> start() async {
-    // 不作state.valueOrNull处理，此时State不应该为Null
+    /// 不作state.valueOrNull处理，此时State不应该为Null
     final unit = state.requireValue;
 
     try {
       unit.start();
-      state = AsyncData(unit); // 更新状态
+      state = AsyncData(unit); /// 更新状态
     } catch (e, st) {
-      // 捕获错误并将错误更新到 state
+      /// 捕获错误并将错误更新到 state
       handleError(e, st);
     }
   }
@@ -129,7 +129,7 @@ class TimerController extends BaseController<TimerUnit> {
     final unit = state.requireValue;
     
     try {
-      // 使用TimerUnit的reset方法重置计时器
+      /// 使用TimerUnit的reset方法重置计时器
       if (unit.type.isCountup) {
         unit.reset();
       } else {
@@ -146,12 +146,12 @@ class TimerController extends BaseController<TimerUnit> {
     final unit = state.requireValue;
     
     try {
-      // 切换类型
+      /// 切换类型
       if (unit.type.isCountup) {
-        // 切换到倒计时，使用默认时长
+        /// 切换到倒计时，使用默认时长
         unit.toCountdown(_settings.countdownDuration!);
       } else {
-        // 切换到正计时
+        /// 切换到正计时
         unit.toCountup();
       }
       state = AsyncData(unit);
@@ -165,13 +165,13 @@ class TimerController extends BaseController<TimerUnit> {
     final unit = state.requireValue;
     
     try {
-      // 只有在计时器未激活时才能更改持续时间
+      /// 只有在计时器未激活时才能更改持续时间
       if (unit.status.isInactive) {
         if (unit.type.isCountdown) {
-          // 如果已经是倒计时器，只更改持续时间
+          /// 如果已经是倒计时器，只更改持续时间
           unit.toCountdown(duration);
         } else {
-          // 如果是正计时器，切换到倒计时器
+          /// 如果是正计时器，切换到倒计时器
           unit.toCountdown(duration);
         }
         state = AsyncData(unit);
@@ -186,7 +186,7 @@ class TimerController extends BaseController<TimerUnit> {
     final unit = state.requireValue;
     
     try {
-      // 如果是倒计时器且未激活，则更新其持续时间
+      /// 如果是倒计时器且未激活，则更新其持续时间
       if (unit.type.isCountdown && unit.status.isInactive) {
         unit.toCountdown(_settings.countdownDuration!);
         state = AsyncData(unit);

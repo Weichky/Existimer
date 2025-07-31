@@ -4,31 +4,35 @@ import 'package:existimer/common/constants/timer_unit_type.dart';
 import 'package:existimer/data/snapshots/settings/settings_snapshot.dart';
 
 class Settings {
-  //外观与语言
+  ///外观与语言
   String? _language;
 
   bool? _enableDarkMode;
   bool? _autoDarkMode;
-  bool? _darkModeFollowSystem; // 未来再加入自订时间
+  bool? _darkModeFollowSystem; /// 未来再加入自订时间
 
   String? _themeColor;
 
-  // 声音与通知
+  /// 声音与通知
   bool? _enableSound;
   bool? _enableFinishedSound;
   bool? _enableNotification;
 
-  // 调试默认配置
+  /// 调试默认配置
   bool? _enableDebug;
   bool? _enableLog;
 
-  // 任务默认配置
+  /// 任务默认配置
   TaskType? _defaultTaskType;
 
-  // 计时默认配置
+  /// 计时默认配置
   TimerUnitType? _defaultTimerUnitType;
 
   Duration? _countdownDuration;
+
+  /// 一次性加载数量配置
+  int? _taskBatchSize;
+  int? _historyBatchSize;
 
   Settings({
     String? language,
@@ -44,6 +48,8 @@ class Settings {
     TaskType? defaultTaskType,
     TimerUnitType? defaultTimerUnitType,
     Duration? countdownDuration,
+    int? taskBatchSize,
+    int? historyBatchSize,
   }) : _language = language,
        _enableDarkMode = enableDarkMode,
        _autoDarkMode = autoDarkMode,
@@ -56,7 +62,9 @@ class Settings {
        _enableLog = enableLog,
        _defaultTaskType = defaultTaskType,
        _defaultTimerUnitType = defaultTimerUnitType,
-       _countdownDuration = countdownDuration;
+       _countdownDuration = countdownDuration,
+       _taskBatchSize = taskBatchSize,
+       _historyBatchSize = historyBatchSize;
 
   SettingsSnapshot toSnapshot() {
     return SettingsSnapshot(
@@ -73,6 +81,8 @@ class Settings {
       defaultTaskType: _defaultTaskType,
       defaultTimerUnitType: _defaultTimerUnitType,
       countdownDuration: _countdownDuration,
+      taskBatchSize: _taskBatchSize,
+      historyBatchSize: _historyBatchSize,
     );
   }
 
@@ -90,6 +100,8 @@ class Settings {
     _defaultTaskType = userSettingsSnapshot.defaultTaskType;
     _defaultTimerUnitType = userSettingsSnapshot.defaultTimerUnitType;
     _countdownDuration = userSettingsSnapshot.countdownDuration;
+    _taskBatchSize = userSettingsSnapshot.taskBatchSize;
+    _historyBatchSize = userSettingsSnapshot.historyBatchSize;
   }
 
   factory Settings.fromSnapshot(SettingsSnapshot userSettingsSnapshot) {
@@ -98,7 +110,7 @@ class Settings {
     return settings;
   }
 
-  // getter
+  /// getter
   String? get language => _language;
   bool? get enableDarkMode => _enableDarkMode;
   bool? get autoDarkMode => _autoDarkMode;
@@ -112,8 +124,9 @@ class Settings {
   TaskType? get defaultTaskType => _defaultTaskType;
   TimerUnitType? get defaultTimerUnitType => _defaultTimerUnitType;
   Duration? get countdownDuration => _countdownDuration;
+  int? get taskBatchSize => _taskBatchSize;
+  int? get historyBatchSize => _historyBatchSize;
   
-  // 正确的Dart setter语法
   set language(String? language) {
     _language = language;
   }
@@ -164,5 +177,13 @@ class Settings {
   
   set countdownDuration(Duration? countdownDuration) {
     _countdownDuration = countdownDuration;
+  }
+  
+  set taskBatchSize(int? taskBatchSize) {
+    _taskBatchSize = taskBatchSize;
+  }
+  
+  set historyBatchSize(int? historyBatchSize) {
+    _historyBatchSize = historyBatchSize;
   }
 }

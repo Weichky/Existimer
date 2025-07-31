@@ -13,7 +13,7 @@ class TaskMapping {
         _entityUuid = entityUuid,
         _entityType = entityType;
 
-  // Getters
+  /// Getters
   String get taskUuid => _taskUuid;
   String get entityUuid => _entityUuid;
   String get entityType => _entityType;

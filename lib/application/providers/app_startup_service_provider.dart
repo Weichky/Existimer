@@ -8,7 +8,7 @@ import 'database_provider.dart';
 final appStartupServiceProvider = FutureProvider<AppStartupService>((ref) async {
   final db = await ref.watch(databaseProvider.future);
   final service = AppStartupService(database: db);
-  await service.initializeApp();  // 这里务必调用初始化
+  await service.initializeApp();  /// 这里务必调用初始化
   return service;
 });
 

@@ -35,7 +35,7 @@ class TaskMetaSqlite implements SnapshotRepository<TaskMetaSnapshot> {
     return null;
   }
   
-  // 将扩展方法合并到主类内部
+  /// 将扩展方法合并到主类内部
   static final validFields = [
     DatabaseTables.taskMeta.taskUuid.name,
     DatabaseTables.taskMeta.createdAt.name,

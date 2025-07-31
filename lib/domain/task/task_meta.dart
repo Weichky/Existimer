@@ -7,9 +7,9 @@ class TaskMeta {
   DateTime? _firstUsedAt;
   DateTime? _lastUsedAt;
 
-  int _totalUsedCount; // 作为任务完成的次数
+  int _totalUsedCount; /// 作为任务完成的次数
 
-  int? _totalCount; // 记次任务的总次数
+  int? _totalCount; /// 记次任务的总次数
   Duration? _avgSessionDuration;
 
   String? _icon;
@@ -48,7 +48,7 @@ class TaskMeta {
     return meta;
   }
 
-  // setter
+  /// setter
   set setFirstUsedAt(DateTime dateTime) {
     _firstUsedAt = dateTime;
   }

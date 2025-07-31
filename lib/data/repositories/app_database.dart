@@ -23,8 +23,8 @@ class AppDatabase {
 
     _db = await openDatabase(
       path,
-      // 100 * major + minor, from 'database_version.dart'
-      // from 100
+      /// 100 * major + minor, from 'database_version.dart'
+      /// from 100
       version: databaseVersion,
       onCreate: (db, version) async {
         await setupSchema(db);
@@ -46,26 +46,26 @@ class AppDatabase {
     int fromVersion,
     int toVersion,
   ) async {
-    // 开发阶段留空
+    /// 开发阶段留空
 
-    // 例
-    // if (fromVersion < 101 && toVersion >= 101) {
-    //   await db.execute('''
-    //     CREATE TABLE IF NOT EXISTS ${DatabaseTables.taskRelation.name} (
-    //       ${DatabaseTables.taskRelation.fromUuid.name} TEXT NOT NULL,
-    //       ${DatabaseTables.taskRelation.toUuid.name} TEXT NOT NULL,
-    //       ${DatabaseTables.taskRelation.weight.name} REAL,
-    //       ${DatabaseTables.taskRelation.isManuallyLinked.name} BOOLEAN NOT NULL DEFAULT 0,
-    //       ${DatabaseTables.taskRelation.description.name} TEXT,
-    //       PRIMARY KEY (${DatabaseTables.taskRelation.fromUuid.name}, ${DatabaseTables.taskRelation.toUuid.name})
-    //     );
-    //   ''');
-    // }
+    /// 例
+    /// if (fromVersion < 101 && toVersion >= 101) {
+    ///   await db.execute('''
+    ///     CREATE TABLE IF NOT EXISTS ${DatabaseTables.taskRelation.name} (
+    ///       ${DatabaseTables.taskRelation.fromUuid.name} TEXT NOT NULL,
+    ///       ${DatabaseTables.taskRelation.toUuid.name} TEXT NOT NULL,
+    ///       ${DatabaseTables.taskRelation.weight.name} REAL,
+    ///       ${DatabaseTables.taskRelation.isManuallyLinked.name} BOOLEAN NOT NULL DEFAULT 0,
+    ///       ${DatabaseTables.taskRelation.description.name} TEXT,
+    ///       PRIMARY KEY (${DatabaseTables.taskRelation.fromUuid.name}, ${DatabaseTables.taskRelation.toUuid.name})
+    ///     );
+    ///   ''');
+    /// }
   }
 
   Future<void> setupSchema([Database? dbOverride]) async {
     final db = dbOverride ?? _db;
-    // 存储状态
+    /// 存储状态
     await db.execute('''
       CREATE TABLE IF NOT EXISTS ${DatabaseTables.timerUnits.name} (
         ${DatabaseTables.timerUnits.uuid.name} TEXT PRIMARY KEY,
@@ -88,7 +88,7 @@ class AppDatabase {
       );
     ''');
 
-    // Task和TaskMeta分离
+    /// Task和TaskMeta分离
     await db.execute('''
       CREATE TABLE IF NOT EXISTS ${DatabaseTables.tasks.name} (
         ${DatabaseTables.tasks.uuid.name} TEXT PRIMARY KEY,

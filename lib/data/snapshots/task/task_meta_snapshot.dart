@@ -8,9 +8,9 @@ class TaskMetaSnapshot extends SnapshotBase {
   final DateTime? firstUsedAt;
   final DateTime? lastUsedAt;
 
-  final int totalUsedCount; // 作为任务完成的次数
+  final int totalUsedCount; /// 作为任务完成的次数
 
-  final int? totalCount; // 记次任务的总次数
+  final int? totalCount; /// 记次任务的总次数
   final Duration? avgSessionDuration;
 
   final String? icon;

@@ -22,7 +22,7 @@ class TaskMappingController extends CollectionController<TaskMapping> {
   @override
   Future<List<TaskMapping>> build() async {
     _repo = await ref.read(taskMappingRepoProvider.future);
-    // 初始化为空列表
+    /// 初始化为空列表
     return [];
   }
 
@@ -31,7 +31,7 @@ class TaskMappingController extends CollectionController<TaskMapping> {
   /// BaseController要求实现的方法
   @override
   Future<void> load() async {
-    // TaskMappingController使用专门的加载方法
+    /// TaskMappingController使用专门的加载方法
     throw UnimplementedError('Use specific load methods instead');
   }
 
@@ -40,7 +40,7 @@ class TaskMappingController extends CollectionController<TaskMapping> {
   /// BaseController要求实现的方法
   @override
   Future<void> save() async {
-    // TaskMapping通过addMapping方法保存单个映射
+    /// TaskMapping通过addMapping方法保存单个映射
     throw UnimplementedError('Use addMapping instead');
   }
 
@@ -53,7 +53,8 @@ class TaskMappingController extends CollectionController<TaskMapping> {
   }
 
   /// 从集合中移除项目
-  /// 
+  ///
+  /// 可用于封装其他逻辑的通用方法 
   /// [predicate] 判断是否应该移除项目的条件
   @override
   Future<void> removeWhere(bool Function(TaskMapping item) predicate) async {
@@ -74,7 +75,7 @@ class TaskMappingController extends CollectionController<TaskMapping> {
     bool Function(TaskMapping item) predicate,
     TaskMapping Function(TaskMapping item) updater,
   ) async {
-    // TaskMapping是映射关系，不支持更新操作
+    /// TaskMapping是映射关系，不支持更新操作
     throw UnsupportedError('TaskMapping does not support update operation');
   }
 
@@ -110,7 +111,7 @@ class TaskMappingController extends CollectionController<TaskMapping> {
   Future<void> addMapping(TaskMapping mapping) async {
     try {
       await _repo.saveSnapshot(mapping.toSnapshot());
-      // 更新状态
+      /// 更新状态
       final currentList = state.value ?? [];
       final newList = List<TaskMapping>.from(currentList)..add(mapping);
       state = AsyncData(newList);
@@ -126,7 +127,7 @@ class TaskMappingController extends CollectionController<TaskMapping> {
   Future<void> deleteMapping(String taskUuid, String entityUuid) async {
     try {
       await _repo.deleteMapping(taskUuid, entityUuid);
-      // 更新状态
+      /// 更新状态
       final currentList = state.value ?? [];
       final newList = currentList.where((mapping) => 
         mapping.taskUuid != taskUuid || mapping.entityUuid != entityUuid).toList();

@@ -4,31 +4,34 @@ import 'package:existimer/common/constants/task_type.dart';
 import 'package:existimer/common/constants/timer_unit_type.dart';
 
 class SettingsSnapshot extends SnapshotBase {
-  //外观与语言
+  ///外观与语言
   final String? language;
 
   final bool? enableDarkMode;
   final bool? autoDarkMode;
-  final bool? darkModeFollowSystem; // 未来再加入自订时间
+  final bool? darkModeFollowSystem; /// 未来再加入自订时间
 
   final String? themeColor;
 
-  // 声音与通知
+  /// 声音与通知
   final bool? enableSound;
   final bool? enableFinishedSound;
   final bool? enableNotification;
 
-  // 调试默认配置
+  /// 调试默认配置
   final bool? enableDebug;
   final bool? enableLog;
 
-  // 任务默认配置
+  /// 任务默认配置
   final TaskType? defaultTaskType;
 
-  // 计时默认配置
+  /// 计时默认配置
   final TimerUnitType? defaultTimerUnitType;
 
   final Duration? countdownDuration;
+
+  final int? taskBatchSize;
+  final int? historyBatchSize;
 
   SettingsSnapshot({
     required this.language,
@@ -51,6 +54,9 @@ class SettingsSnapshot extends SnapshotBase {
     required this.defaultTimerUnitType,
 
     required this.countdownDuration,
+
+    required this.taskBatchSize,
+    required this.historyBatchSize,
   });
 
   @override
@@ -79,6 +85,9 @@ class SettingsSnapshot extends SnapshotBase {
       'default_timer_unit_type': defaultTimerUnitType?.name,
 
       'countdown_duration_ms': countdownDuration?.inMilliseconds,
+      
+      'task_batch_size': taskBatchSize,
+      'history_batch_size': historyBatchSize,
     };
   }
 
@@ -105,6 +114,9 @@ class SettingsSnapshot extends SnapshotBase {
           override.defaultTimerUnitType ?? defaultTimerUnitType,
 
       countdownDuration: override.countdownDuration ?? countdownDuration,
+      
+      taskBatchSize: override.taskBatchSize ?? taskBatchSize,
+      historyBatchSize: override.historyBatchSize ?? historyBatchSize,
     );
   }
 
@@ -140,6 +152,9 @@ class SettingsSnapshot extends SnapshotBase {
           map['countdown_duration_ms'] == null
               ? null
               : Duration(milliseconds: map['countdown_duration_ms'] as int),
+              
+      taskBatchSize: map['task_batch_size'] as int?,
+      historyBatchSize: map['history_batch_size'] as int?,
     );
   }
 

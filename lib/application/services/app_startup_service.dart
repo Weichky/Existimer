@@ -56,10 +56,10 @@ class AppStartupService {
   /// 检查数据库是否已初始化，如果没有则插入默认设置
   /// 执行其他初始化任务
   Future<void> initializeApp() async {
-    // 初始化Repository工厂
+    /// 初始化Repository工厂
     _repositoryFactory = RepositoryFactory(database: _database);
     
-    // 通过工厂创建各种数据访问对象
+    /// 通过工厂创建各种数据访问对象
     _taskRepo = _repositoryFactory.createTaskRepository();
     _timerRepo = _repositoryFactory.createTimerUnitRepository();
     _settingsRepo = _repositoryFactory.createSettingsRepository();
@@ -68,47 +68,47 @@ class AppStartupService {
     _taskRelationRepo = _repositoryFactory.createTaskRelationRepository();
     _historyRepo = _repositoryFactory.createHistoryRepository();
 
-    // 数据库初始化在databaseProvider中完成
+    /// 数据库初始化在databaseProvider中完成
     final isInitialized = await _database.checkInitialized();
     if (!isInitialized) {
       await _settingsRepo.saveSnapshot(DefaultSettings.toSnapshot());
     }
 
     await _recoverUnfinishedTimers();
-    // await _cleanupIfNeeded();
+    /// await _cleanupIfNeeded();
   }
 
   /// 恢复未完成的计时器
   /// 
   /// 用于在应用启动时恢复之前未完成的计时任务
   Future<void> _recoverUnfinishedTimers() async {
-    // 查找所有处于active状态的计时器
+    /// 查找所有处于active状态的计时器
     final activeTimers = await _timerRepo.queryByField(
       'status', 
       TimerUnitStatus.active.name
     );
     
-    // 如果有处于active状态的计时器
+    /// 如果有处于active状态的计时器
     if (activeTimers.isNotEmpty) {
-      // 选择第一个active状态的计时器
-      // TODO: 在UI层实现询问用户是否恢复计时器的逻辑
-      // 这里我们只是查找并准备好数据
+      /// 选择第一个active状态的计时器
+      /// TODO: 在UI层实现询问用户是否恢复计时器的逻辑
+      /// 这里我们只是查找并准备好数据
     } else {
-      // 如果没有active状态的计时器，查找paused状态的计时器
+      /// 如果没有active状态的计时器，查找paused状态的计时器
       final pausedTimers = await _timerRepo.queryByField(
         'status', 
         TimerUnitStatus.paused.name
       );
       
       if (pausedTimers.isNotEmpty) {
-        // 选择第一个paused状态的计时器
-        // TODO: 在UI层实现询问用户是否恢复计时器的逻辑
-        // 这里我们只是查找并准备好数据
+        /// 选择第一个paused状态的计时器
+        /// TODO: 在UI层实现询问用户是否恢复计时器的逻辑
+        /// 这里我们只是查找并准备好数据
       }
     }
     
-    // 查找并清理多余的active/paused状态的计时器
-    // 确保不会同时有多个处于active/paused状态的计时器
+    /// 查找并清理多余的active/paused状态的计时器
+    /// 确保不会同时有多个处于active/paused状态的计时器
     await _cleanupExtraTimers();
   }
   
@@ -116,18 +116,18 @@ class AppStartupService {
   /// 
   /// 确保不会同时有多个处于active/paused状态的计时器
   Future<void> _cleanupExtraTimers() async {
-    // 查找所有处于active状态的计时器
+    /// 查找所有处于active状态的计时器
     final activeTimers = await _timerRepo.queryByField(
       'status', 
       TimerUnitStatus.active.name
     );
     
-    // 如果有超过一个active状态的计时器，将多余的标记为paused
+    /// 如果有超过一个active状态的计时器，将多余的标记为paused
     if (activeTimers.length > 1) {
-      // 保留第一个，将其他的标记为paused
+      /// 保留第一个，将其他的标记为paused
       for (int i = 1; i < activeTimers.length; i++) {
         final timerToPause = activeTimers[i];
-        // 创建一个新的paused状态的计时器快照
+        /// 创建一个新的paused状态的计时器快照
         final pausedTimer = TimerUnitSnapshot(
           uuid: timerToPause.uuid,
           status: TimerUnitStatus.paused,
@@ -140,15 +140,15 @@ class AppStartupService {
       }
     }
     
-    // 查找所有处于paused状态的计时器
+    /// 查找所有处于paused状态的计时器
     final pausedTimers = await _timerRepo.queryByField(
       'status', 
       TimerUnitStatus.paused.name
     );
     
-    // 如果有超过一个paused状态的计时器，将多余的删除
+    /// 如果有超过一个paused状态的计时器，将多余的删除
     if (pausedTimers.length > 1) {
-      // 保留第一个，将其他的删除
+      /// 保留第一个，将其他的删除
       for (int i = 1; i < pausedTimers.length; i++) {
         await _timerRepo.deleteByField(
           'uuid', 

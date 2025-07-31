@@ -10,8 +10,8 @@ class Task {
   String? _name;
   TaskType _type;
 
-  DateTime _createdAt;// 保留字段，方便查找
-  DateTime? _lastUsedAt;// 保留字段，方便查找
+  DateTime _createdAt;/// 保留字段，方便查找
+  DateTime? _lastUsedAt;/// 保留字段，方便查找
 
   bool _isArchived;
   bool _isHighlighted;
@@ -50,7 +50,7 @@ class Task {
     return task;
   }
 
-  // setter
+  /// setter
   set name(String? name) {
     _name = name;
   }
@@ -75,7 +75,7 @@ class Task {
     _opacity = opacity;
   }
 
-  // getter
+  /// getter
   String get uuid => _uuid;
 
   String? get name => _name;

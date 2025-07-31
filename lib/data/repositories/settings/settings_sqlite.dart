@@ -20,7 +20,7 @@ class SettingsSqlite implements SnapshotRepository<SettingsSnapshot> {
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  // 实现接口要求，为了兼容SnapshotRepository
+  /// 实现接口要求，为了兼容SnapshotRepository
   @override
   Future<SettingsSnapshot?> loadSnapshot([String unused = ""]) async {
     final result = await db.query(_table, where: '${DatabaseTables.settings.id.name} = ?', whereArgs: [1]);
@@ -31,7 +31,7 @@ class SettingsSqlite implements SnapshotRepository<SettingsSnapshot> {
       return SettingsSnapshot.fromMap(map);
     }
 
-    // 查询失败返回默认值
+    /// 查询失败返回默认值
     return DefaultSettings.toSnapshot();
   }
 }

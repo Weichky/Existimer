@@ -30,51 +30,51 @@ class _TimerDemoScreenState extends ConsumerState<TimerDemoScreen> {
     try {
       final timerRepo = await ref.read(timerRepoProvider.future);
 
-      // 查找所有处于active状态的计时器
+      /// 查找所有处于active状态的计时器
       final activeTimers = await timerRepo.queryByField(
         'status', 
         TimerUnitStatus.active.name
       );
       
-      // 如果有处于active状态的计时器
+      /// 如果有处于active状态的计时器
       if (activeTimers.isNotEmpty) {
-        // 选择第一个active状态的计时器
+        /// 选择第一个active状态的计时器
         final firstActiveTimer = activeTimers.first;
         final shouldRecover = await _showRecoverDialog('发现正在运行的计时器，是否恢复？');
         if (shouldRecover) {
-          // 确保TimerController已初始化后再尝试加载计时器
+          /// 确保TimerController已初始化后再尝试加载计时器
           await ref.read(timerProvider.future).then((_) async {
             await ref.read(timerProvider.notifier).loadFromUuid(firstActiveTimer.uuid);
           });
         } else {
-          // 删除计时器
+          /// 删除计时器
           await timerRepo.deleteByField('uuid', firstActiveTimer.uuid);
         }
         return;
       }
       
-      // 如果没有active状态的计时器，查找paused状态的计时器
+      /// 如果没有active状态的计时器，查找paused状态的计时器
       final pausedTimers = await timerRepo.queryByField(
         'status', 
         TimerUnitStatus.paused.name
       );
       
       if (pausedTimers.isNotEmpty) {
-        // 选择第一个paused状态的计时器
+        /// 选择第一个paused状态的计时器
         final firstPausedTimer = pausedTimers.first;
         final shouldRecover = await _showRecoverDialog('发现已暂停的计时器，是否恢复？');
         if (shouldRecover) {
-          // 确保TimerController已初始化后再尝试加载计时器
+          /// 确保TimerController已初始化后再尝试加载计时器
           await ref.read(timerProvider.future).then((_) async {
             await ref.read(timerProvider.notifier).loadFromUuid(firstPausedTimer.uuid);
           });
         } else {
-          // 删除计时器
+          /// 删除计时器
           await timerRepo.deleteByField('uuid', firstPausedTimer.uuid);
         }
       }
     } catch (e) {
-      // 发生错误时，继续正常初始化
+      /// 发生错误时，继续正常初始化
       print('检查和恢复计时器时出错: $e');
     }
   }
@@ -128,7 +128,7 @@ class TimerDemoScreenContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 监听计时器状态变化
+    /// 监听计时器状态变化
     final timerState = ref.watch(timerProvider);
 
     return Scaffold(
@@ -142,22 +142,22 @@ class TimerDemoScreenContent extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // 计时器显示区域
+            /// 计时器显示区域
             const TimerDisplayWidget(),
             
             const SizedBox(height: 32),
             
-            // 计时器类型选择器
+            /// 计时器类型选择器
             const TimerTypeSelectorWidget(),
             
             const SizedBox(height: 16),
             
-            // 倒计时设置（仅在倒计时模式下显示）
+            /// 倒计时设置（仅在倒计时模式下显示）
             const CountdownSettingsWidget(),
             
             const SizedBox(height: 32),
             
-            // 计时器控制按钮
+            /// 计时器控制按钮
             const TimerControlsWidget(),
           ],
         ),

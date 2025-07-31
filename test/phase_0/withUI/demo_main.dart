@@ -16,7 +16,7 @@ class DemoApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 等待应用启动服务初始化完成
+    /// 等待应用启动服务初始化完成
     final appStartupAsync = ref.watch(appStartupServiceProvider);
 
     return MaterialApp(
