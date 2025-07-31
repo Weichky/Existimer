@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:existimer/application/providers/timer/timer_provider.dart';
-import 'package:existimer/domain/timer/timer_unit.dart';
 import 'package:existimer/common/utils/clock.dart';
 
 class TimerDisplayWidget extends ConsumerStatefulWidget {

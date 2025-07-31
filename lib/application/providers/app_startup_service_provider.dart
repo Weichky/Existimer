@@ -6,9 +6,6 @@ import 'database_provider.dart';
 
 // 先创建AppStartupService实例（异步）
 final appStartupServiceProvider = FutureProvider<AppStartupService>((ref) async {
-  // 确保在获取数据库之前已经初始化了数据库环境
-  DatabaseInitService.initDatabaseEnvironment();
-  
   final db = await ref.watch(databaseProvider.future);
   final service = AppStartupService(database: db);
   await service.initializeApp();  // 这里务必调用初始化

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:existimer/application/providers/timer/timer_provider.dart';
-import 'package:existimer/domain/timer/timer_unit.dart';
 
 class TimerTypeSelectorWidget extends ConsumerWidget {
   const TimerTypeSelectorWidget({super.key});

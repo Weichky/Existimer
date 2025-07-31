@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:existimer/data/repositories/app_database.dart';
-import 'package:existimer/application/services/app_startup_service.dart';
 
 /// 数据库初始化服务
 /// 
@@ -23,8 +22,8 @@ class DatabaseInitService {
   /// 
   /// [dbName] 数据库名称
   /// [reset] 是否重置数据库（仅用于测试）
-  /// 返回初始化完成的 [AppStartupService] 实例
-  static Future<AppStartupService> initializeAppDatabase({String dbName = 'app.db', bool reset = false}) async {
+  /// 返回初始化完成的 [AppDatabase] 实例
+  static Future<AppDatabase> initializeAppDatabase({String dbName = 'app.db', bool reset = false}) async {
     // 初始化数据库环境
     initDatabaseEnvironment();
     
@@ -32,10 +31,6 @@ class DatabaseInitService {
     final appDatabase = AppDatabase();
     await appDatabase.init(dbName, reset);
 
-    // 创建并初始化应用启动服务
-    final appStartupService = AppStartupService(database: appDatabase);
-    await appStartupService.initializeApp();
-
-    return appStartupService;
+    return appDatabase;
   }
 }

@@ -1,12 +1,8 @@
 //timer_demo_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:existimer/application/controllers/timer/timer_controller.dart';
+import 'package:existimer/application/providers/timer/timer_repo_provider.dart';
 import 'package:existimer/application/providers/timer/timer_provider.dart';
-import 'package:existimer/application/providers/app_startup_service_provider.dart';
-import 'package:existimer/application/services/app_startup_service.dart';
-import 'package:existimer/domain/timer/timer_unit.dart';
-import 'package:existimer/data/snapshots/timer/timer_unit_snapshot.dart';
 import 'package:existimer/common/constants/timer_unit_status.dart';
 import '../demo_widgets/timer_display_widget.dart';
 import '../demo_widgets/timer_controls_widget.dart';
@@ -32,10 +28,10 @@ class _TimerDemoScreenState extends ConsumerState<TimerDemoScreen> {
   /// 检查并恢复计时器
   Future<void> _checkAndRecoverTimer() async {
     try {
-      final appStartupService = await ref.read(appStartupServiceProvider.future);
-      
+      final timerRepo = await ref.read(timerRepoProvider.future);
+
       // 查找所有处于active状态的计时器
-      final activeTimers = await appStartupService.timerRepo.queryByField(
+      final activeTimers = await timerRepo.queryByField(
         'status', 
         TimerUnitStatus.active.name
       );
@@ -52,13 +48,13 @@ class _TimerDemoScreenState extends ConsumerState<TimerDemoScreen> {
           });
         } else {
           // 删除计时器
-          await appStartupService.timerRepo.deleteByField('uuid', firstActiveTimer.uuid);
+          await timerRepo.deleteByField('uuid', firstActiveTimer.uuid);
         }
         return;
       }
       
       // 如果没有active状态的计时器，查找paused状态的计时器
-      final pausedTimers = await appStartupService.timerRepo.queryByField(
+      final pausedTimers = await timerRepo.queryByField(
         'status', 
         TimerUnitStatus.paused.name
       );
@@ -74,7 +70,7 @@ class _TimerDemoScreenState extends ConsumerState<TimerDemoScreen> {
           });
         } else {
           // 删除计时器
-          await appStartupService.timerRepo.deleteByField('uuid', firstPausedTimer.uuid);
+          await timerRepo.deleteByField('uuid', firstPausedTimer.uuid);
         }
       }
     } catch (e) {
