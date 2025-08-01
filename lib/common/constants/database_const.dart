@@ -4,29 +4,70 @@
 // 100 * major + minor
 const int databaseVersion = 100;
 
-// Changelog: 
+// Changelog:
 // 100 -v1.0.0 初始版本，包括表timer_units、task_meta、history、settings
+
+/// 表tasks
+/// order_index字段自增默认间隔
+const int orderIndexGap = 1000;
+
+/// 可调整order_index的最小间隔
+const int gapThreshold = 1;
+
+/// 调整临近范围
+const int orderIndexAdjustRange = 1000;
+
+/// 调整后最小间隔
+const int orderIndexAdjustMinGap = 1000;
+
+/// 查询关系枚举
+/// 用于数据库查询的关系操作符
+enum QueryRelation {
+  equal, // =
+  notEqual, // !=
+  lessThan, // <
+  lessEqual, // <=
+  greaterThan, // >
+  greaterEqual; // >=
+
+  String get operator {
+    switch (this) {
+      case QueryRelation.equal:
+        return '=';
+      case QueryRelation.notEqual:
+        return '!=';
+      case QueryRelation.lessThan:
+        return '<';
+      case QueryRelation.lessEqual:
+        return '<=';
+      case QueryRelation.greaterThan:
+        return '>';
+      case QueryRelation.greaterEqual:
+        return '>=';
+    }
+  }
+}
 
 /// 数据库表枚举
 abstract class DatabaseTables {
   /// timer_units表
   static TimerUnitsTable get timerUnits => TimerUnitsTable();
-  
+
   /// history表
   static HistoryTable get history => HistoryTable();
-  
+
   /// tasks表
   static TasksTable get tasks => TasksTable();
-  
+
   /// task_meta表
   static TaskMetaTable get taskMeta => TaskMetaTable();
-  
+
   /// task_mapping表
   static TaskMappingTable get taskMapping => TaskMappingTable();
-  
+
   /// task_relation表
   static TaskRelationTable get taskRelation => TaskRelationTable();
-  
+
   /// settings表
   static SettingsTable get settings => SettingsTable();
 }
@@ -50,7 +91,7 @@ enum TimerUnitsFields {
   durationMs,
   referenceTime,
   lastRemainMs;
-  
+
   String get name {
     switch (this) {
       case uuid:
@@ -88,7 +129,7 @@ enum HistoryFields {
   sessionDurationMs,
   count,
   isArchived;
-  
+
   String get name {
     switch (this) {
       case historyUuid:
@@ -119,6 +160,7 @@ class TasksTable {
   TasksFields get isHighlighted => TasksFields.isHighlighted;
   TasksFields get color => TasksFields.color;
   TasksFields get opacity => TasksFields.opacity;
+  TasksFields get orderIndex => TasksFields.orderIndex;
 }
 
 /// tasks表字段枚举
@@ -131,8 +173,9 @@ enum TasksFields {
   isArchived,
   isHighlighted,
   color,
-  opacity;
-  
+  opacity,
+  orderIndex;
+
   String get name {
     switch (this) {
       case uuid:
@@ -153,6 +196,8 @@ enum TasksFields {
         return 'color';
       case opacity:
         return 'opacity';
+      case orderIndex:
+        return 'order_index';
     }
   }
 }
@@ -166,7 +211,8 @@ class TaskMetaTable {
   TaskMetaFields get lastUsedAt => TaskMetaFields.lastUsedAt;
   TaskMetaFields get totalUsedCount => TaskMetaFields.totalUsedCount;
   TaskMetaFields get totalCount => TaskMetaFields.totalCount;
-  TaskMetaFields get avgSessionDurationMs => TaskMetaFields.avgSessionDurationMs;
+  TaskMetaFields get avgSessionDurationMs =>
+      TaskMetaFields.avgSessionDurationMs;
   TaskMetaFields get icon => TaskMetaFields.icon;
   TaskMetaFields get baseColor => TaskMetaFields.baseColor;
 }
@@ -182,7 +228,7 @@ enum TaskMetaFields {
   avgSessionDurationMs,
   icon,
   baseColor;
-  
+
   String get name {
     switch (this) {
       case taskUuid:
@@ -220,7 +266,7 @@ enum TaskMappingFields {
   taskUuid,
   entityUuid,
   entityType;
-  
+
   String get name {
     switch (this) {
       case taskUuid:
@@ -239,7 +285,8 @@ class TaskRelationTable {
   TaskRelationFields get fromUuid => TaskRelationFields.fromUuid;
   TaskRelationFields get toUuid => TaskRelationFields.toUuid;
   TaskRelationFields get weight => TaskRelationFields.weight;
-  TaskRelationFields get isManuallyLinked => TaskRelationFields.isManuallyLinked;
+  TaskRelationFields get isManuallyLinked =>
+      TaskRelationFields.isManuallyLinked;
   TaskRelationFields get description => TaskRelationFields.description;
 }
 
@@ -250,7 +297,7 @@ enum TaskRelationFields {
   weight,
   isManuallyLinked,
   description;
-  
+
   String get name {
     switch (this) {
       case fromUuid:
@@ -278,7 +325,7 @@ class SettingsTable {
 enum SettingsFields {
   id,
   json;
-  
+
   String get name {
     switch (this) {
       case id:

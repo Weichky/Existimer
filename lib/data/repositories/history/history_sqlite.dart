@@ -4,7 +4,7 @@ import 'package:existimer/data/repositories/snapshot_repository.dart';
 import 'package:existimer/data/snapshots/history/history_snapshot.dart';
 import 'package:existimer/common/constants/database_const.dart';
 
-class HistorySqlite implements SnapshotRepository<HistorySnapshot> {
+class HistorySqlite extends SnapshotRepository<HistorySnapshot> {
   final Database db;
   static final String _table = DatabaseTables.history.name;
 
@@ -20,7 +20,7 @@ class HistorySqlite implements SnapshotRepository<HistorySnapshot> {
   }
 
   @override
-  Future<HistorySnapshot?> loadSnapshot(String historyUuid) async {
+  Future<HistorySnapshot?> queryByUuid(String historyUuid) async {
     final result = await db.query(
       _table,
       where: '${DatabaseTables.history.historyUuid.name} = ?',
@@ -36,7 +36,8 @@ class HistorySqlite implements SnapshotRepository<HistorySnapshot> {
   }
   
   /// 将扩展方法合并到主类内部
-  static final validFields = [
+  @override
+  List<String> get validFields => [
     DatabaseTables.history.historyUuid.name,
     DatabaseTables.history.taskUuid.name,
     DatabaseTables.history.startedAt.name,
@@ -49,7 +50,7 @@ class HistorySqlite implements SnapshotRepository<HistorySnapshot> {
     String field,
     dynamic value
   ) async {
-    if (!validFields.contains(field)) {
+    if (!isValidField(field)) {
       throw ArgumentError('Invalid field name: $field');
     }
 
@@ -66,7 +67,7 @@ class HistorySqlite implements SnapshotRepository<HistorySnapshot> {
     String field,
     dynamic value
   ) async {
-    if (!validFields.contains(field)) {
+    if (!isValidField(field)) {
       throw ArgumentError('Invalid field name: $field');
     }
 

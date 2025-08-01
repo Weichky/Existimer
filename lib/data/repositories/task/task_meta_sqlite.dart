@@ -4,7 +4,7 @@ import 'package:existimer/data/repositories/snapshot_repository.dart';
 import 'package:existimer/data/snapshots/task/task_meta_snapshot.dart';
 import 'package:existimer/common/constants/database_const.dart';
 
-class TaskMetaSqlite implements SnapshotRepository<TaskMetaSnapshot> {
+class TaskMetaSqlite extends SnapshotRepository<TaskMetaSnapshot> {
   final Database db;
   static final String _table = DatabaseTables.taskMeta.name;
 
@@ -20,7 +20,7 @@ class TaskMetaSqlite implements SnapshotRepository<TaskMetaSnapshot> {
   }
 
   @override
-  Future<TaskMetaSnapshot?> loadSnapshot(String taskUuid) async {
+  Future<TaskMetaSnapshot?> queryByUuid(String taskUuid) async {
     final result = await db.query(
       _table,
       where: '${DatabaseTables.taskMeta.taskUuid.name} = ?',
@@ -36,7 +36,8 @@ class TaskMetaSqlite implements SnapshotRepository<TaskMetaSnapshot> {
   }
   
   /// 将扩展方法合并到主类内部
-  static final validFields = [
+  @override
+  List<String> get validFields => [
     DatabaseTables.taskMeta.taskUuid.name,
     DatabaseTables.taskMeta.createdAt.name,
     DatabaseTables.taskMeta.firstUsedAt.name,
@@ -52,7 +53,7 @@ class TaskMetaSqlite implements SnapshotRepository<TaskMetaSnapshot> {
     String field,
     dynamic value
   ) async {
-    if (!validFields.contains(field)) {
+    if (!isValidField(field)) {
       throw ArgumentError('Invalid field name: $field');
     }
 
@@ -64,12 +65,12 @@ class TaskMetaSqlite implements SnapshotRepository<TaskMetaSnapshot> {
 
     return result.map((e) => TaskMetaSnapshot.fromMap(e)).toList();
   }
-  
+
   Future<void> deleteByField(
     String field,
     dynamic value
   ) async {
-    if (!validFields.contains(field)) {
+    if (!isValidField(field)) {
       throw ArgumentError('Invalid field name: $field');
     }
 

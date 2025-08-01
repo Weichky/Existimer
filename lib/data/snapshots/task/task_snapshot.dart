@@ -18,6 +18,8 @@ class TaskSnapshot extends SnapshotBase {
   final String? color;
   final double opacity;
 
+  final int orderIndex;
+
   TaskSnapshot({
     required this.uuid,
     this.name,
@@ -28,6 +30,7 @@ class TaskSnapshot extends SnapshotBase {
     required this.isHighlighted,
     this.color,
     required this.opacity,
+    required this.orderIndex,
   });
 
   @override
@@ -42,6 +45,7 @@ class TaskSnapshot extends SnapshotBase {
       DatabaseTables.tasks.isHighlighted.name: isHighlighted ? 1 : 0,  /// 将布尔值转换为整数存储
       DatabaseTables.tasks.color.name: color,
       DatabaseTables.tasks.opacity.name: opacity,
+      DatabaseTables.tasks.orderIndex.name: orderIndex,
     };
   }
 
@@ -59,6 +63,7 @@ class TaskSnapshot extends SnapshotBase {
       isHighlighted: map[DatabaseTables.tasks.isHighlighted.name] == 1,
       color: map[DatabaseTables.tasks.color.name],
       opacity: (map[DatabaseTables.tasks.opacity.name] as num).toDouble(),
+      orderIndex: map[DatabaseTables.tasks.orderIndex.name],
     );
   }
 }

@@ -32,20 +32,11 @@ class TimerController extends BaseController<TimerUnit> {
         : TimerUnit.countdown(_settings.countdownDuration!);
   }
 
-  /// 加载数据（未实现）
-  /// 
-  /// BaseController要求实现的方法
-  @override
-  Future<void> load(_) async {
-    /// 对于TimerController，加载操作通过loadFromUuid方法实现
-    throw UnimplementedError('Use loadFromUuid instead');
-  }
-
   /// 保存数据
   /// 
   /// 将当前计时器状态保存到数据库
   @override
-  Future<void> save(_) async {
+  Future<void> save() async {
     final TimerUnit unit = await future;
 
     try {
@@ -59,7 +50,7 @@ class TimerController extends BaseController<TimerUnit> {
   /// 
   /// [uuid] 计时器UUID
   Future<void> loadFromUuid(String uuid) async {
-    final TimerUnitSnapshot? snapshot = await _repo.loadSnapshot(uuid);
+    final TimerUnitSnapshot? snapshot = await _repo.queryByUuid(uuid);
     if (snapshot != null) {
       state = AsyncData(TimerUnit.fromSnapshot(snapshot));
     } else {

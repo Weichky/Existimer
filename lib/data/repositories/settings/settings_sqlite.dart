@@ -5,7 +5,7 @@ import 'package:existimer/data/snapshots/settings/settings_snapshot.dart';
 import 'dart:convert';
 import 'package:existimer/common/constants/database_const.dart';
 
-class SettingsSqlite implements SnapshotRepository<SettingsSnapshot> {
+class SettingsSqlite extends SnapshotRepository<SettingsSnapshot> {
   final Database db;
   static final String _table = DatabaseTables.settings.name;
 
@@ -22,7 +22,7 @@ class SettingsSqlite implements SnapshotRepository<SettingsSnapshot> {
 
   /// 实现接口要求，为了兼容SnapshotRepository
   @override
-  Future<SettingsSnapshot?> loadSnapshot([String unused = ""]) async {
+  Future<SettingsSnapshot?> queryByUuid([String unused = ""]) async {
     final result = await db.query(_table, where: '${DatabaseTables.settings.id.name} = ?', whereArgs: [1]);
 
     if (result.isNotEmpty) {
@@ -34,4 +34,10 @@ class SettingsSqlite implements SnapshotRepository<SettingsSnapshot> {
     /// 查询失败返回默认值
     return DefaultSettings.toSnapshot();
   }
+  
+  @override
+  List<String> get validFields => [
+    DatabaseTables.settings.id.name,
+    DatabaseTables.settings.json.name,
+  ];
 }

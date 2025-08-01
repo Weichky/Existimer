@@ -16,7 +16,7 @@ class SettingsController extends AsyncNotifier<Settings> {
   Future<Settings> build() async {
     _repo = await ref.read(settingsRepoProvider.future);
 
-    final loadedSnapshot = await _repo.loadSnapshot();
+    final loadedSnapshot = await _repo.queryByUuid();
     final defaultSnapshot = DefaultSettings.toSnapshot();
 
     final mergedSnapshot =
@@ -29,7 +29,7 @@ class SettingsController extends AsyncNotifier<Settings> {
 
   /// 读取，设置唯一
   Future<void> load() async {
-    final SettingsSnapshot? snapshot = await _repo.loadSnapshot();
+    final SettingsSnapshot? snapshot = await _repo.queryByUuid();
     if (snapshot != null) {
       state = AsyncData(Settings.fromSnapshot(snapshot));
     } else {

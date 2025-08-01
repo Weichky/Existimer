@@ -4,7 +4,7 @@ import 'package:existimer/data/repositories/snapshot_repository.dart';
 import 'package:existimer/data/snapshots/task/task_mapping_snapshot.dart';
 import 'package:existimer/common/constants/database_const.dart';
 
-class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
+class TaskMappingSqlite extends SnapshotRepository<TaskMappingSnapshot> {
   final Database db;
   static final String _table = DatabaseTables.taskMapping.name;
 
@@ -20,7 +20,7 @@ class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
   }
 
   @override
-  Future<TaskMappingSnapshot?> loadSnapshot(String uuid) async {
+  Future<TaskMappingSnapshot?> queryByUuid(String uuid) async {
     /// TaskMapping使用taskUuid作为标识符进行查询
     final result = await db.query(
       _table,
@@ -37,7 +37,8 @@ class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
   }
   
   /// 将扩展方法合并到主类内部
-  static final validFields = [
+  @override
+  List<String> get validFields => [
     DatabaseTables.taskMapping.taskUuid.name,
     DatabaseTables.taskMapping.entityUuid.name,
     DatabaseTables.taskMapping.entityType.name,
@@ -47,7 +48,7 @@ class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
     String field,
     dynamic value,
   ) async {
-    if (!validFields.contains(field)) {
+    if (!isValidField(field)) {
       throw ArgumentError('Invalid field name: $field');
     }
 
@@ -92,7 +93,7 @@ class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
     String field,
     dynamic value,
   ) async {
-    if (!validFields.contains(field)) {
+    if (!isValidField(field)) {
       throw ArgumentError('Invalid field name: $field');
     }
 
@@ -101,5 +102,10 @@ class TaskMappingSqlite implements SnapshotRepository<TaskMappingSnapshot> {
       where: '$field = ?',
       whereArgs: [value],
     );
+  }
+
+  /// 检查传入的字段名是否在允许的字段列表中
+  bool isValidField(String field) {
+    return validFields.contains(field);
   }
 }

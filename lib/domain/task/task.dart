@@ -19,6 +19,8 @@ class Task {
   String? _color;
   double _opacity;
 
+  int _orderIndex;
+
   Task({
     String? name,
     required TaskType type,
@@ -28,6 +30,7 @@ class Task {
     bool? isHighlighted,
     String? color,
     required double opacity,
+    required int orderIndex,
   }) : _uuid = UuidHelper.getUuid(),
        _name = name,
        _type = type,
@@ -36,13 +39,15 @@ class Task {
        _isArchived = isArchived ?? false,
        _isHighlighted = isHighlighted ?? false,
        _color = color,
-       _opacity = opacity;
+       _opacity = opacity,
+      _orderIndex = orderIndex;
 
   factory Task.fromSnapshot(TaskSnapshot snapshot) {
     Task task = Task(
       type: TaskType.timer,
       createdAt: Clock.instance.currentTime,
       opacity: 0.0,
+      orderIndex: -1,
     );
 
     task.fromSnapshot(snapshot);
@@ -75,6 +80,10 @@ class Task {
     _opacity = opacity;
   }
 
+  set orderIndex(int orderIndex) {
+    _orderIndex = orderIndex;
+  }
+
   /// getter
   String get uuid => _uuid;
 
@@ -94,6 +103,8 @@ class Task {
 
   double get opacity => _opacity;
 
+  int get orderIndex => _orderIndex;
+
   TaskSnapshot toSnapshot() => TaskSnapshot(
     uuid: _uuid,
     name: _name,
@@ -104,6 +115,7 @@ class Task {
     isHighlighted: _isHighlighted,
     color: _color,
     opacity: _opacity,
+    orderIndex: _orderIndex,
   );
 
   void fromSnapshot(TaskSnapshot taskSnapshot) {
@@ -116,5 +128,6 @@ class Task {
     _isHighlighted = taskSnapshot.isHighlighted;
     _color = taskSnapshot.color;
     _opacity = taskSnapshot.opacity;
+    _orderIndex = taskSnapshot.orderIndex;
   }
 }

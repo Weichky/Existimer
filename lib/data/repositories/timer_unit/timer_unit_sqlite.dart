@@ -4,7 +4,7 @@ import 'package:existimer/data/repositories/snapshot_repository.dart';
 import 'package:existimer/data/snapshots/timer/timer_unit_snapshot.dart';
 import 'package:existimer/common/constants/database_const.dart';
 
-class TimerUnitSqlite implements SnapshotRepository<TimerUnitSnapshot> {
+class TimerUnitSqlite extends SnapshotRepository<TimerUnitSnapshot> {
   final Database db;
   static final _table = DatabaseTables.timerUnits.name;
 
@@ -20,7 +20,7 @@ class TimerUnitSqlite implements SnapshotRepository<TimerUnitSnapshot> {
   }
 
   @override
-  Future<TimerUnitSnapshot?> loadSnapshot(String uuid) async {
+  Future<TimerUnitSnapshot?> queryByUuid(String uuid) async {
     final result = await db.query(
       _table,
       where: '${DatabaseTables.timerUnits.uuid.name} = ?',
@@ -37,7 +37,8 @@ class TimerUnitSqlite implements SnapshotRepository<TimerUnitSnapshot> {
   
   /// 将扩展方法合并到主类内部
   /// 防止注入，虽然没啥用
-  static final validFields = [
+  @override
+  List<String> get validFields => [
     DatabaseTables.timerUnits.uuid.name,
     DatabaseTables.timerUnits.status.name,
     DatabaseTables.timerUnits.type.name,
@@ -50,7 +51,7 @@ class TimerUnitSqlite implements SnapshotRepository<TimerUnitSnapshot> {
     String field,
     dynamic value
   ) async {
-    if (!validFields.contains(field)) {
+    if (!isValidField(field)) {
       throw ArgumentError('Invalid field name: $field');
     }
 
@@ -67,7 +68,7 @@ class TimerUnitSqlite implements SnapshotRepository<TimerUnitSnapshot> {
     String field,
     dynamic value
   ) async {
-    if (!validFields.contains(field)) {
+    if (!isValidField(field)) {
       throw ArgumentError('Invalid field name: $field');
     }
 

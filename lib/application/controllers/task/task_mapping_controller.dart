@@ -7,6 +7,7 @@ import 'package:existimer/domain/task/task_mapping.dart';
 import 'package:existimer/data/snapshots/task/task_mapping_snapshot.dart';
 import 'package:riverpod/riverpod.dart';
 
+import 'package:existimer/application/settings/settings.dart';
 /// 任务映射控制器
 /// 
 /// 管理任务与实体之间的映射关系
@@ -15,6 +16,8 @@ import 'package:riverpod/riverpod.dart';
 class TaskMappingController extends CollectionController<TaskMapping> {
   /// 任务映射数据访问对象
   late TaskMappingSqlite _repo;
+  late Settings _settings;
+  late int _batchSize;
 
   /// 构建控制器初始状态
   /// 
@@ -26,18 +29,10 @@ class TaskMappingController extends CollectionController<TaskMapping> {
     return [];
   }
 
-  /// 加载数据（未实现）
+  /// 保存数据
   /// 
-  /// BaseController要求实现的方法
-  @override
-  Future<void> load() async {
-    /// TaskMappingController使用专门的加载方法
-    throw UnimplementedError('Use specific load methods instead');
-  }
-
-  /// 保存数据（未实现）
-  /// 
-  /// BaseController要求实现的方法
+  /// BaseController接口要求，请不要使用该方法
+  /// 保存数据请使用addMapping方法
   @override
   Future<void> save() async {
     /// TaskMapping通过addMapping方法保存单个映射
@@ -45,6 +40,7 @@ class TaskMappingController extends CollectionController<TaskMapping> {
   }
 
   /// 添加项目到集合
+  /// 调用的addMapping方法
   /// 
   /// [item] 要添加的任务映射对象
   @override

@@ -4,7 +4,7 @@ import 'package:existimer/data/repositories/snapshot_repository.dart';
 import 'package:existimer/data/snapshots/task/task_relation_snapshot.dart';
 import 'package:existimer/common/constants/database_const.dart';
 
-class TaskRelationSqlite implements SnapshotRepository<TaskRelationSnapshot> {
+class TaskRelationSqlite extends SnapshotRepository<TaskRelationSnapshot> {
   final Database db;
   static final String _table = DatabaseTables.taskRelation.name;
 
@@ -20,7 +20,7 @@ class TaskRelationSqlite implements SnapshotRepository<TaskRelationSnapshot> {
   }
 
   @override
-  Future<TaskRelationSnapshot?> loadSnapshot(String uuid) async {
+  Future<TaskRelationSnapshot?> queryByUuid(String uuid) async {
     /// TaskRelation使用fromUuid作为标识符进行查询
     final result = await db.query(
       _table,
@@ -37,7 +37,8 @@ class TaskRelationSqlite implements SnapshotRepository<TaskRelationSnapshot> {
   }
   
   /// 将扩展方法合并到主类内部
-  static final validFields = [
+  @override
+  List<String> get validFields => [
     DatabaseTables.taskRelation.fromUuid.name,
     DatabaseTables.taskRelation.toUuid.name,
     DatabaseTables.taskRelation.weight.name,
@@ -49,7 +50,7 @@ class TaskRelationSqlite implements SnapshotRepository<TaskRelationSnapshot> {
     String field,
     dynamic value
   ) async {
-    if (!validFields.contains(field)) {
+    if (!isValidField(field)) {
       throw ArgumentError('Invalid field name: $field');
     }
 
@@ -84,7 +85,7 @@ class TaskRelationSqlite implements SnapshotRepository<TaskRelationSnapshot> {
     String field,
     dynamic value
   ) async {
-    if (!validFields.contains(field)) {
+    if (!isValidField(field)) {
       throw ArgumentError('Invalid field name: $field');
     }
 

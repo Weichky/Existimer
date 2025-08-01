@@ -8,15 +8,10 @@ abstract class BaseController<T> extends AsyncNotifier<T> {
   /// 构造函数
   BaseController();
 
-  /// 加载数据
-  /// 
-  /// 子类需要实现具体的加载逻辑
-  Future<void> load(dynamic);
-
   /// 保存数据
   /// 
   /// 子类需要实现具体的保存逻辑
-  Future<void> save(dynamic);
+  Future<void> save();
 
   /// 处理错误
   /// 
