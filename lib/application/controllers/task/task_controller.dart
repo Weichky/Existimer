@@ -32,11 +32,11 @@ class OrderIndexAllocator {
 
   OrderIndexAllocator(this._repo);
 
-  bool shouldRecorder(int lower, int upper) => upper - lower <= gapThreshold;
+  bool shouldReorder(int lower, int upper) => upper - lower <= gapThreshold;
 
   /// 在结尾分配一个新的order_index
   Future<int> allocateAtEnd() async {
-    final TaskSnapshot? snapshot = await _repo.getByOrder(
+    final TaskSnapshot? snapshot = await _repo.getExtremeByField(
       field: DatabaseTables.tasks.orderIndex.name,
       ascending: false,
     );
@@ -66,7 +66,7 @@ class OrderIndexAllocator {
       return null;
     } else {
       final current = currentSnapshot.orderIndex;
-      final beforeSnapshot = await _repo.queryBatchByFieldOrderBefore(
+      final beforeSnapshot = await _repo.queryBatchByFieldBefore(
         field: DatabaseTables.tasks.orderIndex.name,
         value: current,
         ascending: false,
@@ -78,7 +78,7 @@ class OrderIndexAllocator {
         lower = null;
       }
 
-      final afterSnapshot = await _repo.queryBatchByFieldOrderAfter(
+      final afterSnapshot = await _repo.queryBatchByFieldAfter(
         field: DatabaseTables.tasks.orderIndex.name,
         value: current,
         ascending: true,
@@ -94,7 +94,7 @@ class OrderIndexAllocator {
     return (lower, upper);
   }
 
-  Future<void> recorderAround({
+  Future<void> reorderAround({
     required String uuid,
     required int adjustRange,
     required int minGap,

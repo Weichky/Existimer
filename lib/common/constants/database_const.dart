@@ -18,7 +18,7 @@ const int gapThreshold = 1;
 const int orderIndexAdjustRange = 1000;
 
 /// 调整后最小间隔
-const int orderIndexAdjustMinGap = 1000;
+const int orderIndexAdjustMinGap = 100;
 
 /// 查询关系枚举
 /// 用于数据库查询的关系操作符
@@ -28,9 +28,11 @@ enum QueryRelation {
   lessThan, // <
   lessEqual, // <=
   greaterThan, // >
-  greaterEqual; // >=
+  greaterEqual, // >=
+  like, // LIKE
+  any; // ANY
 
-  String get operator {
+  String? get operator {
     switch (this) {
       case QueryRelation.equal:
         return '=';
@@ -44,6 +46,10 @@ enum QueryRelation {
         return '>';
       case QueryRelation.greaterEqual:
         return '>=';
+      case QueryRelation.like:
+        return 'LIKE';
+      case QueryRelation.any:
+        return null;
     }
   }
 }
