@@ -59,19 +59,25 @@ class TaskSqlite extends SnapshotRepository<TaskSnapshot> {
 
   /// 更新指定字段
   ///
-  /// [field] 字段名
-  /// [newValue] 新值
-  /// [queryField] 查询字段名
-  /// [queryValue] 查询值
+  /// [field] 要更新的字段名
+  /// [newValue] 要设置的新值，可为null，将设置为null
+  /// [queryField] 条件字段名
+  /// [queryValue] 条件字段值；如果[relation]为QueryRelation.any，则忽略
+  /// [relation] 查询关系（例如 =、<、>、LIKE 等）
   ///
-  /// 注意，将会修改所有满足查询条件的记录
-  /// 最好确保使用uuid等唯一标识符进行查询
-  Future<void> updateByField(
-    String field,
+  /// 注意：将会更新所有满足条件的记录，建议优先使用唯一标识（如uuid）
+  /// 禁用QueryRelation.any关系
+  Future<void> updateByField({
+    required String field,
     dynamic newValue,
-    String queryField,
-    dynamic queryValue,
-  ) async {
+    required String queryField,
+    required dynamic queryValue,
+    required QueryRelation relation,
+  }) async {
+    if (relation == QueryRelation.any) {
+      throw ArgumentError('QueryRelation.any is not allowed for updateByField');
+    }
+
     if (!isValidField(field)) {
       throw ArgumentError('Invalid field name: $field');
     }
@@ -80,18 +86,21 @@ class TaskSqlite extends SnapshotRepository<TaskSnapshot> {
       throw ArgumentError('Invalid query field name: $queryField');
     }
 
+    String where = '$queryField ${relation.operator} ?';
+    List<dynamic> whereArgs = [queryValue];
+
     await db.update(
       _table,
       {field: newValue},
-      where: '$queryField = ?',
-      whereArgs: [queryValue],
+      where: where,
+      whereArgs: whereArgs,
     );
   }
 
   /// 批量查询系
 
   /// 批量查询基础方法
-  /// 
+  ///
   /// 请优先使用其他方法，仔细阅读使用方法
   ///
   /// [field] 查询字段
@@ -99,7 +108,7 @@ class TaskSqlite extends SnapshotRepository<TaskSnapshot> {
   /// [ascending] 升序，默认为true；否则为降序
   /// [batchSize] 批量大小
   /// [relation] 查询关系，QueryRelation.any 表示任意关系
-  /// 
+  ///
   /// 务必配套使用value和relation参数!!!
   Future<List<TaskSnapshot>> queryBatchByField({
     required String field,
@@ -132,7 +141,13 @@ class TaskSqlite extends SnapshotRepository<TaskSnapshot> {
   }
 
   /// 查询指定字段的所有匹配项
-  Future<List<TaskSnapshot>> queryByField(String field, dynamic value) async {
+  ///
+  /// [field] 字段名
+  /// [value] 字段值
+  Future<List<TaskSnapshot>> queryByField({
+    required String field,
+    required dynamic value,
+  }) async {
     return queryBatchByField(
       field: field,
       value: value,
@@ -140,6 +155,9 @@ class TaskSqlite extends SnapshotRepository<TaskSnapshot> {
     );
   }
 
+  /// 封装自queryBatchByField方法
+  ///
+  /// 默认返回升序排列的结果
   Future<List<TaskSnapshot>> queryBatchByFieldBefore({
     required String field,
     required dynamic value,
@@ -155,6 +173,9 @@ class TaskSqlite extends SnapshotRepository<TaskSnapshot> {
     );
   }
 
+  /// 封装自queryBatchByField方法
+  ///
+  /// 默认返回升序排列的结果
   Future<List<TaskSnapshot>> queryBatchByFieldAfter({
     required String field,
     required dynamic value,
@@ -182,30 +203,128 @@ class TaskSqlite extends SnapshotRepository<TaskSnapshot> {
       field: field,
       ascending: ascending,
       relation: QueryRelation.any,
-      );
+    );
 
     return resultList.isNotEmpty ? resultList.first : null;
   }
+
   /// 获得满足指定字段和关系的记录数量
-  /// 
+  ///
   /// [field] 字段名
   /// [value] 字段值
   /// [relation] 查询关系
+  /// [andField] 可选的附加查询字段名，默认为null
+  /// [andRelation] 可选的附加查询关系
+  /// [andValue] 附加查询值
   Future<int> howMany({
     required String field,
-    required dynamic value,
+    dynamic value,
     required QueryRelation relation,
+    String? andField,
+    QueryRelation? andRelation,
+    dynamic andValue,
   }) async {
     if (!isValidField(field)) {
       throw ArgumentError('Invalid field name: $field');
     }
 
-    final result = await db.rawQuery(
-      'SELECT COUNT(*) as count FROM $_table WHERE $field ${relation.operator} ?',
-      [value],
+    if (andField != null && !isValidField(andField)) {
+      throw ArgumentError('Invalid andField name: $andField');
+    }
+
+    final whereClauses = <String>[];
+    final whereArgs = <dynamic>[];
+
+    if (relation != QueryRelation.any && value != null) {
+      whereClauses.add('$field ${relation.operator} ?');
+      whereArgs.add(value);
+    }
+
+    if (andRelation != null &&
+        andRelation != QueryRelation.any &&
+        andValue != null &&
+        andField != null) {
+      whereClauses.add('$andField ${andRelation.operator} ?');
+      whereArgs.add(andValue);
+    }
+
+    final where = whereClauses.isNotEmpty ? whereClauses.join(' AND ') : null;
+
+    final result = await db.query(
+      _table,
+      columns: ['COUNT(*) AS count'],
+      where: where,
+      whereArgs: whereArgs,
     );
 
     final count = Sqflite.firstIntValue(result);
     return count ?? 0;
+  }
+
+  /// 重新排列所有orderIndex
+  Future<void> reorderAll() async {
+    final List<Map<String, Object?>> records = await db.query(
+      _table,
+      columns: ['rowid', DatabaseTables.tasks.orderIndex.name],
+      orderBy: '${DatabaseTables.tasks.orderIndex.name} ASC',
+    );
+
+    final Batch batch = db.batch();
+
+    for (int i = 0; i < records.length; i++) {
+      final int rowid = records[i]['rowid'] as int;
+      final int newOrderIndex = (i + 1) * orderIndexGap; // 从1开始计数
+
+      batch.update(
+        _table,
+        {DatabaseTables.tasks.orderIndex.name: newOrderIndex},
+        where: 'rowid = ?',
+        whereArgs: [rowid],
+      );
+    }
+
+    await batch.commit();
+  }
+
+  /// 局部重排orderIndex
+  ///
+  /// 排序对象包括边界
+  /// [points] 需要调整的点数，包括边界
+  Future<void> reorderAround({
+    required int lowerBound,
+    required int upperBound,
+    required int points,
+  }) async {
+    final orderIndexColumn = DatabaseTables.tasks.orderIndex.name;
+
+    final gap = (upperBound - lowerBound) ~/ (points - 1);
+
+    // 获取位于 [lowerBound, upperBound] 之间的记录
+    final List<Map<String, Object?>> records = await db.query(
+      _table,
+      columns: ['rowid', orderIndexColumn],
+      where: '$orderIndexColumn >= ? AND $orderIndexColumn <= ?',
+      whereArgs: [lowerBound, upperBound],
+      orderBy: '$orderIndexColumn ASC',
+    );
+
+    final Batch batch = db.batch();
+
+    for (
+      int i = 0, newOrder = lowerBound;
+      i < records.length;
+      i++, newOrder += gap
+    ) {
+      final int rowid = records[i]['rowid'] as int;
+
+      batch.update(
+        _table,
+        {orderIndexColumn: newOrder},
+        where: 'rowid = ?',
+        whereArgs: [rowid],
+      );
+    }
+
+    await batch.commit(noResult: true);
   }
 }
