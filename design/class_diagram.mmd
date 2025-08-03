@@ -3,74 +3,86 @@ class TimerUnitSqlite
 TimerUnitSqlite : +db Database
 TimerUnitSqlite o-- Database
 TimerUnitSqlite : -_table$ String
-TimerUnitSqlite : +validFields$ List~String~
+TimerUnitSqlite : +validFields List~String~
 TimerUnitSqlite : +saveSnapshot() dynamic
-TimerUnitSqlite : +loadSnapshot() dynamic
+TimerUnitSqlite : +queryByUuid() dynamic
 TimerUnitSqlite : +queryByField() dynamic
 TimerUnitSqlite : +deleteByField() dynamic
-SnapshotRepository <|.. TimerUnitSqlite
+SnapshotRepository <|-- TimerUnitSqlite
 
 class SettingsSqlite
 SettingsSqlite : +db Database
 SettingsSqlite o-- Database
 SettingsSqlite : -_table$ String
+SettingsSqlite : +validFields List~String~
 SettingsSqlite : +saveSnapshot() dynamic
-SettingsSqlite : +loadSnapshot() dynamic
-SnapshotRepository <|.. SettingsSqlite
+SettingsSqlite : +queryByUuid() dynamic
+SnapshotRepository <|-- SettingsSqlite
 
 class SnapshotRepository
 <<abstract>> SnapshotRepository
+SnapshotRepository : +validFields List~String~
 SnapshotRepository : +saveSnapshot()* dynamic
-SnapshotRepository : +loadSnapshot()* dynamic
+SnapshotRepository : +queryByUuid()* dynamic
+SnapshotRepository : +isValidField() bool
 
 class TaskSqlite
 TaskSqlite : +db Database
 TaskSqlite o-- Database
 TaskSqlite : -_table$ String
-TaskSqlite : +validFields$ List~String~
+TaskSqlite : +validFields List~String~
 TaskSqlite : +saveSnapshot() dynamic
-TaskSqlite : +loadSnapshot() dynamic
-TaskSqlite : +queryByField() dynamic
+TaskSqlite : +queryByUuid() dynamic
 TaskSqlite : +deleteByField() dynamic
-SnapshotRepository <|.. TaskSqlite
+TaskSqlite : +updateByField() dynamic
+TaskSqlite : +queryBatchByField() dynamic
+TaskSqlite : +queryByField() dynamic
+TaskSqlite : +queryBatchByFieldBefore() dynamic
+TaskSqlite : +queryBatchByFieldAfter() dynamic
+TaskSqlite : +getExtremeByField() dynamic
+TaskSqlite : +howMany() dynamic
+TaskSqlite : +reorderAll() dynamic
+TaskSqlite : +reorderAround() dynamic
+SnapshotRepository <|-- TaskSqlite
 
 class TaskMetaSqlite
 TaskMetaSqlite : +db Database
 TaskMetaSqlite o-- Database
 TaskMetaSqlite : -_table$ String
-TaskMetaSqlite : +validFields$ List~String~
+TaskMetaSqlite : +validFields List~String~
 TaskMetaSqlite : +saveSnapshot() dynamic
-TaskMetaSqlite : +loadSnapshot() dynamic
+TaskMetaSqlite : +queryByUuid() dynamic
 TaskMetaSqlite : +queryByField() dynamic
 TaskMetaSqlite : +deleteByField() dynamic
-SnapshotRepository <|.. TaskMetaSqlite
+SnapshotRepository <|-- TaskMetaSqlite
 
 class TaskMappingSqlite
 TaskMappingSqlite : +db Database
 TaskMappingSqlite o-- Database
 TaskMappingSqlite : -_table$ String
-TaskMappingSqlite : +validFields$ List~String~
+TaskMappingSqlite : +validFields List~String~
 TaskMappingSqlite : +saveSnapshot() dynamic
-TaskMappingSqlite : +loadSnapshot() dynamic
+TaskMappingSqlite : +queryByUuid() dynamic
 TaskMappingSqlite : +queryByField() dynamic
 TaskMappingSqlite : +loadMappingsForTask() dynamic
 TaskMappingSqlite : +loadMappingsForEntity() dynamic
 TaskMappingSqlite : +deleteMapping() dynamic
 TaskMappingSqlite : +deleteByField() dynamic
-SnapshotRepository <|.. TaskMappingSqlite
+TaskMappingSqlite : +isValidField() bool
+SnapshotRepository <|-- TaskMappingSqlite
 
 class TaskRelationSqlite
 TaskRelationSqlite : +db Database
 TaskRelationSqlite o-- Database
 TaskRelationSqlite : -_table$ String
-TaskRelationSqlite : +validFields$ List~String~
+TaskRelationSqlite : +validFields List~String~
 TaskRelationSqlite : +saveSnapshot() dynamic
-TaskRelationSqlite : +loadSnapshot() dynamic
+TaskRelationSqlite : +queryByUuid() dynamic
 TaskRelationSqlite : +queryByField() dynamic
 TaskRelationSqlite : +loadRelationsForTask() dynamic
 TaskRelationSqlite : +deleteRelation() dynamic
 TaskRelationSqlite : +deleteByField() dynamic
-SnapshotRepository <|.. TaskRelationSqlite
+SnapshotRepository <|-- TaskRelationSqlite
 
 class RepositoryFactory
 RepositoryFactory : -_database Database
@@ -87,12 +99,12 @@ class HistorySqlite
 HistorySqlite : +db Database
 HistorySqlite o-- Database
 HistorySqlite : -_table$ String
-HistorySqlite : +validFields$ List~String~
+HistorySqlite : +validFields List~String~
 HistorySqlite : +saveSnapshot() dynamic
-HistorySqlite : +loadSnapshot() dynamic
+HistorySqlite : +queryByUuid() dynamic
 HistorySqlite : +queryByField() dynamic
 HistorySqlite : +deleteByField() dynamic
-SnapshotRepository <|.. HistorySqlite
+SnapshotRepository <|-- HistorySqlite
 
 class AppDatabase
 AppDatabase : +defaultDbName$ String
@@ -122,6 +134,8 @@ SettingsSnapshot o-- TaskType
 SettingsSnapshot : +defaultTimerUnitType TimerUnitType?
 SettingsSnapshot o-- TimerUnitType
 SettingsSnapshot : +countdownDuration Duration?
+SettingsSnapshot : +taskBatchSize int?
+SettingsSnapshot : +historyBatchSize int?
 SettingsSnapshot : +toMap() Map<String, dynamic>
 SettingsSnapshot : +mergeWith() SettingsSnapshot
 SettingsSnapshot : +fromMap()$ SettingsSnapshot
@@ -171,6 +185,7 @@ TaskSnapshot : +isArchived bool
 TaskSnapshot : +isHighlighted bool
 TaskSnapshot : +color String?
 TaskSnapshot : +opacity double
+TaskSnapshot : +orderIndex int
 TaskSnapshot : +toMap() Map<String, dynamic>
 TaskSnapshot : +fromMap()$ TaskSnapshot
 SnapshotBase <|-- TaskSnapshot
@@ -307,6 +322,8 @@ TasksTable : +color TasksFields
 TasksTable o-- TasksFields
 TasksTable : +opacity TasksFields
 TasksTable o-- TasksFields
+TasksTable : +orderIndex TasksFields
+TasksTable o-- TasksFields
 
 class TaskMetaTable
 TaskMetaTable : +name String
@@ -357,6 +374,28 @@ SettingsTable : +id SettingsFields
 SettingsTable o-- SettingsFields
 SettingsTable : +json SettingsFields
 SettingsTable o-- SettingsFields
+
+class QueryRelation
+<<enumeration>> QueryRelation
+QueryRelation : +index int
+QueryRelation : +values$ List~QueryRelation~
+QueryRelation : +equal$ QueryRelation
+QueryRelation o-- QueryRelation
+QueryRelation : +notEqual$ QueryRelation
+QueryRelation o-- QueryRelation
+QueryRelation : +lessThan$ QueryRelation
+QueryRelation o-- QueryRelation
+QueryRelation : +lessEqual$ QueryRelation
+QueryRelation o-- QueryRelation
+QueryRelation : +greaterThan$ QueryRelation
+QueryRelation o-- QueryRelation
+QueryRelation : +greaterEqual$ QueryRelation
+QueryRelation o-- QueryRelation
+QueryRelation : +like$ QueryRelation
+QueryRelation o-- QueryRelation
+QueryRelation : +any$ QueryRelation
+QueryRelation o-- QueryRelation
+Enum <|.. QueryRelation
 
 class TimerUnitsFields
 <<enumeration>> TimerUnitsFields
@@ -415,6 +454,8 @@ TasksFields o-- TasksFields
 TasksFields : +color$ TasksFields
 TasksFields o-- TasksFields
 TasksFields : +opacity$ TasksFields
+TasksFields o-- TasksFields
+TasksFields : +orderIndex$ TasksFields
 TasksFields o-- TasksFields
 Enum <|.. TasksFields
 
@@ -530,6 +571,8 @@ DefaultSettings o-- TaskType
 DefaultSettings : +defaultTimerUnitType$ TimerUnitType
 DefaultSettings o-- TimerUnitType
 DefaultSettings : +countdownDuration$ Duration
+DefaultSettings : +taskBatchSize$ int
+DefaultSettings : +historyBatchSize$ int
 DefaultSettings : +toSnapshot()$ SettingsSnapshot
 DefaultSettings : +toMap()$ Map<String, dynamic>
 
@@ -563,6 +606,8 @@ Settings o-- TaskType
 Settings : -_defaultTimerUnitType TimerUnitType?
 Settings o-- TimerUnitType
 Settings : -_countdownDuration Duration?
+Settings : -_taskBatchSize int?
+Settings : -_historyBatchSize int?
 Settings : +language String?
 Settings : +enableDarkMode bool?
 Settings : +autoDarkMode bool?
@@ -578,6 +623,8 @@ Settings o-- TaskType
 Settings : +defaultTimerUnitType TimerUnitType?
 Settings o-- TimerUnitType
 Settings : +countdownDuration Duration?
+Settings : +taskBatchSize int?
+Settings : +historyBatchSize int?
 Settings : +toSnapshot() SettingsSnapshot
 Settings : +fromSnapshot() void
 
@@ -648,8 +695,10 @@ AsyncNotifier <|-- SettingsController
 class TaskMappingController
 TaskMappingController : -_repo TaskMappingSqlite
 TaskMappingController o-- TaskMappingSqlite
+TaskMappingController : -_settings Settings
+TaskMappingController o-- Settings
+TaskMappingController : -_batchSize int
 TaskMappingController : +build() dynamic
-TaskMappingController : +load() dynamic
 TaskMappingController : +save() dynamic
 TaskMappingController : +addItem() dynamic
 TaskMappingController : +removeWhere() dynamic
@@ -660,6 +709,37 @@ TaskMappingController : +addMapping() dynamic
 TaskMappingController : +deleteMapping() dynamic
 CollectionController <|-- TaskMappingController
 
+class TaskController
+TaskController : -_repo TaskSqlite
+TaskController o-- TaskSqlite
+TaskController : -_settings Settings
+TaskController o-- Settings
+TaskController : -_batchSize int
+TaskController : -_orderIndexAllocator OrderIndexAllocator
+TaskController o-- OrderIndexAllocator
+TaskController : +build() dynamic
+TaskController : +load() dynamic
+TaskController : +save() dynamic
+TaskController : +addItem() dynamic
+TaskController : +removeWhere() dynamic
+TaskController : +updateWhere() dynamic
+CollectionController <|-- TaskController
+
+class OrderIndexAllocator
+OrderIndexAllocator : -_repo TaskSqlite
+OrderIndexAllocator o-- TaskSqlite
+OrderIndexAllocator : +shouldReorder() bool
+OrderIndexAllocator : +allocateOrderAtEnd() dynamic
+OrderIndexAllocator : +allocateOrderBetween() dynamic
+OrderIndexAllocator : +reorderAround() dynamic
+OrderIndexAllocator : +getLowerNeighborOrderByUuid() dynamic
+OrderIndexAllocator : +getUpperNeighborOrderByUuid() dynamic
+OrderIndexAllocator : +Future() dynamic
+OrderIndexAllocator : +() dynamic
+OrderIndexAllocator : +?() dynamic
+OrderIndexAllocator : +>() dynamic
+OrderIndexAllocator : +getNeighborOrderByUuid() dynamic
+
 class CollectionController
 <<abstract>> CollectionController
 CollectionController : +addItem()* dynamic
@@ -669,7 +749,6 @@ BaseController <|-- CollectionController
 
 class BaseController
 <<abstract>> BaseController
-BaseController : +load()* dynamic
 BaseController : +save()* dynamic
 BaseController : +handleError() void
 AsyncNotifier <|-- BaseController
@@ -680,7 +759,6 @@ TimerController o-- TimerUnitSqlite
 TimerController : -_settings Settings
 TimerController o-- Settings
 TimerController : +build() dynamic
-TimerController : +load() dynamic
 TimerController : +save() dynamic
 TimerController : +loadFromUuid() dynamic
 TimerController : +create() dynamic
@@ -708,6 +786,7 @@ Task : -_isArchived bool
 Task : -_isHighlighted bool
 Task : -_color String?
 Task : -_opacity double
+Task : -_orderIndex int
 Task : +name String?
 Task : +type TaskType
 Task o-- TaskType
@@ -715,6 +794,7 @@ Task : +isArchived bool
 Task : +isHighlighted bool
 Task : +color String?
 Task : +opacity double
+Task : +orderIndex int
 Task : +uuid String
 Task : +createdAt DateTime
 Task : +lastUsedAt DateTime?

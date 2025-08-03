@@ -1,3 +1,103 @@
+586b8d1
+Weichky Charl
+2025-08-03 01:12:53 +0800
+feat(task): 实现任务排序索引的动态分配
+
+- 新增 OrderIndexAllocator 类用于管理任务排序索引
+- 实现了动态排序算法，避免频繁的全表重排
+- 添加了局部重排和全表重排的方法
+- 优化了任务的插入和更新逻辑
+
+--------------------
+1802e7f
+Weichky Charl
+2025-08-02 19:58:29 +0800
+refactor(task): 重构任务模块数据库查询逻辑
+
+- 重命名和重构了多个数据库查询相关的方法，提高了代码的可读性和可维护性
+- 新增了通用的批量查询方法 queryBatchByField，支持多种查询关系
+- 更新了数据库查询常量，调整了部分参数值
+- 优化了部分方法的实现，提高了查询效率
+
+--------------------
+7d00a16
+Weichky Charl
+2025-08-02 00:46:09 +0800
+feat(task): 添加任务排序功能
+
+- 在 Task 模型中添加 orderIndex 字段，用于任务排序
+- 在 TaskSnapshot 中添加 orderIndex 相关的数据库操作
+- 在 TaskController 中实现任务加载和保存方法
+- 优化 SnapshotRepository 接口，增加通用的查询方法
+
+--------------------
+0186e3a
+Weichky Charl
+2025-08-01 01:15:26 +0800
+feat(settings): 添加任务和历史记录的批量加载设置
+
+- 在 Settings 模型中添加 taskBatchSize 和 historyBatchSize 字段
+- 更新相关控制器和数据库操作以支持批量加载
+
+--------------------
+ae707d8
+Weichky Charl
+2025-07-31 17:28:31 +0800
+refactor(database): 重构数据库初始化逻辑
+
+- 移除 DatabaseInitService 中的 AppStartupService 初始化逻辑
+- 在 app_startup_service_provider 中初始化 AppStartupService
+- 更新数据库初始化流程，确保在创建数据库前完成环境初始化
+- 调整相关测试代码，以适应新的数据库初始化逻辑
+
+--------------------
+f0927f1
+Weichky Charl
+2025-07-31 01:16:57 +0800
+design: 修改部分代码块
+
+--------------------
+61d3945
+Weichky Charl
+2025-07-30 23:59:15 +0800
+refactor: 移除无用的日志打印语句
+
+- 在 SettingsController 中移除了合并设置快照后的打印语句
+- 在 AppStartupService 中移除了发现 active 和 paused 状态计时器的打印语句
+
+--------------------
+e6c7ba1
+Weichky Charl
+2025-07-30 23:57:34 +0800
+design: 重构设计文稿
+
+--------------------
+3116d9d
+Weichky Charl
+2025-07-30 23:56:15 +0800
+design: Make sure how to save history, again
+
+--------------------
+0142310
+Weichky Charl
+2025-07-30 21:50:47 +0800
+design: Make sure how to save history.
+
+Also delete "print()" in timer_unit.dart
+
+--------------------
+fb2ef51
+Weichky Charl
+2025-07-30 19:41:24 +0800
+Refactor timer-related constants and utilities
+
+- Deleted old timer status, type, and unit status/type enums and replaced them with new implementations in the common/constants directory.
+- Removed the Clock and UuidHelper classes from core/utils and moved them to common/utils.
+- Updated imports across the codebase to reflect the new structure.
+- Added a new task service class as a placeholder for future task-related functionalities.
+- Created a comprehensive design document on how to save history, detailing the relationships.
+
+--------------------
 3b42e51
 Weichky Charl
 2025-07-29 17:56:56 +0800

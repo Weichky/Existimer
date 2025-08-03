@@ -138,3 +138,45 @@
 - 移动和整理了controller和provider
 - 将现阶段测试文件归档phase_0，创建phase_1目录
 - 移动demo相关代码
+
+**30日**
+- 重构计时器相关常量和工具类
+- 移除了旧的计时器状态、类型和单元状态/类型枚举，使用common/constants目录中的新实现替代
+- 将Clock和UuidHelper类从core/utils移动到common/utils
+- 更新整个代码库中的导入路径以反映新结构
+- 添加了新的任务服务类作为未来任务相关功能的占位符
+- 创建了关于如何保存历史记录的综合设计文档，详细说明了各种关系
+
+**31日**
+- 重构数据库初始化逻辑
+- 移除了DatabaseInitService中的AppStartupService初始化逻辑
+- 在app_startup_service_provider中初始化AppStartupService
+- 更新数据库初始化流程，确保在创建数据库前完成环境初始化
+- 调整相关测试代码，以适应新的数据库初始化逻辑
+- 移除了SettingsController中合并设置快照后的打印语句
+- 移除了AppStartupService中发现active和paused状态计时器的打印语句
+
+### 8月
+**1日**
+- 添加任务和历史记录的批量加载设置
+- 在Settings模型中添加taskBatchSize和historyBatchSize字段
+- 更新相关控制器和数据库操作以支持批量加载
+
+**2日**
+- 重构任务模块数据库查询逻辑
+- 重命名和重构了多个数据库查询相关的方法，提高了代码的可读性和可维护性
+- 新增了通用的批量查询方法queryBatchByField，支持多种查询关系
+- 更新了数据库查询常量，调整了部分参数值
+- 优化了部分方法的实现，提高了查询效率
+- 添加任务排序功能
+- 在Task模型中添加orderIndex字段，用于任务排序
+- 在TaskSnapshot中添加orderIndex相关的数据库操作
+- 在TaskController中实现任务加载和保存方法
+- 优化SnapshotRepository接口，增加通用的查询方法
+
+**3日**
+- 实现任务排序索引的动态分配
+- 新增OrderIndexAllocator类用于管理任务排序索引
+- 实现了动态排序算法，避免频繁的全表重排
+- 添加了局部重排和全表重排的方法
+- 优化了任务的插入和更新逻辑
