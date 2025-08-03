@@ -1,3 +1,5 @@
+import 'dart:math';
+
 // 定义了数据库版本和数据库表，和数据库表字段
 
 // 数据库版本号
@@ -8,17 +10,22 @@ const int databaseVersion = 100;
 // 100 -v1.0.0 初始版本，包括表timer_units、task_meta、history、settings
 
 /// 表tasks
+
+/// 1024*2^53 = 2^63 > 2^63-1，超出有符号int64最大值
+/// 故任务数量上限为1023个
+const int maxTaskCount = 1023;
+
 /// order_index字段自增默认间隔
-const int orderIndexGap = 1000;
+final orderIndexGap = pow(2, 53).toInt();
+
+/// 调整临近范围
+final orderIndexAdjustRange = pow(2, 12).toInt();
+
+/// 调整后最小间隔
+final orderIndexAdjustMinGap = pow(2, 10).toInt();
 
 /// 可调整order_index的最小间隔
 const int gapThreshold = 1;
-
-/// 调整临近范围
-const int orderIndexAdjustRange = 1000;
-
-/// 调整后最小间隔
-const int orderIndexAdjustMinGap = 100;
 
 /// 查询关系枚举
 /// 用于数据库查询的关系操作符
