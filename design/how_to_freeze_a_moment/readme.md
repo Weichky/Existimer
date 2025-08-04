@@ -1,6 +1,8 @@
-# How to Save A Moment? 
+# How To Freeze A Moment?
+### Before Reading
+其实是由History引发的讨论，但主要研究的还是Task的读写控制一致性问题。
 
-不仅仅是History，还有前面的Task
+本系列整理了Existimer开发第0阶段的设计思路。这是本系列第三篇讨论，主要从数据库读写、数据结构和Riverpod的角度展开。
 
 ### How to Put TimerUnit into Task ?
 

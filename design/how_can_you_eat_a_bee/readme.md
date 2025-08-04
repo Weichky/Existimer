@@ -1,4 +1,12 @@
 # How Can You Eat A Bee?
+### Before Reading
+**You eat a bee!!! You eat a bee!!!**~~谐音梗不好笑~~
+
+后面不会再有这么巧的谐音梗了（
+
+其实是说，在我们下面假设的情境中，怎么由A得B（~~**由A得B.jpg**~~
+
+本系列整理了Existimer开发第0阶段的设计思路。这是本系列第二篇讨论，主要从数据结构的视角讨论了任务之间的关系。
 
 ## 情景假设
 

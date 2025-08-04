@@ -1,6 +1,11 @@
 # What Can A Meta Be?
+### Before Reading
+整理了Existimer开发第0阶段的设计思路。这是本系列第一篇讨论，主要讨论了实体与任务的关系，元数据和任务的存在形式。
 
-目前是将TimerUnit保存为final的TimerUnitSnapshot后，再存入数据库的. 其唯一标识是uuid，也是读取和保存的凭据. 基于这点，作了如下的讨论
+在**重构**以前的均是初版讨论，思路不清晰明朗，但有大致的方向。大可直接跳至重构部分阅读。
+
+----
+目前是将TimerUnit保存为final的TimerUnitSnapshot后，再存入数据库的. 其唯一标识是uuid，也是读取和保存的凭据. 基于这点，作了如下的讨论。
 
 ### Meta的身份
 
@@ -29,7 +34,6 @@ Meta的目的是什么？为了以后的笔记、计次任务等，以及历史�
 - 3）A2记录a2.uuid
 
 其中1如何优雅的同时记录a1.uuid和a2.uuid是个问题.  天然的，我们想到在Task中添加JSON字段. 不过建立一个映射表可能是更好的选择.
-
 
 ```sql
 CREATE TABLE Task {
