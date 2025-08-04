@@ -1,4 +1,4 @@
-# 从TimerUnit出发设计的Meta
+# What Can A Meta Be?
 
 目前是将TimerUnit保存为final的TimerUnitSnapshot后，再存入数据库的. 其唯一标识是uuid，也是读取和保存的凭据. 基于这点，作了如下的讨论
 

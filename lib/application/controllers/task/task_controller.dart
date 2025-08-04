@@ -63,7 +63,7 @@ class OrderIndexAllocator {
 
   /// 在任务列表末尾分配一个新的order_index
   /// 通过查询当前最大的orderIndex值，然后加上orderIndexGap作为新值
-  /// orderIndexGap在database_const.dart中定义，默认值为1000
+  /// orderIndexGap在database_const.dart中定义，默认值为2^53
   Future<int> allocateOrderAtEnd() async {
     // 获取orderIndex字段的最大值记录
     final TaskSnapshot? snapshot = await _repo.getExtremeByField(
@@ -95,8 +95,8 @@ class OrderIndexAllocator {
   /// 这是一个递归算法，当局部区域过于密集时会逐步扩大范围重新分配索引
   /// 
   /// [uuid] 当前任务的唯一标识符
-  /// [adjustRange] 调整范围，初始值通常为orderIndexAdjustRange（默认1000）
-  /// [minGap] 最小间隔，初始值通常为orderIndexAdjustMinGap（默认100）
+  /// [adjustRange] 调整范围，初始值通常为orderIndexAdjustRange（默认2^12）
+  /// [minGap] 最小间隔，初始值通常为orderIndexAdjustMinGap（默认2^10）
   Future<void> reorderAround({
     required String uuid,
     required int adjustRange,
