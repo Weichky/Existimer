@@ -206,6 +206,39 @@ DEFAULT_STEP_FLOAT = 5      # Float indexing move step size
 DEFAULT_INITIAL_VALUE_INTEGER = 9 # Integer indexing initial value
 DEFAULT_RESET_VALUE_INTEGER = 9   # Integer indexing reset value
 DEFAULT_INCREMENT_INTERVAL = 5  # Auto increment interval
+
+# ==================== Visualization Configuration ====================
+# Text elements - All text in the visualization
+VISUALIZATION_TITLE = "Indexing System Failure Rate Analysis"
+INTEGER_CHART_TITLE = "Integer Indexing Failure Rate vs Moves"
+FLOAT_CHART_TITLE = "Float Indexing Failure Rate vs Moves"
+X_AXIS_LABEL = "Number of Moves"
+Y_AXIS_LABEL = "Failure Rate"
+INTEGER_LEGEND_LABEL = "Integer Indexing"
+FLOAT_LEGEND_LABEL = "Float Indexing"
+CHART_FILENAME = "indexing_results.png"
+
+# Display options - Enable/disable text elements
+SHOW_VISUALIZATION_TITLE = True
+SHOW_INTEGER_CHART_TITLE = True
+SHOW_FLOAT_CHART_TITLE = True
+SHOW_X_AXIS_LABEL = True
+SHOW_Y_AXIS_LABEL = True
+SHOW_LEGEND = True
+SHOW_GRID = True
+SHOW_PLOT_LINE = True  # 控制是否显示数据线
+
+# Chart styling - Material Design colors with low saturation
+INTEGER_COLOR = '#6200EA'  # Material Design purple with lower saturation
+FLOAT_COLOR = '#03DAC6'    # Material Design teal with lower saturation
+GRID_COLOR = '#BDBDBD'     # Material Design gray for grid
+BACKGROUND_COLOR = '#FFFFFF'  # White background
+
+# Chart configuration
+Y_AXIS_MIN = 0.0
+Y_AXIS_MAX = 1.0
+GRID_DENSITY = 0.1         # Grid line density (0.1 = 10 lines from 0 to 1)
+FIGURE_SIZE = (12, 5)      # Figure size (width, height)
 # ===================================================================
 
 def run_single_experiment_integer(args):
@@ -333,30 +366,57 @@ def run_experiments(m, n, max_moves, min_moves=1, num_experiments=200,
 def visualize_results(integer_failures, float_failures, move_counts_integer, move_counts_float):
     """Visualize results"""
     # Create two subplots
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=FIGURE_SIZE)
     
     # Plot integer indexing results
     moves_integer = list(integer_failures.keys())
     rates_integer = list(integer_failures.values())
-    ax1.plot(moves_integer, rates_integer, 'bo-', label='Integer Indexing')
-    ax1.set_xlabel('Number of Moves')
-    ax1.set_ylabel('Failure Rate')
-    ax1.set_title('Integer Indexing Failure Rate vs Moves')
-    ax1.grid(True)
-    ax1.legend()
+    if SHOW_PLOT_LINE:
+        ax1.plot(moves_integer, rates_integer, 'o-', color=INTEGER_COLOR, label=INTEGER_LEGEND_LABEL)
+    else:
+        ax1.plot(moves_integer, rates_integer, 'o', color=INTEGER_COLOR, label=INTEGER_LEGEND_LABEL)
+    if SHOW_INTEGER_CHART_TITLE:
+        ax1.set_title(INTEGER_CHART_TITLE)
+    if SHOW_X_AXIS_LABEL:
+        ax1.set_xlabel(X_AXIS_LABEL)
+    if SHOW_Y_AXIS_LABEL:
+        ax1.set_ylabel(Y_AXIS_LABEL)
+    ax1.set_ylim([Y_AXIS_MIN, Y_AXIS_MAX])
+    if SHOW_GRID:
+        ax1.grid(True, color=GRID_COLOR, linestyle='-', linewidth=0.5)
+        # Set grid density
+        from matplotlib.ticker import MultipleLocator
+        ax1.yaxis.set_major_locator(MultipleLocator(GRID_DENSITY))
+    if SHOW_LEGEND:
+        ax1.legend()
     
     # Plot float indexing results
     moves_float = list(float_failures.keys())
     rates_float = list(float_failures.values())
-    ax2.plot(moves_float, rates_float, 'ro-', label='Float Indexing')
-    ax2.set_xlabel('Number of Moves')
-    ax2.set_ylabel('Failure Rate')
-    ax2.set_title('Float Indexing Failure Rate vs Moves')
-    ax2.grid(True)
-    ax2.legend()
+    if SHOW_PLOT_LINE:
+        ax2.plot(moves_float, rates_float, 'o-', color=FLOAT_COLOR, label=FLOAT_LEGEND_LABEL)
+    else:
+        ax2.plot(moves_float, rates_float, 'o', color=FLOAT_COLOR, label=FLOAT_LEGEND_LABEL)
+    if SHOW_FLOAT_CHART_TITLE:
+        ax2.set_title(FLOAT_CHART_TITLE)
+    if SHOW_X_AXIS_LABEL:
+        ax2.set_xlabel(X_AXIS_LABEL)
+    if SHOW_Y_AXIS_LABEL:
+        ax2.set_ylabel(Y_AXIS_LABEL)
+    ax2.set_ylim([Y_AXIS_MIN, Y_AXIS_MAX])
+    if SHOW_GRID:
+        ax2.grid(True, color=GRID_COLOR, linestyle='-', linewidth=0.5)
+        # Set grid density
+        ax2.yaxis.set_major_locator(MultipleLocator(GRID_DENSITY))
+    if SHOW_LEGEND:
+        ax2.legend()
+    
+    # Set main title
+    if SHOW_VISUALIZATION_TITLE:
+        fig.suptitle(VISUALIZATION_TITLE)
     
     plt.tight_layout()
-    plt.savefig('indexing_results.png')
+    plt.savefig(CHART_FILENAME)
     plt.show()
 
 def main():
@@ -380,12 +440,12 @@ def main():
         m, n, max_moves, min_moves, num_experiments, initial_value_integer, reset_value_integer, 
         True, auto_increment, increment_interval)
     
-    # Visualize results
+    # Visualize results with new visualization parameters
     visualize_results(integer_failures, float_failures, move_counts_integer, move_counts_float)
     
-    # Print summary
+    # Print summary of parameters and results
     print("\n" + "=" * 50)
-    print("Summary:")
+    print("Experiment Summary:")
     print(f"Number of experiments per move count: {num_experiments}")
     print(f"Integer indexing move step size: {DEFAULT_STEP_INTEGER}")
     print(f"Float indexing move step size: {DEFAULT_STEP_FLOAT}")
@@ -395,6 +455,13 @@ def main():
     print(f"Integer indexing reset value: {reset_value_integer}")
     print(f"Auto increment: {auto_increment}")
     print(f"Increment interval: {increment_interval}")
+    print("\nVisualization Parameters:")
+    print(f"Chart size: {FIGURE_SIZE}")
+    print(f"Integer color: {INTEGER_COLOR}")
+    print(f"Float color: {FLOAT_COLOR}")
+    print(f"Grid color: {GRID_COLOR}")
+    print(f"Y-axis range: {Y_AXIS_MIN}-{Y_AXIS_MAX}")
+    print(f"Grid density: {GRID_DENSITY}")
     print("\nTo adjust parameters, modify the values in the 'Parameter Adjustment Area' at the top of the code.")
 
 if __name__ == "__main__":
