@@ -55,9 +55,79 @@ AI生成的省流一句话总结（~~喂刚刚不是说不用AI生成内容的�
 
 #### We Need An Unbridgeable Gap
 
-整型天然表明了顺序。如果我们可以一次性录入所有记录，并永不重排，一个自增的整型order index便足以处理这种情况。好啦，我们的工作结束了，是时候奖励一下自己了，去泡杯咖啡吧。然而现实没有那么理想，阻碍我们休息的罪魁祸首主要有两点：
+##### Order Leads To Chaos
+
+整型天然表明了顺序。如果我们可以一次性录入所有记录，并永不重排，一个自增的整型order index便足以处理这种情况。好啦，我们的工作结束了，**是时候奖励一下自己了，去泡杯咖啡吧**(~~表达了作者对咖啡的喜爱之情（~~咖啡还会在后文中出现)。然而现实没有那么理想，阻碍我们休息的罪魁祸首主要有两点：
 
 - 记录不会一次性全部录入，而是会随着使用增长或减少，在某些场景下可能极端多或极端少
 - 记录一般会在录入后调整顺序，在极端情况下~~（比如UI过于华丽，用户乐于反复操作以欣赏你的动效，或者是仅仅出于无聊）~~会像跳棋一样~~（左脚踩右脚登天）~~，直戳你设计的软肋
 
-对于第一点处理可以很简单（尽管埋下了隐患），只是使用整型作为order index无需担心，增加就max+1，减少删除掉就好。对于第二点，我们也不必像给小孩子讲计算机或者数学一样，打排队的比方。总之很好理解，如果order index的自增间隔为1，即不预留空间，除非后续排序或删除，否则插入或排序的代价将是自目标位置的
+对于**第一点**处理可以很简单（尽管埋下了**隐患**），只是使用整型作为order index无需过多担心，增加就在最大值上加1为新的索引，减少删除掉就好。对于**第二点**，我们也不必像给小孩子讲计算机或者数学一样，打排队的比方。总之很好理解，如果Order Index的自增间隔为1，即不预留空间，除非后续排序或删除，否则对于索引总数为$N$的序列，插入或排序的位于$M$的记录的代价将是$O(N-M)$，自$M$起后面位置的必须全部重排。当$N\gg M$时，不考虑查询的时间复杂度为$O(N)$。在可用的情况下，不考虑查询的插入时间复杂度为$O(1)$，利用数据库索引查找的时间复杂度为$O(\log N)$，否则为$O(N)$。因此**如果不预留时间，则会频繁触发全体重排**，最糟情况下，考虑B-tree查询的$n$次插入或排序时间复杂度为
+$$
+O\!\left(\sum_{k=1}^{n} \left(\underbrace{\log(N+k)}_{\text{查找}}+\underbrace{(N+k)}_{\text{重排}}\right)\right)
+= O\!\left(nN + \tfrac{n(n+1)}{2} + \sum_{k=1}^n\log(N+k)\right)
+= O\!\left(nN + \tfrac{n(n+1)}{2} + n\log(N+n)\right) \tag*{(1)}
+$$
+当$\frac{n}{N} = a,\ a \in \mathbb{R},\ a \neq 0$时，式(1)可以化简
+$$
+O\!\left(nN + \tfrac{n(n+1)}{2} + n\log(N+n)\right) = O(nN + n^2) \tag*{(2)}
+$$
+设数据库单位查读写时间分别为$t_s$、$t_r$和$t_w$，某自$k \ll N$位向后重排则有
+$$
+T = t_w + t_s \log N + t_r + (t_s \log N + t_w)N \tag*{(3)}
+$$
+若全部重排则为
+$$
+T_\text{all} = T_s + T_\text{update} = (t_s \log N + t_w)N \tag*{(4)}
+$$
+Well done, but actually (3)式和(4)式相当的不负责任。在我配备Ryzen9 7950X和Samsung 990EVO Plus的设备上，理论模型和实际重排时间始终差100倍左右，如下图所示
+
+![实际重排时间与理论时间对比](https://bed.weichky.com/2025/png/0809SQLite-reorderAll-Performance.png)
+
+其中$t_w\approx1.07\times10^{-7}$s，$t_s\approx9.83\times10^{-6}$s，$t_r\approx9.83\times10^{-6}$s。你可能注意到，这组参数格外的滑稽荒唐，因为写时间竟然短于另外两个。这是因为写操作开启了**事务(TRANSACTION)**，而查和读则一般不这样做。笔者实在是没有时间精力刨根问底，因此**100**这个**Magic Number**让人产生了小小的遗憾，期待有人为我解惑。我的猜测是这样的：
+
+- 在实际使用中，SQLite会自动优化
+- 单操作测量有误
+- 建模使用的时间参数不对
+- ~~建模有误~~（可是整整100倍是从何而来，令人费解
+
+如果时间复杂度计算本身是正确的，便可以参考下面的图像（或者大家早就烂熟于心），看起来很吓人，但不算非常糟糕。对于轻量的使用场景比如**ToDo-List类应用**，在总任务数小于$10^6$时都是可等的，延迟在几百毫秒左右。考虑到接口等消耗，$10^4$时也是**绰绰有余**。
+
+![常见时间复杂度可视对比](https://bed.weichky.com/2025/png/0809comprasion-of-time-comlexities.png)
+
+可是如果有用户是任务狂人呢？我们当然也可以选择推开键盘，建议用户和我们一样，**在适当的时候来杯咖啡，而不是过于执着。**那么本文就此结束，又到了**愉快的咖啡时间**（
+
+
+
+还不到时候。**如此频繁的触发重排，将长期占用磁盘读写和CPU资源，而且非常不利于并发。**既然做了这么多工作，为什么不多做一点呢？
+
+##### Sooner Or Later
+
+很自然的会想到在一个Order Index前后留出空间，方便未来的位置调整。我们引入**间隙缓冲(Gap Buffer)**来实现这一目的。最简单的实现就是把自增间隙调大。有了间隙之后，插入就可以采用不同的策略：**二分**或者**随机**。随机策略除了引入混乱以外，似乎没有明显的优势；而针对二分策略，间隙则以2的幂为佳，这样才能充分利用空间。如果用户的排序行为是随机的，这个问题又简化成一种二项分布。虽然笔者在几门数学课程中，得分最高的就是概率论，奈何数二不考，高中知识也忘干净了，就不再展开了。总之最好的情况就是填满间隙，最差的情况就是只向一边插入或移动，导致局部过密，间隙失效。最差情况下的操作次数遵循下面公式：
+$$
+n = \left\lfloor \log_2 N_\text{Gap} \right\rfloor \tag*{(5)}
+$$
+![将Gap Buffer设成1024时的插入极限](https://bed.weichky.com/2025/png/08091024-Gap-Buffer.png)
+
+看起来也太不划算了。这意味着，Gap设置成1024只能获得10次绝对安心插入，再多就要开始赌了。这样看来，退化到$\text{Gap}=1$的情况只是时间问题，间隙缓冲没法从根本上解决问题，甚至引入了新的问题：如果我们为了降低重排概率而将Gap设置的非常大比如$2^{63}$，这样自增的数量就有限了（在$Gap=2^{63}$的情况下算上0只能容下两个索引），总索引数目就会很小了。不过在我们不需要很多索引的时候，间隙缓冲不失为一种方法，反正不需要写额外的逻辑，不用白不用。
+
+#### A Finite Infinity
+
+浮点索引也是对半砍，不过理论上能无限小。
+
+![浮点索引密度分布](https://bed.weichky.com/2025/jpg/0809FloatingPointNumberDensity.jpg)
+
+*上图截取自[A robust mechanism for Kanban board column indexing](https://nickmccleery.com/posts/08-kanban-indexing/)，Author：[Nick McCleery](https://nickmccleery.com/)。在文章发布不久后，将尝试寻求图片作者授权。在此先向 Mr.McCleery 致谢。*
+
+*The above figure is adapted from* [*A robust mechanism for Kanban board column indexing*](https://nickmccleery.com/posts/08-kanban-indexing/) *by* [Nick McCleery](https://nickmccleery.com/). *Permission to reproduce the image will be sought from the author in due course. The author’s contribution is gratefully acknowledged.*
+
+这张图说明了什么问题？由于浮点数的特性，注定了其数密度的不均匀。对于FP64，其组成如下图所示
+
+![FP64存储分配示意图](https://bed.weichky.com/2025/png/0809FP64-IEEE-754.png)
+
+其中决定精度的是**Mantissa**(译作尾数，或**Fraction**)部分。**52 Bit Mantissa**也就意味着**FP64至多二分52次就达到精度极限。**用数学形式表达：
+$$
+|N_A - N_B| < 2^{-52} \ \Longrightarrow\ \mathrm{fl}(N_A) = \mathrm{fl}(N_B),\\
+\quad\text{i.e. at most $52$ bisections to reach the precision limit}.\tag*{(6)}
+$$
+一旦精度耗尽，就会陷入和整数索引一样的重排境地。不过这也给了我们启发：只要整数索引的Gap Buffer大于$2^{52}$，我们就能获得比FP64更高的精度。很遗憾的是，这招对FP64无效。一般再大的数字只能通过大数或任意数类型的额外库引入，也没办法这么方便的存进数据库。这个时候就要INT64大显身手了。
