@@ -252,7 +252,20 @@ $$
 
 我们举一个简单的例子：同样是`123/2/13`三个数，对于字典索引顺序应当是`123<13<2`，而对于数索引则是`2<13<123`。字典索引的排序是按位的，元素的顺序需要每个层级分别确定；而数索引的排序则是由数值整体决定。如果采用ASCII码作为字典，则每层消耗1字节。在频繁向一侧插入时，资源占用会迅速增长至其他方法的数倍。
 
+以**LexoRank**为代表的字典索引为了避免或减小这些问题，采用了不同的策略：
+
+1. [Return a new string that sorts between two given strings](https://stackoverflow.com/questions/38923376/return-a-new-string-that-sorts-between-two-given-strings)：stack Overflow上的一个帖子，质量很高，详细讲解了如何确保只在必要时增加层数。这一设计旨在避免层数失控。然而这一设计面向的是完全随机的插入，在排序能力上面对优化后的数索引未必有优势。
+2. [Managing LexoRank](https://confluence.atlassian.com/adminjiraserver/managing-lexorank-938847803.html)（这是算法创始团队的技术支持文档）和[Лексоранги — что это такое и как их использовать для эффективной сортировки списков](https://habr.com/ru/articles/510448/)（如同大部分文章一样介绍了LexoRank，但是篇幅比较短因此列在这里）以及[LexoRank とは何か？](https://k11i.biz/blog/2024/12/16/what-is-lexorank/)（在用日语解释了这一算法的实现后，本文澄清了对**桶**即**Bucket**这一概念的偏见）：这些文章介绍了LexoRank和它的桶策略。通常认为，桶是在字典耗尽时的解决方法。但文章指出，桶的关键作用在于保证重排时，对表查询时仍然保持原有顺序不变。所以桶本身并不是避免了重排，而是避免了重排时的顺序混乱。具体原理请参阅原文。
+
+应当注意到，**同一时间只能有一个活跃桶**，**Bucket**应当作为一个独立字段，而非加在**Rank**字段前面。
+
 ### The Other Path
+
+- 方案1：INT64路径编码，问题：sqlite没有无符号整型
+- 方案2：8Byte Blob路径编码，问题：性能不如INT64
+- 方案3：Blob无限路径编码，问题：Dart处理麻烦
+- 方案4：Blob无限路径编码+getUint64切片，问题：额外逻辑
+- 方案5：二进制编码TEXT压缩路径编码+自定义collection加速+解码，问题：可能得不偿失
 
 ### With Extra Pages
 
