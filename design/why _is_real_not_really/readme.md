@@ -28,7 +28,9 @@ AI生成的省流一句话总结（~~喂刚刚不是说不用AI生成内容的�
 
 在这一设计中，**索引排序算法的选择直接影响系统的整体可用性和性能表现**。优秀的排序算法能够在高密度插入场景下保持低重排频率，确保索引系统长期稳定可用，同时将资源消耗控制在合理范围。
 
-本文从对比 **INT64 整数索引** 与 **FP64 浮点索引** 出发，探讨多种索引排序算法的适用场景，纠正部分常见误解。特别指出，整数索引并非天生劣势，而是存在关键的"53位"间距这一"神秘数字"（~~其实不神秘一看就知道恰好是超出FP64的精度上限~~），使得在适当设计下，整数索引的性能和可用性可以接近甚至超越浮点索引。此外，结合类似 LexoRank 的字符索引方法，我们提出基于路径编码的排序方案，该方案可将路径编码压缩进单个 INT64，实现最坏情况下 $2^{63}$ 次插入操作；或利用 BLOB 存储方式，获得比字符串编码或 LexoRank 更优的性能表现。
+本文从对比 **INT64 整数索引** 与 **FP64 浮点索引** 出发，探讨多种索引排序算法的适用场景，纠正部分常见误解。特别指出，整数索引并非天生劣势。在适当设计下，整数索引的性能和可用性可以接近甚至超越浮点索引。此外，结合类似 LexoRank 的字符索引方法，我们提出基于路径编码的排序方案，使用64位空间实现最坏情况下 64 次插入操作；或利用 BLOB 存储方式，获得比字符串编码或 LexoRank 更优的性能表现。
+
+![](https://bed.weichky.com/2025/jpg/0913Control-Experiments-With-Different-Auto-increments-And-Elements-new.jpg)
 
 ## Introduction
 
@@ -254,7 +256,7 @@ $$
 
 以**LexoRank**为代表的字典索引为了避免或减小这些问题，采用了不同的策略：
 
-1. [Return a new string that sorts between two given strings](https://stackoverflow.com/questions/38923376/return-a-new-string-that-sorts-between-two-given-strings)：stack Overflow上的一个帖子，质量很高，详细讲解了如何确保只在必要时增加层数。这一设计旨在避免层数失控。然而这一设计面向的是完全随机的插入，在排序能力上面对优化后的数索引未必有优势。
+1. [Return a new string that sorts between two given strings](https://stackoverflow.com/questions/38923376/return-a-new-string-that-sorts-between-two-given-strings)：S  tack Overflow上的一个帖子，质量很高，详细讲解了如何确保只在必要时增加层数。这一设计旨在避免层数失控。然而这一设计面向的是完全随机的插入，在排序能力上面对优化后的数索引未必有优势。
 2. [Managing LexoRank](https://confluence.atlassian.com/adminjiraserver/managing-lexorank-938847803.html)（这是算法创始团队的技术支持文档）和[Лексоранги — что это такое и как их использовать для эффективной сортировки списков](https://habr.com/ru/articles/510448/)（如同大部分文章一样介绍了LexoRank，但是篇幅比较短因此列在这里）以及[LexoRank とは何か？](https://k11i.biz/blog/2024/12/16/what-is-lexorank/)（在用日语解释了这一算法的实现后，本文澄清了对**桶**即**Bucket**这一概念的偏见）：这些文章介绍了LexoRank和它的桶策略。通常认为，桶是在字典耗尽时的解决方法。但文章指出，桶的关键作用在于保证重排时，对表查询时仍然保持原有顺序不变。所以桶本身并不是避免了重排，而是避免了重排时的顺序混乱。具体原理请参阅原文。
 
 应当注意到，**同一时间只能有一个活跃桶**，**Bucket**应当作为一个独立字段，而非加在**Rank**字段前面。
@@ -267,7 +269,7 @@ $$
 - 方案4：Blob无限路径编码+getUint64切片，问题：额外逻辑
 - 方案5：二进制编码TEXT压缩路径编码+自定义collection加速+解码，问题：可能得不偿失
 
-
+基于之前的讨论，上面是我想到的一些方法。整体上来说，**方案2**和**方案3**比较可取。关于它们性能之间的讨论，因为要做更多的实验，而且结果比较显然，没有太大实际意义，所以不再深入了。
 
 ### With Extra Pages
 

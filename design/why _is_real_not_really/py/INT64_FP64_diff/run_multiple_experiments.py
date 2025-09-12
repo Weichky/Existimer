@@ -28,6 +28,9 @@ logging.basicConfig(
 # 添加日志开关配置
 ENABLE_DETAILED_LOGGING = True  # 设置为False可关闭详细日志输出以节省性能
 
+# 获取当前脚本所在目录的绝对路径
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def create_pic_directory():
     """Create pic directory if it doesn't exist"""
     if not os.path.exists('pic'):
@@ -89,9 +92,9 @@ def run_single_experiment(args):
     
     # Create a temporary directory for this experiment
     with tempfile.TemporaryDirectory() as temp_dir:
-        # Copy all necessary files to the temporary directory
-        shutil.copy2('simple_experiment.py', temp_dir)
-        shutil.copy2('simulation.py', temp_dir)
+        # Copy all necessary files to the temporary directory using absolute paths
+        shutil.copy2(os.path.join(SCRIPT_DIR, 'simple_experiment.py'), temp_dir)
+        shutil.copy2(os.path.join(SCRIPT_DIR, 'simulation.py'), temp_dir)
         
         # Path to the experiment file in the temporary directory
         experiment_file = os.path.join(temp_dir, 'simple_experiment.py')
@@ -99,6 +102,10 @@ def run_single_experiment(args):
         # Add SHOW_PLOT = False to prevent interactive plots
         param_updates_with_plot = param_updates.copy()
         param_updates_with_plot["SHOW_PLOT"] = False
+        # Enable data points output
+        param_updates_with_plot["OUTPUT_DATA_POINTS"] = True
+        # Set data points filename with test name
+        param_updates_with_plot["DATA_POINTS_FILENAME"] = f"{test_name}_data_points.txt"
         
         # Modify configuration in the temporary file
         modify_config_in_file(experiment_file, param_updates_with_plot)
@@ -139,6 +146,12 @@ def run_single_experiment(args):
                 result_image = os.path.join(temp_dir, 'indexing_results.png')
                 if os.path.exists(result_image):
                     shutil.copy2(result_image, f'pic/{test_name}_results.png')
+                
+                # Move the data points file to pic directory with descriptive name
+                data_points_file = os.path.join(temp_dir, f'{test_name}_data_points.txt')
+                if os.path.exists(data_points_file):
+                    shutil.copy2(data_points_file, f'pic/{test_name}_data_points.txt')
+                    
                 return test_name, True, None, elapsed_time
             else:
                 # Collect and log stderr output

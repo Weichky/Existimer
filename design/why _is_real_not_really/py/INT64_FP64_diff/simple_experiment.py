@@ -37,6 +37,9 @@ VERBOSE = True            # Whether to output detailed information
 # Performance control
 ENABLE_DETAILED_OUTPUT = True  # 设置为False可关闭详细输出以节省性能
 
+# Data output control
+OUTPUT_DATA_POINTS = True  # 是否将绘图时使用的点输出到文件中
+
 # ==================== Visualization Configuration ====================
 # Text elements - All text in the visualization
 VISUALIZATION_TITLE = "Indexing System Failure Rate Analysis"
@@ -47,6 +50,7 @@ Y_AXIS_LABEL = "Failure Rate"
 INTEGER_LEGEND_LABEL = "Integer Indexing"
 FLOAT_LEGEND_LABEL = "Float Indexing"
 CHART_FILENAME = "indexing_results.png"
+DATA_POINTS_FILENAME = "data_points.txt"  # 数据点输出文件名
 
 # Display options - Enable/disable text elements
 SHOW_VISUALIZATION_TITLE = True
@@ -140,6 +144,24 @@ def run_experiments(m, n, max_moves, min_moves, num_experiments,
     
     return integer_failures, float_failures
 
+def output_data_points(integer_failures, float_failures, filename=DATA_POINTS_FILENAME):
+    """Output data points to a file"""
+    if not OUTPUT_DATA_POINTS:
+        return
+    
+    with open(filename, 'w') as f:
+        f.write("# Integer indexing data points\n")
+        f.write("# Moves\tFailure Rate\n")
+        for moves, rate in sorted(integer_failures.items()):
+            f.write(f"{moves}\t{rate}\n")
+        
+        f.write("\n# Float indexing data points\n")
+        f.write("# Moves\tFailure Rate\n")
+        for moves, rate in sorted(float_failures.items()):
+            f.write(f"{moves}\t{rate}\n")
+    
+    print_if_enabled(f"Data points output to {filename}")
+
 def visualize_results(integer_failures, float_failures):
     """Visualize results"""
     # Create two subplots
@@ -219,6 +241,9 @@ def run_simple_experiments():
     )
     
     end_time = time.time()
+    
+    # Output data points if enabled
+    output_data_points(integer_failures, float_failures)
     
     # Visualize results
     visualize_results(integer_failures, float_failures)
