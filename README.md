@@ -1,10 +1,20 @@
 # Existimer
-开发中，不着急写README. 开发日志在lib目录下，记录了开发过程和学习过程.
 
-**PotatoTask**暂定改名为**Existimer**, 其意味仍需要思考，不过暂时目标是作为一款后人文主义式的（尽管要超出后人文主义，不仅仅是对人主体的反思）计时器，构建一个允许“透明之石”（后人文主义弱化后主体）留下存在痕迹的机制. 
+**Existimer** is a timer inspired by the Pomodoro technique—but stripped of purpose.
 
-而这个项目本身就是一种“后后人文主义”实践？其实“后后人文主义”描述其也不合适，因为他不在存在论的范畴以内. 对于哲学观念不会在此展开，有机会会专门写一篇的. 
+It is intentionally casual, even indifferent to productivity, while paradoxically being designed for long-term statistical analysis and possible future integration of machine learning. This tension is not a flaw but a core condition of the project.
 
-开发日志在lib/README.md中
+Originally named **PotatoTask**, the project was provisionally renamed **Existimer**. The meaning of the name is still unresolved. For now, Existimer is conceived as a post-humanist timer—or something that exceeds post-humanism—less a tool for optimizing a human subject than a mechanism that allows a weakened or transparent subject (“the transparent stone”) to leave traces of existence through time.
 
-源码在existimer/lib中，其余主要为Flutter调试、配置文件. 如需使用请自行新建项目，配置好对应的库，替换lib目录即可.
+In this sense, the project itself may be read as a contradictory practice:
+a system that records, analyzes, and possibly predicts, while refusing to justify *why* time is recorded at all. Whether this counts as “post-post-humanism” is questionable; in any case, the project deliberately avoids grounding itself in ontology. Philosophical discussion is postponed and may be addressed elsewhere in a dedicated text.
+
+This repository is under active development. There is no urgency to finalize documentation.
+
+## Project Structure
+
+* Development logs and learning notes are recorded in `lib/README.md`.
+* Core source code lives in `existimer/lib`.
+* Other files are primarily for Flutter configuration and debugging.
+
+To use the project, create your own Flutter application, configure the required dependencies, and replace the `lib` directory with the one provided here.
