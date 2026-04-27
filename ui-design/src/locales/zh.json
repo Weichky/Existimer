@@ -1,0 +1,45 @@
+{
+  "app": {
+    "name": "Existimer"
+  },
+  "timer": {
+    "title": "计时器",
+    "countdown": "倒计时",
+    "countup": "正向计时",
+    "start": "开始",
+    "pause": "暂停",
+    "resume": "继续",
+    "reset": "重置",
+    "complete": "完成",
+    "pauseCount": "暂停次数",
+    "pauseDuration": "累计暂停",
+    "switchMode": "切换为{{mode}}"
+  },
+  "history": {
+    "title": "历史记录",
+    "subtitle": "记录与可视化",
+    "heatmap": "热力图",
+    "barchart": "柱状图",
+    "recentRecords": "最近记录",
+    "minutes": "{{count}}分钟"
+  },
+  "settings": {
+    "title": "设置",
+    "subtitle": "全局设置",
+    "dataManagement": "数据管理",
+    "exportJson": "导出 JSON",
+    "exportJsonDesc": "导出所有记录为 JSON 文件",
+    "exportCsv": "导出 CSV",
+    "exportCsvDesc": "导出所有记录为 CSV 文件",
+    "about": "关于",
+    "aboutDesc": "Existimer 是一个简单的时间追踪工具。",
+    "statistics": "统计",
+    "totalSessions": "总计时次数",
+    "totalDuration": "总时长",
+    "longestSession": "最长单次"
+  },
+  "nav": {
+    "preset": "预设",
+    "page": "页面"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "app": {
+    "name": "Existimer"
+  },
+  "timer": {
+    "title": "Timer",
+    "countdown": "Countdown",
+    "countup": "Countup",
+    "start": "Start",
+    "pause": "Pause",
+    "resume": "Resume",
+    "reset": "Reset",
+    "complete": "Complete",
+    "pauseCount": "Pause Count",
+    "pauseDuration": "Paused Time",
+    "switchMode": "Switch to {{mode}}"
+  },
+  "history": {
+    "title": "History",
+    "subtitle": "Records & Visualization",
+    "heatmap": "Heatmap",
+    "barchart": "Bar Chart",
+    "recentRecords": "Recent Records",
+    "minutes": "{{count}} min"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Preferences",
+    "dataManagement": "Data Management",
+    "exportJson": "Export JSON",
+    "exportJsonDesc": "Export all records as JSON",
+    "exportCsv": "Export CSV",
+    "exportCsvDesc": "Export all records as CSV",
+    "about": "About",
+    "aboutDesc": "A simple time tracking tool.",
+    "statistics": "Statistics",
+    "totalSessions": "Total Sessions",
+    "totalDuration": "Total Duration",
+    "longestSession": "Longest Session"
+  },
+  "nav": {
+    "preset": "Preset",
+    "page": "Page"
+  }
+}
