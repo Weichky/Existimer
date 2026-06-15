@@ -5,13 +5,13 @@ import {
   saveSession,
   generateId,
   Session,
+  Preset,
 } from "../lib/db";
 
-type TimerMode = "countdown" | "countup";
 type TimerStatus = "idle" | "running" | "paused" | "completed";
 
 interface TimerState {
-  mode: TimerMode;
+  timerType: "countdown" | "countup";
   status: TimerStatus;
   targetSeconds: number;
   elapsedSeconds: number;
@@ -19,11 +19,11 @@ interface TimerState {
   totalPauseSeconds: number;
   defaultCountdownMinutes: number;
   sessionId: string | null;
-  sessionStartTime: number | null;
+  sessionStartTime: string | null;
   pauseStartTime: number | null;
 
   init: () => Promise<void>;
-  setMode: (mode: TimerMode) => void;
+  applyPreset: (preset: Preset) => void;
   setDefaultCountdownMinutes: (minutes: number) => Promise<void>;
   start: () => void;
   pause: () => void;
@@ -33,7 +33,7 @@ interface TimerState {
 }
 
 export const useTimerStore = create<TimerState>((set, get) => ({
-  mode: "countdown",
+  timerType: "countdown",
   status: "idle",
   targetSeconds: 35 * 60,
   elapsedSeconds: 0,
@@ -45,17 +45,18 @@ export const useTimerStore = create<TimerState>((set, get) => ({
   pauseStartTime: null,
 
   init: async () => {
-    const saved = await getSetting("defaultCountdownMinutes");
-    const minutes = saved ? parseInt(saved, 10) : 35;
+    const savedMinutes = await getSetting("defaultCountdownMinutes");
+    const minutes = savedMinutes ? parseInt(savedMinutes, 10) : 35;
     set({
       defaultCountdownMinutes: minutes,
       targetSeconds: minutes * 60,
     });
   },
 
-  setMode: (mode) => {
+  applyPreset: (preset: Preset) => {
     set({
-      mode,
+      timerType: preset.timer_type,
+      targetSeconds: preset.target_seconds,
       status: "idle",
       elapsedSeconds: 0,
       pauseCount: 0,
@@ -66,9 +67,10 @@ export const useTimerStore = create<TimerState>((set, get) => ({
 
   setDefaultCountdownMinutes: async (minutes) => {
     await setSetting("defaultCountdownMinutes", minutes.toString());
+    const state = get();
     set({
       defaultCountdownMinutes: minutes,
-      targetSeconds: minutes * 60,
+      targetSeconds: state.timerType === "countdown" ? minutes * 60 : state.targetSeconds,
     });
   },
 
@@ -79,7 +81,7 @@ export const useTimerStore = create<TimerState>((set, get) => ({
     set({
       status: "running",
       sessionId: generateId(),
-      sessionStartTime: Date.now(),
+      sessionStartTime: Date.now().toString(),
     });
   },
 
@@ -121,13 +123,13 @@ export const useTimerStore = create<TimerState>((set, get) => ({
     if (state.sessionId && state.sessionStartTime) {
       const session: Session = {
         id: state.sessionId,
-        start_time: state.sessionStartTime,
+        start_time: parseInt(state.sessionStartTime, 10),
         end_time: Date.now(),
         duration: state.elapsedSeconds,
         pause_count: state.pauseCount,
         pause_duration: finalPauseSeconds,
-        timer_type: state.mode,
-        target_duration: state.mode === "countdown" ? state.targetSeconds : 0,
+        timer_type: state.timerType,
+        target_duration: state.timerType === "countdown" ? state.targetSeconds : 0,
         is_completed: state.status === "completed" ? 1 : 0,
       };
       await saveSession(session);
@@ -150,7 +152,7 @@ export const useTimerStore = create<TimerState>((set, get) => ({
 
     const newElapsed = state.elapsedSeconds + 1;
 
-    if (state.mode === "countdown") {
+    if (state.timerType === "countdown") {
       const remaining = state.targetSeconds - newElapsed;
       if (remaining <= 0) {
         set({ elapsedSeconds: state.targetSeconds, status: "completed" });
