@@ -79,7 +79,7 @@ export function TimerPage({ preset, onInsertAfter }: TimerPageProps) {
     }
   };
 
-  const { handlers, clearTimers } = useDialInteraction(
+  const { handlers, forceClearAllTimers } = useDialInteraction(
     {
       onSingleTap: triggerClick,
       onDoubleTap: handleDoubleTap,
@@ -90,9 +90,9 @@ export function TimerPage({ preset, onInsertAfter }: TimerPageProps) {
 
   useEffect(() => {
     if (showEdit) {
-      clearTimers();
+      forceClearAllTimers();
     }
-  }, [showEdit, clearTimers]);
+  }, [showEdit, forceClearAllTimers]);
 
   const getDisplayTime = () => {
     if (timerType === 'countdown') {

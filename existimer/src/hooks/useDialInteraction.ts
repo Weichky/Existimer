@@ -31,6 +31,18 @@ export function useDialInteraction(
     }
   }, []);
 
+  const forceClearAllTimers = useCallback(() => {
+    if (clickTimer.current) {
+      clearTimeout(clickTimer.current);
+      clickTimer.current = null;
+    }
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+    lastTapTime.current = 0;
+  }, []);
+
   const handleMouseDown = useCallback(() => {
     if (disabled) return;
     clearTimers();
@@ -142,5 +154,6 @@ export function useDialInteraction(
       onTouchEnd: handleMouseUp,
     },
     clearTimers,
+    forceClearAllTimers,
   };
 }
