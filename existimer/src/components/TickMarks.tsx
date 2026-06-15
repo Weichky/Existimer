@@ -1,19 +1,22 @@
 import { useMemo } from 'react';
-import { DIAL, COLORS } from '../constants/timer';
+import { COLORS } from '../constants/timer';
 
-interface TickMarksProps {
-  size?: number;
-}
+const TICK_RADIUS = {
+  HOUR: 95,
+  MINUTE: 100,
+  OUTER: 108,
+  CENTER: 128,
+};
 
-export function TickMarks({ size = DIAL.FACE_SIZE }: TickMarksProps) {
+export function TickMarks() {
   const ticks = useMemo(() => {
     const result = [];
-    const cx = size / 2;
+    const cx = TICK_RADIUS.CENTER;
     for (let i = 0; i < 60; i++) {
       const angle = (i * 6 - 90) * (Math.PI / 180);
       const isHour = i % 5 === 0;
-      const r1 = isHour ? DIAL.TICK_INNER_HOUR : DIAL.TICK_INNER_MINUTE;
-      const r2 = DIAL.TICK_OUTER;
+      const r1 = isHour ? TICK_RADIUS.HOUR : TICK_RADIUS.MINUTE;
+      const r2 = TICK_RADIUS.OUTER;
       result.push({
         x1: cx + r1 * Math.cos(angle),
         y1: cx + r1 * Math.sin(angle),
@@ -24,12 +27,12 @@ export function TickMarks({ size = DIAL.FACE_SIZE }: TickMarksProps) {
       });
     }
     return result;
-  }, [size]);
+  }, []);
 
   return (
     <svg
       className="absolute inset-0 w-full h-full -rotate-90"
-      viewBox={`0 0 ${size} ${size}`}
+      viewBox="0 0 256 256"
     >
       {ticks.map((tick) => (
         <line

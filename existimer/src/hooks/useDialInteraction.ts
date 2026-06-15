@@ -112,7 +112,9 @@ export function useDialInteraction(
       lastTapTime.current = now;
       clickTimer.current = window.setTimeout(() => {
         clickTimer.current = null;
-        onSingleTap();
+        if (!disabled) {
+          onSingleTap();
+        }
       }, TIMING.CLICK_DELAY);
     };
 
