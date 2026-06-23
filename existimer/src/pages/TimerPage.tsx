@@ -127,7 +127,6 @@ export function TimerPage({ preset, onInsertAfter }: TimerPageProps) {
       <div className="flex-1 flex flex-col items-center justify-center p-4">
         <div className="relative z-10 flex-shrink-0">
           <DialOverlay 
-            progress={animationState.longPressProgress} 
             visible={animationState.isLongPressing} 
           />
           
