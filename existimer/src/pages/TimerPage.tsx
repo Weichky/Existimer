@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTimerStore } from '../store/timerStore';
 import { Preset } from '../lib/db';
-import { COLORS } from '../constants/timer';
+import { COLORS, SWISS_RED } from '../constants/timer';
 import { GlassCard } from '../components/GlassCard';
 import { TickMarks } from '../components/TickMarks';
 import { ProgressRing } from '../components/ProgressRing';
 import { PulsingGlow } from '../components/PulsingGlow';
+import { DialOverlay } from '../components/DialOverlay';
 import { StatsModal } from '../components/modals/StatsModal';
 import { EditModal } from '../components/modals/EditModal';
 import { useDialInteraction } from '../hooks/useDialInteraction';
@@ -79,7 +80,7 @@ export function TimerPage({ preset, onInsertAfter }: TimerPageProps) {
     }
   };
 
-  const { handlers, forceClearAllTimers } = useDialInteraction(
+  const { handlers, animationState, clearTimers, resetAnimation } = useDialInteraction(
     {
       onSingleTap: triggerClick,
       onDoubleTap: handleDoubleTap,
@@ -89,10 +90,11 @@ export function TimerPage({ preset, onInsertAfter }: TimerPageProps) {
   );
 
   useEffect(() => {
-    if (showEdit) {
-      forceClearAllTimers();
+    if (showEdit || showStats) {
+      clearTimers();
+      resetAnimation();
     }
-  }, [showEdit, forceClearAllTimers]);
+  }, [showEdit, showStats, clearTimers, resetAnimation]);
 
   const getDisplayTime = () => {
     if (timerType === 'countdown') {
@@ -108,6 +110,9 @@ export function TimerPage({ preset, onInsertAfter }: TimerPageProps) {
 
   const isMinimalMode = status === 'running' || status === 'paused';
 
+  const dialScale = animationState.isPressed ? 0.97 : 1;
+  const showTapFeedback = animationState.showDoubleTapFeedback;
+
   return (
     <div className="min-h-screen bg-[#f5f5f5] flex flex-col">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -121,11 +126,17 @@ export function TimerPage({ preset, onInsertAfter }: TimerPageProps) {
 
       <div className="flex-1 flex flex-col items-center justify-center p-4">
         <div className="relative z-10 flex-shrink-0">
+          <DialOverlay 
+            progress={animationState.longPressProgress} 
+            visible={animationState.isLongPressing} 
+          />
+          
           <motion.div
             className="relative w-56 h-56 mx-auto cursor-pointer"
-            initial={{ scale: 0.95, opacity: 0.8 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
+            animate={{
+              scale: dialScale,
+              transition: { type: 'spring', stiffness: 400, damping: 25 }
+            }}
             {...handlers}
           >
             <div
@@ -135,6 +146,19 @@ export function TimerPage({ preset, onInsertAfter }: TimerPageProps) {
                 boxShadow: '0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)',
               }}
             />
+
+            <AnimatePresence>
+              {showTapFeedback && (
+                <motion.div
+                  className="absolute inset-0 rounded-full"
+                  initial={{ opacity: 0.8, scale: 0.98 }}
+                  animate={{ opacity: 0, scale: 1.02 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  style={{ background: SWISS_RED }}
+                />
+              )}
+            </AnimatePresence>
 
             <div
               className="absolute inset-[14px] rounded-full"
